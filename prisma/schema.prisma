@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GenderType {
+  male
+  female
+  other
+}
+
+model User {
+  id               Int                @id @default(autoincrement())
+  created_at       DateTime           @default(now())
+  logs             UserLog[]
+  authorization    UserAuthorization?
+  profile          UserProfile?
+  active           UserActive?
+  deletion         UserDelete?
+  contacts         UserContact?
+}
+
+model UserLog {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  action     String
+  detail     String?
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id])
+}
+
+model UserProfile {
+  user_id    Int        @unique
+  name       String
+  birth_date DateTime
+  gender     GenderType
+  created_at DateTime   @default(now())
+  user       User       @relation(fields: [user_id], references: [id])
+}
+
+model UserAuthorization {
+  user_id       Int    @unique
+  auth_id       String @unique
+  password_hash String
+  created_at    DateTime @default(now())
+  user          User   @relation(fields: [user_id], references: [id])
+}
+
+model UserActive {
+  user_id      Int      @unique
+  activated_at DateTime @default(now())
+  user         User     @relation(fields: [user_id], references: [id])
+}
+
+model UserDelete {
+  user_id    Int      @unique
+  deleted_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id])
+}
+
+model UserContact {
+  user_id    Int  @unique
+  email      String
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id])
+}

@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import Sidebar from "../components/Sidebar";
 import AdminHeader from "../components/AdminHeader";
 import NavigationHeader from "../components/NavigationHeader";
+import "react-toastify/dist/ReactToastify.css";
 import App from "next/app";
 
 function MyApp({ Component, pageProps }) {
