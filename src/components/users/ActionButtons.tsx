@@ -1,37 +1,37 @@
 import Link from "next/link";
 import { PlusIcon, TrashIcon } from "@heroicons/react/solid";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { showConfirmDialog } from "../utils/ConfirmDialog";
 
 const ActionButtons = ({ selectedUsers }) => {
   const router = useRouter();
   const isDeleteDisabled = selectedUsers.length === 0;
 
   const handleDeleteSelectedUsers = async () => {
-    if (window.confirm("Are you sure you want to delete the selected users?")) {
-      try {
-        const response = await fetch("/api/users", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userIds: selectedUsers }),
-        });
-
-        if (response.ok) {
-          toast.success("Users successfully deleted", {
-            onClose: () => {
-              router.reload();
+    showConfirmDialog({
+      message: "Are you sure you want to delete the selected users?",
+      onConfirm: async () => {
+        try {
+          const response = await fetch("/api/users", {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
             },
+            body: JSON.stringify({ userIds: selectedUsers }),
           });
-        } else {
-          toast.error("Failed to delete users");
+
+          if (response.ok) {
+            router.reload();
+          } else {
+            toast.error("Failed to delete users");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          toast.error("An error occurred");
         }
-      } catch (error) {
-        console.error("Error:", error);
-        toast.error("An error occurred");
-      }
-    }
+      },
+    });
   };
 
   return (

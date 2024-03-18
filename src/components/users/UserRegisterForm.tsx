@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { toastError, toastSuccess } from "../utils/ToastifyAlerts";
 
 function UserRegisterForm() {
   const [formData, setFormData] = useState({
@@ -32,7 +33,7 @@ function UserRegisterForm() {
         throw new Error("Something went wrong with the submission");
       }
 
-      alert("Registration successful!");
+      toastSuccess("Registration successful!");
       setFormData({
         username: "",
         email: "",
@@ -44,7 +45,7 @@ function UserRegisterForm() {
       router.push("/users");
     } catch (error) {
       console.error(error);
-      alert("Failed to register. Please try again.");
+      toastError("Failed to register. Please try again.");
     }
   };
 

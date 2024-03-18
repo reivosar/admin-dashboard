@@ -3,6 +3,8 @@ import Sidebar from "../components/Sidebar";
 import AdminHeader from "../components/AdminHeader";
 import NavigationHeader from "../components/NavigationHeader";
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import App from "next/app";
 
 function MyApp({ Component, pageProps }) {
@@ -16,6 +18,7 @@ function MyApp({ Component, pageProps }) {
         <Sidebar />
         <main className="flex-1 pt-4 pl-4 ">
           <Component {...pageProps} />
+          <ToastContainer pauseOnFocusLoss draggable pauseOnHover />
         </main>
       </div>
     </div>
