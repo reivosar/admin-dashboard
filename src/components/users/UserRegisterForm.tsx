@@ -42,7 +42,9 @@ function UserRegisterForm() {
         birthdate: "2000-01-01",
       });
 
-      router.push("/users");
+      setTimeout(() => {
+        router.push("/users");
+      }, 300);
     } catch (error) {
       console.error(error);
       toastError("Failed to register. Please try again.");

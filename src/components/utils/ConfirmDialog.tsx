@@ -25,7 +25,10 @@ export const showConfirmDialog = ({ title = "", message, onConfirm }) => {
             }}
           >
             <button
-              onClick={onConfirm}
+              onClick={() => {
+                onConfirm();
+                onClose();
+              }}
               style={{
                 marginRight: "10px",
                 padding: "5px 20px",

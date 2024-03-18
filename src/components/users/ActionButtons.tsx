@@ -1,39 +1,11 @@
 import Link from "next/link";
 import { PlusIcon, TrashIcon } from "@heroicons/react/solid";
-import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { showConfirmDialog } from "../utils/ConfirmDialog";
+import { handleDelceteSelectedUsers } from "./UserActions";
 
 const ActionButtons = ({ selectedUsers }) => {
   const router = useRouter();
   const isDeleteDisabled = selectedUsers.length === 0;
-
-  const handleDeleteSelectedUsers = async () => {
-    showConfirmDialog({
-      message: "Are you sure you want to delete the selected users?",
-      onConfirm: async () => {
-        try {
-          const response = await fetch("/api/users", {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ userIds: selectedUsers }),
-          });
-
-          if (response.ok) {
-            router.reload();
-          } else {
-            toast.error("Failed to delete users");
-          }
-        } catch (error) {
-          console.error("Error:", error);
-          toast.error("An error occurred");
-        }
-      },
-    });
-  };
-
   return (
     <>
       <Link href="/userRegister" legacyBehavior>
@@ -42,7 +14,7 @@ const ActionButtons = ({ selectedUsers }) => {
         </a>
       </Link>
       <button
-        onClick={handleDeleteSelectedUsers}
+        onClick={() => handleDelceteSelectedUsers(router, selectedUsers)}
         disabled={isDeleteDisabled}
         className={`ml-2 p-2 ${
           isDeleteDisabled ? "bg-gray-300" : "bg-red-500 hover:bg-red-600"

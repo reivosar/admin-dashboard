@@ -18,7 +18,18 @@ function MyApp({ Component, pageProps }) {
         <Sidebar />
         <main className="flex-1 pt-4 pl-4 ">
           <Component {...pageProps} />
-          <ToastContainer pauseOnFocusLoss draggable pauseOnHover />
+          {/* Default toast setting */}
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </main>
       </div>
     </div>

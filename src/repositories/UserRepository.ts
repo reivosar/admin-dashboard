@@ -24,7 +24,8 @@ export const UserRepository = {
       SELECT
         "User"."id",
         "UserProfile"."name",
-        "UserContact"."email" as "email",
+        "UserContact"."email",
+        "UserActive".activated_at,
         (
           SELECT MAX("created_at")
           FROM "UserLog"
@@ -33,6 +34,7 @@ export const UserRepository = {
       FROM "User"
       LEFT JOIN "UserProfile" ON "User"."id" = "UserProfile"."user_id"
       LEFT JOIN "UserContact" ON "User"."id" = "UserContact"."user_id"
+      LEFT JOIN "UserActive" ON "User"."id" = "UserActive"."user_id"
       LEFT JOIN "UserDelete" ON "User"."id" = "UserDelete"."user_id"
       WHERE "UserDelete"."user_id" IS NULL
       ${whereClause}
