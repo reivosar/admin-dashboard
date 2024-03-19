@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { UserRepository } from "../../repositories/UserRepository";
+import { UserRepository } from "../../../repositories/UserRepository";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {

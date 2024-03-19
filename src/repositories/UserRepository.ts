@@ -3,6 +3,34 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient({});
 
 export const UserRepository = {
+  async findById(id: number) {
+    let params: any[] = [id];
+    return await prisma.$queryRawUnsafe<unknown[]>(
+      `
+      SELECT
+        "User"."id",
+        "UserProfile"."name",
+        "UserProfile"."birth_date",
+        "UserProfile"."gender",
+        "UserContact"."email",
+        "UserActive".activated_at,
+        (
+          SELECT MAX("created_at")
+          FROM "UserLog"
+          WHERE "User"."id" = "UserLog"."user_id"
+        ) AS "lastActivity"
+      FROM "User"
+      INNER JOIN "UserProfile" ON "User"."id" = "UserProfile"."user_id"
+      INNER JOIN "UserContact" ON "User"."id" = "UserContact"."user_id"
+      LEFT JOIN "UserActive" ON "User"."id" = "UserActive"."user_id"
+      LEFT JOIN "UserDelete" ON "User"."id" = "UserDelete"."user_id"
+      WHERE "UserDelete"."user_id" IS NULL
+      AND "User"."id" = $1
+      `,
+      ...params
+    );
+  },
+
   async findByNameAndEmail(name?: string, email?: string) {
     let whereParts: string[] = [];
     let params: any[] = [];
@@ -24,6 +52,8 @@ export const UserRepository = {
       SELECT
         "User"."id",
         "UserProfile"."name",
+        "UserProfile"."birth_date",
+        "UserProfile"."gender",
         "UserContact"."email",
         "UserActive".activated_at,
         (
@@ -32,8 +62,8 @@ export const UserRepository = {
           WHERE "User"."id" = "UserLog"."user_id"
         ) AS "lastActivity"
       FROM "User"
-      LEFT JOIN "UserProfile" ON "User"."id" = "UserProfile"."user_id"
-      LEFT JOIN "UserContact" ON "User"."id" = "UserContact"."user_id"
+      INNER JOIN "UserProfile" ON "User"."id" = "UserProfile"."user_id"
+      INNER JOIN "UserContact" ON "User"."id" = "UserContact"."user_id"
       LEFT JOIN "UserActive" ON "User"."id" = "UserActive"."user_id"
       LEFT JOIN "UserDelete" ON "User"."id" = "UserDelete"."user_id"
       WHERE "UserDelete"."user_id" IS NULL
@@ -59,6 +89,34 @@ export const UserRepository = {
       },
     });
     return user;
+  },
+
+  async update(user_id: number, { profile, contact }) {
+    const updatedUser = await prisma.$transaction(async (prisma) => {
+      await prisma.userProfile.deleteMany({
+        where: { user_id },
+      });
+      await prisma.userContact.deleteMany({
+        where: { user_id },
+      });
+
+      const updatedProfile = await prisma.userProfile.create({
+        data: {
+          user_id,
+          ...profile,
+        },
+      });
+      const updatedContacts = await prisma.userContact.create({
+        data: {
+          user_id,
+          ...contact,
+        },
+      });
+
+      return { updatedProfile, updatedContacts };
+    });
+
+    return updatedUser;
   },
 
   async delete(userIds: number[]) {

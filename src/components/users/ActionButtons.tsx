@@ -8,7 +8,7 @@ const ActionButtons = ({ selectedUsers }) => {
   const isDeleteDisabled = selectedUsers.length === 0;
   return (
     <>
-      <Link href="/userRegister" legacyBehavior>
+      <Link href="/users/regist" legacyBehavior>
         <a className="inline-flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
           <PlusIcon className="w-6 h-6" />
         </a>

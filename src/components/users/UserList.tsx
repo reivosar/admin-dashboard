@@ -10,6 +10,8 @@ import Link from "next/link";
 import Pagination from "./Pagination";
 import { useRouter } from "next/router";
 import { handleDelceteSelectedUsers } from "./UserActions";
+import { useEffect, useState } from "react";
+import UserDetailModal from "./UserDetailModal";
 
 const UserList = ({
   users,
@@ -24,6 +26,9 @@ const UserList = ({
   const totalUsers = users.length;
   const itemsPerPage = 10;
   const totalPages = Math.ceil(totalUsers / itemsPerPage);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -50,6 +55,31 @@ const UserList = ({
     } else {
       setSelectedUsers([...selectedUsers, userId]);
     }
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (isModalOpen) {
+        return;
+      }
+      const menu = document.getElementById("dropdown-menu");
+      if (
+        menu &&
+        !menu.contains(event.target) &&
+        !event.target.matches(".dropdown-button")
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isModalOpen]);
+
+  const handleOpenModal = (user) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
   };
 
   return (
@@ -110,13 +140,19 @@ const UserList = ({
                       <DotsVerticalIcon className="w-5 h-5 text-gray-800 cursor-pointer" />
                     </button>
                     {isOpen[user.id] && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded border">
-                        <Link href={`/users/${user.id}/detail`} legacyBehavior>
-                          <a className="flex items-center space-x-2 p-2 hover:bg-gray-100">
+                      <div
+                        id="dropdown-menu"
+                        className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded border"
+                      >
+                        <div className=" hover:bg-gray-100">
+                          <button
+                            onClick={() => handleOpenModal(user)}
+                            className="flex items-center space-x-2 p-2"
+                          >
                             <InformationCircleIcon className="w-5 h-5 text-blue-500" />
                             <span>Detail</span>
-                          </a>
-                        </Link>
+                          </button>
+                        </div>
                         <Link href={`/users/${user.id}/edit`} legacyBehavior>
                           <a className="flex items-center space-x-2 p-2 hover:bg-gray-100">
                             <PencilIcon className="w-5 h-5 text-green-500" />
@@ -140,6 +176,13 @@ const UserList = ({
           </tbody>
         </table>
       </div>
+      {isModalOpen && selectedUser && (
+        <UserDetailModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          user={selectedUser}
+        />
+      )}
       <Pagination {...{ totalPages, currentPage, goToPage }} />
     </>
   );

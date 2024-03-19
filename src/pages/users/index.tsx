@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-import SearchBar from "../components/users/SearchBar";
-import UserList from "../components/users/UserList";
+import SearchBar from "../../components/users/SearchBar";
+import UserList from "../../components/users/UserList";
 import ActionButtons from "@/components/users/ActionButtons";
 
 const Users: React.FC = () => {
