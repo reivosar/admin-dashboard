@@ -27,8 +27,7 @@ const UserEditForm = () => {
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
-        const data = await response.json();
-        const userData = data[0];
+        const userData = await response.json();
         if (userData) {
           setFormData({
             username: userData.name,
@@ -95,6 +94,9 @@ const UserEditForm = () => {
             value={formData.username}
             onChange={handleChange}
             required
+            minLength={4}
+            maxLength={20}
+            pattern="^[a-zA-Z0-9_]+$"
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
@@ -113,6 +115,7 @@ const UserEditForm = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
@@ -130,51 +133,71 @@ const UserEditForm = () => {
             name="birthdate"
             value={formData.birthdate}
             onChange={handleChange}
+            required
+            pattern="^\d{4}-\d{2}-\d{2}$"
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
-        <div>
+        <div className="mt-4">
           <label
             htmlFor="gender"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-bold text-gray-700"
           >
             Gender
           </label>
-          <div className="mt-2 flex gap-4">
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, gender: "male" })}
-              className={`px-4 py-2 rounded ${
+          <div className="mt-2 space-x-4">
+            <label
+              className={`px-4 py-2 border rounded ${
                 formData.gender === "male"
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-200"
+                  : "bg-gray-200 text-gray-700"
               }`}
             >
+              <input
+                type="radio"
+                name="gender"
+                value="male"
+                onChange={handleChange}
+                required
+                className="sr-only"
+              />{" "}
               Male
-            </button>
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, gender: "female" })}
-              className={`px-4 py-2 rounded ${
+            </label>
+            <label
+              className={`px-4 py-2 border rounded ${
                 formData.gender === "female"
                   ? "bg-pink-500 text-white"
-                  : "bg-gray-200"
+                  : "bg-gray-200 text-gray-700"
               }`}
             >
+              <input
+                type="radio"
+                name="gender"
+                value="female"
+                onChange={handleChange}
+                required
+                className="sr-only"
+              />{" "}
               Female
-            </button>
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, gender: "other" })}
-              className={`px-4 py-2 rounded ${
+            </label>
+            <label
+              className={`px-4 py-2 border rounded ${
                 formData.gender === "other"
                   ? "bg-green-500 text-white"
-                  : "bg-gray-200"
+                  : "bg-gray-200 text-gray-700"
               }`}
             >
+              <input
+                type="radio"
+                name="gender"
+                value="other"
+                onChange={handleChange}
+                required
+                className="sr-only"
+              />{" "}
               Other
-            </button>
+            </label>
           </div>
         </div>
 

@@ -26,7 +26,7 @@ async function handleGet(
 ) {
   return UserRepository.findById(Number(id))
     .then((result) => {
-      if (result) {
+      if (!result) {
         return res.status(404).json({ message: "No users found." });
       } else {
         return res.status(200).json(result);
