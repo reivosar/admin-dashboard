@@ -46,8 +46,8 @@ function UserRegisterForm() {
         router.push("/users");
       }, 300);
     } catch (error) {
-      console.error(error);
       toastError("Failed to register. Please try again.");
+      router.push("/users");
     }
   };
 

@@ -38,8 +38,8 @@ const UserEditForm = () => {
           });
         }
       } catch (error) {
-        console.error("Fetch error:", error);
         toastError("Failed to load user data.");
+        router.push("/users");
       }
     };
 
@@ -71,8 +71,8 @@ const UserEditForm = () => {
           toastSuccess("User updated successfully!");
           router.push("/users");
         } catch (error) {
-          console.error(error);
           toastError("Failed to update user. Please try again.");
+          router.push("/users");
         }
       },
     });

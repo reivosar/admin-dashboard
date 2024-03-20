@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { UserRepository } from "../../../repositories/UserRepository";
+import { generateHash } from "../../../utils/crypt";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
@@ -9,42 +10,73 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   switch (method) {
     case "GET":
-      return UserRepository.findById(Number(id))
-        .then((results) => {
-          if (results.length === 0) {
-            return res.status(404).json({ message: "No users found." });
-          } else {
-            return res.status(200).json(results);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          return res.status(500).json({ message: "Internal Server Error" });
-        });
+      return handleGet(Number(id), req, res);
     case "PUT":
-      try {
-        const { username, email, gender, birthdate } = req.body;
-        const profileData = {
-          name: username,
-          gender: gender,
-          birth_date: new Date(birthdate),
-        };
-        const contactData = {
-          email: email,
-        };
-        const updatedUser = UserRepository.update(Number(id), {
-          profile: profileData,
-          contact: contactData,
-        });
-        return res.status(200).json(updatedUser);
-      } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Failed to save user." });
-      }
-    case "DELETE":
-      break;
+      return handlePost(Number(id), req, res);
     default:
-      res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
+      res.setHeader("Allow", ["GET", "PUT"]);
       res.status(405).end(`Method ${method} Not Allowed`);
+  }
+}
+
+async function handleGet(
+  id: number,
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  return UserRepository.findById(Number(id))
+    .then((result) => {
+      if (result) {
+        return res.status(404).json({ message: "No users found." });
+      } else {
+        return res.status(200).json(result);
+      }
+    })
+    .catch(() => {
+      return res.status(500).json({ message: "Internal Server Error" });
+    });
+}
+
+async function handlePost(
+  id: number,
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const { username, email, gender, birthdate } = req.body;
+
+    const existingUser = await UserRepository.findById(id);
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (existingUser.email !== email) {
+      const emailAlreadyRegistered = await UserRepository.findByEmail(email);
+      if (emailAlreadyRegistered) {
+        return res.status(400).json({ message: "Email already registered." });
+      }
+    }
+
+    const profileData = {
+      name: username,
+      gender: gender,
+      birth_date: new Date(birthdate),
+    };
+    const authIdHash = await generateHash(email);
+    const authorizationData = {
+      auth_id: authIdHash,
+      password_hash: existingUser.password_hash,
+    };
+    const contactData = {
+      email: email,
+    };
+    const updatedUser = UserRepository.update(id, {
+      profile: profileData,
+      authorization: authorizationData,
+      contact: contactData,
+    });
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to save user." });
   }
 }

@@ -1,10 +1,3 @@
-/**
- * Takes a Date object and a format string, then returns a formatted date-time string.
- *
- * @param {Date} date - The Date object to format.
- * @param {string} format - The format string (e.g., 'YYYY-MM-DD HH:mm:ss.SSS', 'YYYY/MM/DD HH:mm').
- * @returns {string} The formatted date-time string.
- */
 export const formatDateTime = (date: Date, format: string): string => {
   const replacements = {
     YYYY: date.getFullYear().toString(),
