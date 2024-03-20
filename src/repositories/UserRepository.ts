@@ -4,48 +4,40 @@ const prisma = new PrismaClient({});
 
 export const UserRepository = {
   async findById(id: number) {
-    let params: any[] = [id];
-    return await prisma.$queryRawUnsafe<unknown[]>(
-      `
-      SELECT
-        "User"."id",
-        "UserProfile"."name",
-        "UserProfile"."birth_date",
-        "UserProfile"."gender",
-        "UserContact"."email",
-        "UserActive".activated_at,
-        (
-          SELECT MAX("created_at")
-          FROM "UserLog"
-          WHERE "User"."id" = "UserLog"."user_id"
-        ) AS "lastActivity"
-      FROM "User"
-      INNER JOIN "UserProfile" ON "User"."id" = "UserProfile"."user_id"
-      INNER JOIN "UserContact" ON "User"."id" = "UserContact"."user_id"
-      LEFT JOIN "UserActive" ON "User"."id" = "UserActive"."user_id"
-      LEFT JOIN "UserDelete" ON "User"."id" = "UserDelete"."user_id"
-      WHERE "UserDelete"."user_id" IS NULL
-      AND "User"."id" = $1
-      `,
-      ...params
-    );
+    return this.findUsers({ id: id });
   },
 
   async findByNameAndEmail(name?: string, email?: string) {
-    let whereParts: string[] = [];
+    return this.findUsers({ name: name, email: email });
+  },
+
+  async findUsers({
+    id,
+    name,
+    email,
+  }: {
+    id?: number;
+    name?: string;
+    email?: string;
+  }) {
     let params: any[] = [];
-
-    if (name) {
-      whereParts.push(`"UserProfile"."name" ILIKE $1 `);
-      params.push(`%${name}%`);
+    let whereClause = "";
+    if (id) {
+      whereClause = `AND "User"."id" = $1`;
+      params.push(id);
+    } else {
+      let whereParts: string[] = [];
+      if (name) {
+        whereParts.push(`"UserProfile"."name" ILIKE $${params.length + 1}`);
+        params.push(`%${name}%`);
+      }
+      if (email) {
+        whereParts.push(`"UserContact"."email" ILIKE $${params.length + 1}`);
+        params.push(`%${email}%`);
+      }
+      whereClause =
+        whereParts.length > 0 ? `AND (${whereParts.join(" OR ")})` : "";
     }
-    if (email) {
-      whereParts.push(`"UserContact"."email" ILIKE $2 `);
-      params.push(`%${email}%`);
-    }
-
-    let whereClause =
-      whereParts.length > 0 ? `AND ${whereParts.join(" OR ")}` : "";
 
     return await prisma.$queryRawUnsafe<unknown[]>(
       `
@@ -68,7 +60,7 @@ export const UserRepository = {
       LEFT JOIN "UserDelete" ON "User"."id" = "UserDelete"."user_id"
       WHERE "UserDelete"."user_id" IS NULL
       ${whereClause}
-    `,
+      `,
       ...params
     );
   },

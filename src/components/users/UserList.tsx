@@ -17,10 +17,10 @@ const UserList = ({
   users,
   currentPage,
   selectedUsers,
-  setSelectedUsers,
+  isOpen,
   setCurrentPage,
   setIsOpen,
-  isOpen,
+  setSelectedUsers,
 }) => {
   const router = useRouter();
   const totalUsers = users.length;

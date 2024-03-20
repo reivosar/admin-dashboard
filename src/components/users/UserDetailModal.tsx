@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { PencilIcon } from "@heroicons/react/solid";
+import { formatDateTime } from "@/utils/dateutils";
 
 interface UserDetailModalProps {
   isOpen: boolean;
@@ -28,21 +29,16 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
     router.push(`/users/${user.id}/edit`);
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}-${String(date.getDate()).padStart(2, "0")}`;
-  };
-
   const genderStyle = {
     male: "bg-blue-500 text-white",
     female: "bg-pink-500 text-white",
     other: "bg-green-500 text-white",
   };
 
-  const birthDateFormatted = formatDate(user.birth_date);
+  const birthDateFormatted = formatDateTime(
+    new Date(user.birth_date),
+    "YYYY-MM-DD"
+  );
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">

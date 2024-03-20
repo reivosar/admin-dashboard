@@ -1,38 +1,23 @@
-import { useState, useEffect } from "react";
-
+import { userHooks } from "@/hooks/users/useUsers";
 import SearchBar from "../../components/users/SearchBar";
 import UserList from "../../components/users/UserList";
 import ActionButtons from "@/components/users/ActionButtons";
 
 const Users: React.FC = () => {
-  const [users, setUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isOpen, setIsOpen] = useState({});
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
-
-  const fetchUsers = async (query = "") => {
-    const response = await fetch(
-      `/api/users?search=${encodeURIComponent(query)}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response.ok) {
-      const data = await response.json();
-      setUsers(data);
-    } else {
-      setUsers([]);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers(searchTerm);
-  }, [searchTerm]);
+  const {
+    users,
+    currentPage,
+    isOpen,
+    searchTerm,
+    selectedUsers,
+    showAdvancedSearch,
+    setCurrentPage,
+    setIsOpen,
+    setSearchTerm,
+    setSelectedUsers,
+    setShowAdvancedSearch,
+    fetchUsers,
+  } = userHooks();
 
   const searchProps = {
     searchTerm,
@@ -49,10 +34,10 @@ const Users: React.FC = () => {
     users,
     currentPage,
     selectedUsers,
-    setSelectedUsers,
+    isOpen,
     setCurrentPage,
     setIsOpen,
-    isOpen,
+    setSelectedUsers,
   };
 
   return (
