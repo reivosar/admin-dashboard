@@ -158,6 +158,7 @@ const UserEditForm = () => {
                 type="radio"
                 name="gender"
                 value="male"
+                checked={formData.gender === "male"}
                 onChange={handleChange}
                 required
                 className="sr-only"
@@ -175,6 +176,7 @@ const UserEditForm = () => {
                 type="radio"
                 name="gender"
                 value="female"
+                checked={formData.gender === "female"}
                 onChange={handleChange}
                 required
                 className="sr-only"
@@ -192,6 +194,7 @@ const UserEditForm = () => {
                 type="radio"
                 name="gender"
                 value="other"
+                checked={formData.gender === "other"}
                 onChange={handleChange}
                 required
                 className="sr-only"
