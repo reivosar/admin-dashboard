@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { ViewGridIcon, UserGroupIcon } from "@heroicons/react/solid";
+import {
+  ViewGridIcon,
+  UserGroupIcon,
+  LightningBoltIcon,
+  ClipboardListIcon,
+  InboxIcon,
+  TerminalIcon,
+} from "@heroicons/react/solid";
 
 const Sidebar: React.FC = () => {
   return (
@@ -19,6 +26,38 @@ const Sidebar: React.FC = () => {
               <a className="flex items-center p-2 text-base font-normal text-gray-800 rounded-lg hover:bg-gray-100">
                 <UserGroupIcon className="w-6 h-6 text-gray-600" />
                 <span className="ml-3">Users</span>
+              </a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/actions" legacyBehavior>
+              <a className="flex items-center p-2 text-base font-normal text-gray-800 rounded-lg hover:bg-gray-100">
+                <LightningBoltIcon className="w-6 h-6 text-gray-600" />
+                <span className="ml-3">Actions</span>
+              </a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/reports" legacyBehavior>
+              <a className="flex items-center p-2 text-base font-normal text-gray-800 rounded-lg hover:bg-gray-100">
+                <ClipboardListIcon className="w-6 h-6 text-gray-600" />
+                <span className="ml-3">Reports</span>
+              </a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/messages" legacyBehavior>
+              <a className="flex items-center p-2 text-base font-normal text-gray-800 rounded-lg hover:bg-gray-100">
+                <InboxIcon className="w-6 h-6 text-gray-600" />
+                <span className="ml-3">Messages</span>
+              </a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/debug" legacyBehavior>
+              <a className="flex items-center p-2 text-base font-normal text-gray-800 rounded-lg hover:bg-gray-100">
+                <TerminalIcon className="w-6 h-6 text-gray-600" />
+                <span className="ml-3">Debug</span>
               </a>
             </Link>
           </li>

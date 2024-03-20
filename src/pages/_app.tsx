@@ -6,10 +6,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import App from "next/app";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
   return (
     <div className="flex flex-col min-h-screen">
+      <Head>
+        <title>Admin Dashboard</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="flex justify-between items-center bg-gray-900 text-white w-full">
         <AdminHeader />
         <NavigationHeader />
@@ -17,7 +22,13 @@ function MyApp({ Component, pageProps }) {
       <div className="flex flex-1">
         <Sidebar />
         <main className="flex-1 pt-4 pl-4 ">
-          <Component {...pageProps} />
+          <div
+            style={{ display: "flex", justifyContent: "center", width: "100%" }}
+          >
+            <div style={{ width: "96%" }}>
+              <Component {...pageProps} />
+            </div>
+          </div>
           {/* Default toast setting */}
           <ToastContainer
             position="top-center"
