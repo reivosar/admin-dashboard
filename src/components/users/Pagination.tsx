@@ -3,7 +3,17 @@ import {
   ArrowNarrowRightIcon,
 } from "@heroicons/react/solid";
 
-const Pagination = ({ totalPages, currentPage, goToPage }) => {
+type PaginationProps = {
+  totalPages: number;
+  currentPage: number;
+  goToPage: (page: number) => void;
+};
+
+const Pagination: React.FC<PaginationProps> = ({
+  totalPages,
+  currentPage,
+  goToPage,
+}) => {
   return (
     <div className="flex justify-center items-center space-x-1 mt-4">
       {totalPages > 1 && (

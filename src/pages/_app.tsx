@@ -1,14 +1,15 @@
 import "../styles/globals.css";
+import type { AppProps } from "next/app";
 import Sidebar from "../components/Sidebar";
 import AdminHeader from "../components/AdminHeader";
 import NavigationHeader from "../components/NavigationHeader";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import App from "next/app";
 import Head from "next/head";
+import App, { AppContext } from "next/app";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className="flex flex-col min-h-screen">
       <Head>
@@ -47,7 +48,7 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-MyApp.getInitialProps = async (appContext) => {
+MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   return { ...appProps };
 };

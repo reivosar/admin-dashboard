@@ -1,4 +1,4 @@
-import { userHooks } from "@/hooks/users/useUsers";
+import { UserHooks } from "@/hooks/users/useUsers";
 import SearchBar from "../../components/users/SearchBar";
 import UserList from "../../components/users/UserList";
 import ActionButtons from "@/components/users/ActionButtons";
@@ -17,7 +17,7 @@ const Users: React.FC = () => {
     setSelectedUsers,
     setShowAdvancedSearch,
     fetchUsers,
-  } = userHooks();
+  } = UserHooks();
 
   const searchProps = {
     searchTerm,

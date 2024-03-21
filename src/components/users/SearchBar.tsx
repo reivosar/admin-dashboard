@@ -1,6 +1,15 @@
 import { SearchIcon, FilterIcon } from "@heroicons/react/solid";
 
-const SearchBar = ({
+type SearchBarProps = {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  setShowAdvancedSearch: (
+    value: boolean | ((prev: boolean) => boolean)
+  ) => void;
+  onSearch: (searchTerm: string) => void;
+};
+
+const SearchBar: React.FC<SearchBarProps> = ({
   searchTerm,
   setSearchTerm,
   setShowAdvancedSearch,

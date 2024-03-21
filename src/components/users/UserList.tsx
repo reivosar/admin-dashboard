@@ -1,3 +1,4 @@
+import React, { useEffect, useState, ChangeEvent } from "react";
 import {
   DotsVerticalIcon,
   PencilIcon,
@@ -10,10 +11,20 @@ import Link from "next/link";
 import Pagination from "./Pagination";
 import { useRouter } from "next/router";
 import { handleDelceteSelectedUsers } from "./UserActions";
-import { useEffect, useState } from "react";
 import UserDetailModal from "./UserDetailModal";
+import { User } from "./UserModels";
 
-const UserList = ({
+type UserListProps = {
+  users: User[];
+  currentPage: number;
+  selectedUsers: string[];
+  isOpen: { [key: string]: boolean };
+  setCurrentPage: (page: number) => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
+  setSelectedUsers: (users: string[]) => void;
+};
+
+const UserList: React.FC<UserListProps> = ({
   users,
   currentPage,
   selectedUsers,
@@ -27,21 +38,21 @@ const UserList = ({
   const itemsPerPage = 10;
   const totalPages = Math.ceil(totalUsers / itemsPerPage);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const goToPage = (pageNumber) => {
+  const goToPage = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
-  const toggleDropdown = (id) => {
-    setIsOpen((prevState) => ({
+  const toggleDropdown = (id: string) => {
+    setIsOpen((prevState: { [key: string]: boolean }) => ({
       ...prevState,
       [id]: !prevState[id],
     }));
   };
 
-  const handleSelectAllChange = (e) => {
+  const handleSelectAllChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       setSelectedUsers(users.map((user) => user.id));
     } else {
@@ -49,7 +60,7 @@ const UserList = ({
     }
   };
 
-  const handleUserCheckChange = (userId) => {
+  const handleUserCheckChange = (userId: string) => {
     if (selectedUsers.includes(userId)) {
       setSelectedUsers(selectedUsers.filter((id) => id !== userId));
     } else {
@@ -58,26 +69,26 @@ const UserList = ({
   };
 
   useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (isModalOpen) {
-        return;
-      }
-      const menu = document.getElementById("dropdown-menu");
-      if (
-        menu &&
-        !menu.contains(event.target) &&
-        !event.target.matches(".dropdown-button")
-      ) {
-        setIsOpen(false);
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (!isModalOpen) {
+        const menu = document.getElementById("dropdown-menu");
+        if (
+          menu &&
+          !menu.contains(event.target as Node) &&
+          !(event.target as Element).classList.contains("dropdown-button")
+        ) {
+          setIsOpen({});
+        }
       }
     };
+
     document.addEventListener("mousedown", handleOutsideClick);
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [isModalOpen]);
+  }, [isModalOpen, setIsOpen]);
 
-  const handleOpenModal = (user) => {
+  const handleOpenModal = (user: User) => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };

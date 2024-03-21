@@ -2,7 +2,17 @@ import React from "react";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
-export const showConfirmDialog = ({ title = "", message, onConfirm }) => {
+interface ConfirmDialogOptions {
+  title?: string;
+  message: string;
+  onConfirm: () => void;
+}
+
+export const showConfirmDialog = ({
+  title = "",
+  message,
+  onConfirm,
+}: ConfirmDialogOptions) => {
   confirmAlert({
     customUI: ({ onClose }) => {
       return (

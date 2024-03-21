@@ -22,10 +22,17 @@ ChartJS.register(
   Legend
 );
 
+type TrendData = {
+  label: string;
+  scores: number[];
+  timestamps: string[];
+  description: string;
+};
+
 const colors = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"];
 
 const TrendDashboard = () => {
-  const [trendData, setTrendData] = useState([]);
+  const [trendData, setTrendData] = useState<TrendData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {

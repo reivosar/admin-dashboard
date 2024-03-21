@@ -1,9 +1,9 @@
 version: "3.8"
 services:
-  postgres:
+  db:
     image: postgres:latest
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
@@ -12,5 +12,15 @@ services:
       - "5432:5432"
     env_file:
       - .env
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db
+
 volumes:
-  postgres_data:
+  db_data:

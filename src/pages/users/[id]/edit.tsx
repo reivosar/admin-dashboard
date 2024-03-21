@@ -12,7 +12,7 @@ const EditUserPage: React.FC = () => {
           <h1 className="text-3xl font-bold">Edit User</h1>
         </div>
       </div>
-      {id && <UserEditForm id={id} />}
+      {typeof id === "string" && <UserEditForm id={id} />}
     </div>
   );
 };

@@ -26,7 +26,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         return res.status(200).json(results);
       }
     })
-    .catch((error) => {
+    .catch(() => {
       return res.status(500).json({ message: "Internal Server Error" });
     });
 }
@@ -42,8 +42,8 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 
     const profileData = {
       name: username,
-      gender: gender,
       birth_date: new Date(birthdate),
+      gender: gender,
     };
     const authIdHash = await generateHash(email);
     const passwordHash = await generateHash(password);
@@ -54,11 +54,11 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
     const contactData = {
       email: email,
     };
-    const savedUser = await UserRepository.create({
-      profile: profileData,
-      authorization: authorizationData,
-      contacts: contactData,
-    });
+    const savedUser = await UserRepository.create(
+      profileData,
+      authorizationData,
+      contactData
+    );
     return res.status(201).json(savedUser);
   } catch (error) {
     return res.status(500).json({ message: "Failed to save user." });

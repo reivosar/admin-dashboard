@@ -59,8 +59,8 @@ async function handlePost(
 
     const profileData = {
       name: username,
-      gender: gender,
       birth_date: new Date(birthdate),
+      gender: gender,
     };
     const authIdHash = await generateHash(email);
     const authorizationData = {
@@ -70,11 +70,12 @@ async function handlePost(
     const contactData = {
       email: email,
     };
-    const updatedUser = UserRepository.update(id, {
-      profile: profileData,
-      authorization: authorizationData,
-      contact: contactData,
-    });
+    const updatedUser = UserRepository.update(
+      id,
+      profileData,
+      authorizationData,
+      contactData
+    );
     return res.status(200).json(updatedUser);
   } catch (error) {
     return res.status(500).json({ message: "Failed to save user." });

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
-export const userHooks = () => {
+export const UserHooks = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpen, setIsOpen] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
 
   const fetchUsers = async (query = "") => {

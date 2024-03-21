@@ -2,9 +2,14 @@ import Link from "next/link";
 import { PlusIcon, TrashIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { handleDelceteSelectedUsers } from "./UserActions";
+import { NextRouter } from "next/router";
 
-const ActionButtons = ({ selectedUsers }) => {
-  const router = useRouter();
+type ActionButtonsProps = {
+  selectedUsers: string[];
+};
+
+const ActionButtons: React.FC<ActionButtonsProps> = ({ selectedUsers }) => {
+  const router: NextRouter = useRouter();
   const isDeleteDisabled = selectedUsers.length === 0;
   return (
     <>

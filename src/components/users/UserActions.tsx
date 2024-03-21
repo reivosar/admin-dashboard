@@ -1,7 +1,11 @@
+import { NextRouter } from "next/router";
 import { showConfirmDialog } from "../utils/ConfirmDialog";
 import { toastError } from "../utils/ToastifyAlerts";
 
-export const handleDelceteSelectedUsers = async (router, selectedUsers) => {
+export const handleDelceteSelectedUsers = async (
+  router: NextRouter,
+  selectedUsers: string[]
+) => {
   showConfirmDialog({
     message: "Are you sure you want to delete the selected users?",
     onConfirm: async () => {

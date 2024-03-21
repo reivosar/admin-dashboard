@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const toastSuccess = (message) => {
+export const toastSuccess = (message: string) => {
   toast.success(message, {
     position: "top-center",
     autoClose: 5000,
@@ -14,7 +14,7 @@ export const toastSuccess = (message) => {
   });
 };
 
-export const toastWarn = (message) => {
+export const toastWarn = (message: string) => {
   toast.warn(message, {
     position: "top-center",
     autoClose: 5000,
@@ -27,7 +27,7 @@ export const toastWarn = (message) => {
   });
 };
 
-export const toastError = (message) => {
+export const toastError = (message: string) => {
   toast.error(message, {
     position: "top-center",
     autoClose: 5000,
