@@ -11,16 +11,21 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - .env
+      - .env.${BUILD_ENV:-}
 
   app:
-    build: .
+    build:
+      context: .
+      args:
+        BUILD_ENV: ${BUILD_ENV:-}
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV:-production}
     depends_on:
       - db
+    env_file:
+      - .env.${BUILD_ENV:-}
 
 volumes:
   db_data:

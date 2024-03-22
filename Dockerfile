@@ -1,13 +1,15 @@
 FROM node:21.5.0-alpine3.19 AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci --only=production
+RUN npm ci --only={BUILD_ENV} 
 
 FROM node:21.5.0-alpine3.19 AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN npx prisma generate 
+RUN npx prisma generate
+ARG BUILD_ENV
+COPY .env.${BUILD_ENV} ./.env
 RUN npm run build
 
 FROM node:21.5.0-alpine3.19 AS runner
@@ -21,11 +23,11 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/.env ./.env
 
 RUN chown -R nextjs:nodejs /app/.next
 USER nextjs
 
 EXPOSE 3000
-ENV NODE_ENV production
 
 CMD ["npm", "start"]
