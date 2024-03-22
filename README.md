@@ -60,8 +60,9 @@ http://localhost:3000
 Follow the instructions on the screen to explore the features of the dashboard.
 
 ## Screenshots
+![スクリーンショット 2024-03-22 11 02 59](https://github.com/reivosar/admin-dashboard/assets/2153822/d39e88fd-b1bd-4434-aed7-980d6acbe0b4)
 
-Screenshots of the project will be added here.
+![スクリーンショット 2024-03-22 11 06 10](https://github.com/reivosar/admin-dashboard/assets/2153822/ba1dd6c2-30ec-4689-8448-cc506e206b73)
 
 ## Contributing
 
