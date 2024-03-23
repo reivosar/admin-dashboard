@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - .env.${BUILD_ENV:-}
+      - .env${BUILD_ENV:+.$BUILD_ENV}
 
   app:
     build:
@@ -25,7 +25,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env.${BUILD_ENV:-}
+      - .env${BUILD_ENV:+.$BUILD_ENV}
 
 volumes:
   db_data:
