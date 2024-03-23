@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Admin Dashboard
+
+This project is an admin dashboard designed for administrators to display the latest trend information, manage users, messages, and action lists, and more.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Screenshots](#screenshots)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Overview
+
+The Admin Dashboard is a comprehensive management tool designed to simplify the administrative workload. It provides a user-friendly interface for monitoring and managing the latest trends, user data, messages, and action items efficiently and effectively.
 
 ## Getting Started
 
-First, run the development server:
+To get started with this project, you will need to have a basic understanding of web development technologies and tools.
+
+### Prerequisites
+
+- Node.js v14 or higher
+- Docker and Docker-compose
+- A modern web browser
+
+## Installation
+
+1. Clone the project repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/reivosar/admin-dashboard.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Navigate to the project directory:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd admin-dashboard
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Use Docker-compose to build and run the application:
 
-## Learn More
+```bash
+docker-compose up --build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Once the application is running, you can access the admin dashboard through your web browser by navigating to:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```
+http://localhost:3000
+```
 
-## Deploy on Vercel
+Follow the instructions on the screen to explore the features of the dashboard.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Screenshots
+![スクリーンショット 2024-03-22 11 02 59](https://github.com/reivosar/admin-dashboard/assets/2153822/d39e88fd-b1bd-4434-aed7-980d6acbe0b4)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![スクリーンショット 2024-03-22 11 06 10](https://github.com/reivosar/admin-dashboard/assets/2153822/ba1dd6c2-30ec-4689-8448-cc506e206b73)
+
+## Contributing
+
+Contributions to this project are welcome! If you find a bug or have a feature request, please open an issue. If you want to contribute to the code, feel free to create a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For questions or bug reports, please use the following methods:
+
+- GitHub Issues: https://github.com/reivosar/admin-dashboard/issues
