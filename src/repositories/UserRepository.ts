@@ -1,6 +1,5 @@
-import { PrismaClient, $Enums } from "@prisma/client";
-
-const prisma = new PrismaClient({});
+import { $Enums } from "@prisma/client";
+import prisma from "./Prisma";
 
 interface UserWithDetails {
   id: number;
