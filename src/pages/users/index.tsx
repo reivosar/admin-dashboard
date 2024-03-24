@@ -1,29 +1,27 @@
-import { UserHooks } from "@/hooks/users/useUsers";
+import { useSearchAndPaginationHook } from "@/hooks/useSearchAndPagination";
 import SearchBar from "../../components/users/SearchBar";
 import UserList from "../../components/users/UserList";
 import ActionButtons from "@/components/users/ActionButtons";
+import { useState } from "react";
+import { User } from "@/components/users/UserModels";
 
 const Users: React.FC = () => {
   const {
-    users,
+    data: users,
+    totalPage,
     currentPage,
-    isOpen,
-    searchTerm,
-    selectedUsers,
-    showAdvancedSearch,
     setCurrentPage,
-    setIsOpen,
-    setSearchTerm,
-    setSelectedUsers,
-    setShowAdvancedSearch,
-    fetchUsers,
-  } = UserHooks();
+    setFilter,
+    sortConfig,
+    setSortConfig,
+    goToPage,
+  } = useSearchAndPaginationHook<User>("/api/users", 10);
+
+  const [isOpen, setIsOpen] = useState({});
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const searchProps = {
-    searchTerm,
-    setSearchTerm,
-    setShowAdvancedSearch,
-    onSearch: () => fetchUsers(searchTerm),
+    setFilter,
   };
 
   const actionProps = {
@@ -33,11 +31,13 @@ const Users: React.FC = () => {
   const userListProps = {
     users,
     currentPage,
+    totalPage,
     selectedUsers,
     isOpen,
     setCurrentPage,
     setIsOpen,
     setSelectedUsers,
+    goToPage,
   };
 
   return (
@@ -55,11 +55,6 @@ const Users: React.FC = () => {
         <SearchBar {...searchProps} />
         <ActionButtons {...actionProps} />
       </div>
-      {showAdvancedSearch && (
-        <div className="bg-gray-100 p-4 rounded">
-          <h3 className="font-semibold">Advanced Search</h3>
-        </div>
-      )}
 
       <UserList {...userListProps} />
     </div>

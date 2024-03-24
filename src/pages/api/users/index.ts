@@ -17,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
-  const searchQuery = req.query.search as string | undefined;
+  const searchQuery = req.query["filter[searchTerm]"] as string | undefined;
   return UserRepository.findByNameAndEmail(searchQuery, searchQuery)
     .then((results) => {
       if (results.length === 0) {

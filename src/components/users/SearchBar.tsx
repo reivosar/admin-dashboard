@@ -1,20 +1,17 @@
-import { SearchIcon, FilterIcon } from "@heroicons/react/solid";
+import React, { useState } from "react";
+import { SearchIcon } from "@heroicons/react/solid";
 
 type SearchBarProps = {
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  setShowAdvancedSearch: (
-    value: boolean | ((prev: boolean) => boolean)
-  ) => void;
-  onSearch: (searchTerm: string) => void;
+  setFilter: (filter: Record<string, string>) => void;
 };
 
-const SearchBar: React.FC<SearchBarProps> = ({
-  searchTerm,
-  setSearchTerm,
-  setShowAdvancedSearch,
-  onSearch,
-}) => {
+const SearchBar: React.FC<SearchBarProps> = ({ setFilter }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = () => {
+    setFilter({ searchTerm: searchTerm });
+  };
+
   return (
     <>
       <input
@@ -26,15 +23,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
       />
       <button
         className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-        onClick={() => onSearch(searchTerm)}
+        onClick={handleSearch}
       >
         <SearchIcon className="w-5 h-5 text-gray-600" />
-      </button>
-      <button
-        className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-        onClick={() => setShowAdvancedSearch((prev) => !prev)}
-      >
-        <FilterIcon className="w-5 h-5 text-gray-600" />
       </button>
     </>
   );

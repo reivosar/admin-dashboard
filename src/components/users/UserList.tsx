@@ -8,7 +8,7 @@ import {
   XCircleIcon,
 } from "@heroicons/react/solid";
 import Link from "next/link";
-import Pagination from "./Pagination";
+import Pagination from "../utils/Pagination";
 import { useRouter } from "next/router";
 import { handleDelceteSelectedUsers } from "./UserActions";
 import UserDetailModal from "./UserDetailModal";
@@ -17,33 +17,29 @@ import { User } from "./UserModels";
 type UserListProps = {
   users: User[];
   currentPage: number;
+  totalPage: number;
   selectedUsers: string[];
   isOpen: { [key: string]: boolean };
   setCurrentPage: (page: number) => void;
   setIsOpen: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
   setSelectedUsers: (users: string[]) => void;
+  goToPage: (page: number) => void;
 };
 
 const UserList: React.FC<UserListProps> = ({
   users,
   currentPage,
+  totalPage,
   selectedUsers,
   isOpen,
   setCurrentPage,
   setIsOpen,
   setSelectedUsers,
+  goToPage,
 }) => {
   const router = useRouter();
-  const totalUsers = users.length;
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(totalUsers / itemsPerPage);
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
-  const goToPage = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
 
   const toggleDropdown = (id: string) => {
     setIsOpen((prevState: { [key: string]: boolean }) => ({
@@ -194,7 +190,7 @@ const UserList: React.FC<UserListProps> = ({
           user={selectedUser}
         />
       )}
-      <Pagination {...{ totalPages, currentPage, goToPage }} />
+      <Pagination {...{ totalPage, currentPage, goToPage }} />
     </>
   );
 };

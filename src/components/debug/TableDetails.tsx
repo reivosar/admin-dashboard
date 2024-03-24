@@ -29,18 +29,29 @@ const TableDetails: React.FC<TableDetailsFormProps> = ({ name }) => {
     direction: string;
   } | null>(null);
   const [filter, setFilter] = useState<Record<string, string>>({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchTableData();
-  }, [name, sortConfig]);
+  }, [name, sortConfig, filter]);
+
+  const goToPage = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   const fetchTableData = async () => {
     setIsLoading(true);
     setError(null);
 
-    let url = `/api/debug/db/${name}`;
+    let url = new URL(`/api/debug/db/${name}`, window.location.origin);
+
     if (sortConfig) {
-      url += `?sort=${sortConfig.key}&direction=${sortConfig.direction}`;
+      url.searchParams.append("sort", sortConfig.key);
+      url.searchParams.append("direction", sortConfig.direction);
+    }
+
+    if (Object.keys(filter).length > 0) {
+      url.searchParams.append("filter", JSON.stringify(filter));
     }
 
     try {
@@ -77,12 +88,6 @@ const TableDetails: React.FC<TableDetailsFormProps> = ({ name }) => {
     setFilter((prev) => ({ ...prev, [columnName]: value }));
   };
 
-  const filteredData = tableDetails?.data.filter((row) =>
-    Object.entries(filter).every(([key, value]) =>
-      row[key].toString().toLowerCase().includes(value.toLowerCase())
-    )
-  );
-
   if (isLoading) return <LoadingIndicator />;
   if (error) return <div>Error: {error}</div>;
 
@@ -110,6 +115,7 @@ const TableDetails: React.FC<TableDetailsFormProps> = ({ name }) => {
               <td key={header.column_name} className="px-6 py-3">
                 <FilterInput
                   columnName={header.column_name}
+                  value={filter[header.column_name] || ""}
                   onChange={(value) =>
                     handleFilterChange(header.column_name, value)
                   }
@@ -117,7 +123,7 @@ const TableDetails: React.FC<TableDetailsFormProps> = ({ name }) => {
               </td>
             ))}
           </tr>
-          {filteredData?.map((row, rowIndex) => (
+          {tableDetails?.data.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {tableDetails?.headers.map((header) => (
                 <td key={header.column_name}>{row[header.column_name]}</td>
