@@ -23,25 +23,34 @@ export default async function handler(
   }
 }
 
+interface TableColumn {
+  column_name: string;
+  data_type: string;
+}
+
 async function handleGet(
   name: string,
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    let { sort, direction } = req.query;
-    let conditions = {};
+    const { sort, direction } = req.query;
+    let conditions: Record<string, any> = [];
 
     const headers = await DebugRepository.findHeaderByName(name);
 
-    if (typeof req.query.filter === "string") {
-      try {
-        const rawConditions = JSON.parse(req.query.filter);
-        conditions = convertFilterConditions(rawConditions, headers);
-      } catch (err) {
-        return res.status(400).json({ error: "Invalid filter format" });
+    Object.keys(req.query).forEach((key) => {
+      if (key.startsWith("filter[")) {
+        const match = key.match(/^filter\[(.*?)\]$/);
+        const filterKey = match && match[1];
+        if (filterKey) {
+          const value = req.query[key];
+          conditions[filterKey] = value;
+        }
       }
-    }
+    });
+
+    conditions = convertFilterConditions(conditions, headers);
 
     const sortConfig =
       typeof sort === "string" && typeof direction === "string"
@@ -60,38 +69,36 @@ async function handleGet(
   }
 }
 
-interface TableColumn {
-  column_name: string;
-  data_type: string;
-}
-
 function convertFilterConditions(
   conditions: Record<string, any>,
   headers: TableColumn[]
 ) {
   const convertedConditions: Record<string, any> = {};
 
-  Object.entries(conditions).forEach(([columnName, filterValue]) => {
-    const trimmedFilterValue = typeof filterValue
-      ? filterValue.trim()
-      : filterValue;
-    if (!trimmedFilterValue) return;
-
+  Object.entries(conditions).forEach(([columnName, rawValue]) => {
     const columnInfo = headers.find(
       (header) => header.column_name === columnName
     );
     if (!columnInfo) return;
 
+    if (!rawValue) return;
+
+    let value = rawValue;
+    if (typeof rawValue === "string") {
+      value = rawValue.trim();
+      if (value === "") return;
+    }
+
     switch (columnInfo.data_type) {
       case "integer":
-        convertedConditions[columnName] = parseInt(trimmedFilterValue, 10);
-        if (isNaN(convertedConditions[columnName])) {
-          throw new Error(`Invalid integer format for column ${columnName}`);
+        value = parseInt(value, 10);
+        if (isNaN(value)) {
+          throw new Error(`Invalid integer format for column '${columnName}'.`);
         }
         break;
-      default:
-        convertedConditions[columnName] = trimmedFilterValue;
     }
+
+    convertedConditions[columnName] = value;
   });
 
   return convertedConditions;

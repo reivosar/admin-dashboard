@@ -6,16 +6,10 @@ import { useState } from "react";
 import { User } from "@/components/users/UserModels";
 
 const Users: React.FC = () => {
-  const {
-    data: users,
-    totalPage,
-    currentPage,
-    setCurrentPage,
-    setFilter,
-    sortConfig,
-    setSortConfig,
-    goToPage,
-  } = useSearchAndPaginationHook<User>("/api/users", 10);
+  const { states, setFilter, goToPage } = useSearchAndPaginationHook<User>(
+    "/api/users",
+    10
+  );
 
   const [isOpen, setIsOpen] = useState({});
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
@@ -29,12 +23,9 @@ const Users: React.FC = () => {
   };
 
   const userListProps = {
-    users,
-    currentPage,
-    totalPage,
+    states,
     selectedUsers,
     isOpen,
-    setCurrentPage,
     setIsOpen,
     setSelectedUsers,
     goToPage,
@@ -46,7 +37,7 @@ const Users: React.FC = () => {
         <div className="flex items-center">
           <h1 className="text-3xl font-bold">Users</h1>
           <span className="ml-2 bg-green-500 text-white font-semibold py-1 px-3 rounded">
-            {users.length}
+            {states.data.length}
           </span>
         </div>
       </div>

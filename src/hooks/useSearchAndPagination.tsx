@@ -6,19 +6,18 @@ type SortConfig = {
 } | null;
 
 type UseSearchAndPaginationHookReturnType<T> = {
-  data: T[];
-  currentPage: number;
-  totalPage: number;
-  isLoading: boolean;
-  error: string;
-  filter: Record<string, string>;
-  sortConfig: { key: string; direction: "asc" | "desc" } | null;
-  setFilter: (filter: Record<string, string>) => void;
-  setSortConfig: (
-    sortConfig: { key: string; direction: "asc" | "desc" } | null
-  ) => void;
-  setCurrentPage: (currentPage: number) => void;
+  states: {
+    data: T[];
+    currentPage: number;
+    totalPage: number;
+    isLoading: boolean;
+    error: string;
+    filter: Record<string, string>;
+    sortConfig: { key: string; direction: "asc" | "desc" } | null;
+  };
+  setFilter: (newFilter: Record<string, string>) => void;
   goToPage: (page: number) => void;
+  handleSort: (key: string) => void;
 };
 
 export const useSearchAndPaginationHook = <T,>(
@@ -54,6 +53,7 @@ export const useSearchAndPaginationHook = <T,>(
       const response = await fetch(url.toString());
       if (!response.ok) throw new Error("Failed to fetch data");
       const result = await response.json();
+
       setStates((prev) => ({
         ...prev,
         data: result,
@@ -85,15 +85,29 @@ export const useSearchAndPaginationHook = <T,>(
   }, [fetchData]);
 
   return {
-    ...states,
-    setFilter: (filter: Record<string, string>) =>
-      setStates((prev) => ({ ...prev, filter, currentPage: 1 })),
-    setSortConfig: (sortConfig: SortConfig) =>
-      setStates((prev) => ({ ...prev, sortConfig })),
-    setCurrentPage: (currentPage: number) =>
-      setStates((prev) => ({ ...prev, currentPage })),
+    states,
+    setFilter: (newFilter: Record<string, string>) =>
+      setStates((prev) => ({
+        ...prev,
+        filter: { ...prev.filter, ...newFilter },
+        currentPage: 1,
+      })),
     goToPage: (page: number) => {
       setStates((prev) => ({ ...prev, currentPage: page }));
+    },
+    handleSort: (key: string) => {
+      let direction: "asc" | "desc" = "asc";
+      if (
+        states.sortConfig &&
+        states.sortConfig.key === key &&
+        states.sortConfig.direction === "asc"
+      ) {
+        direction = "desc";
+      }
+      setStates((prev) => ({
+        ...prev,
+        sortConfig: { key, direction },
+      }));
     },
   };
 };

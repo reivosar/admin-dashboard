@@ -1,109 +1,58 @@
-import React, { useState, useEffect } from "react";
-import { toastError, toastWarn } from "../utils/ToastifyAlerts";
 import { SortIcon } from "../utils/SortIcon";
 import { LoadingIndicator } from "../utils/LoadingIndicator";
 import { FilterInput } from "../utils/FilterInput";
+import Pagination from "../utils/Pagination";
+import { TableDetails } from "./TableModels";
 
 type TableDetailsFormProps = {
-  name: string;
+  states: {
+    data: TableDetails;
+    currentPage: number;
+    totalPage: number;
+    isLoading: boolean;
+    error: string;
+    filter: Record<string, string>;
+    sortConfig: { key: string; direction: "asc" | "desc" } | null;
+  };
+  setFilter: (filter: Record<string, string>) => void;
+  goToPage: (page: number) => void;
+  handleSort: (key: string) => void;
 };
 
-interface TableColumn {
-  column_name: string;
-  data_type: string;
-}
-
-interface TableDetails {
-  headers: TableColumn[];
-  data: { [key: string]: any }[];
-}
-
-const TableDetails: React.FC<TableDetailsFormProps> = ({ name }) => {
-  const [tableDetails, setTableDetails] = useState<TableDetails | undefined>(
-    undefined
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [sortConfig, setSortConfig] = useState<{
-    key: string;
-    direction: string;
-  } | null>(null);
-  const [filter, setFilter] = useState<Record<string, string>>({});
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    fetchTableData();
-  }, [name, sortConfig, filter]);
-
-  const goToPage = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const fetchTableData = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    let url = new URL(`/api/debug/db/${name}`, window.location.origin);
-
-    if (sortConfig) {
-      url.searchParams.append("sort", sortConfig.key);
-      url.searchParams.append("direction", sortConfig.direction);
-    }
-
-    if (Object.keys(filter).length > 0) {
-      url.searchParams.append("filter", JSON.stringify(filter));
-    }
-
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        toastWarn("Failed to fetch table data");
-        setError("Failed to fetch table data");
-        return;
-      }
-      const data: TableDetails = await response.json();
-      setTableDetails(data);
-    } catch (err) {
-      console.error(err);
-      toastError("Failed to load table data.");
-      setError("Failed to load table data.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSort = (key: string) => {
-    let direction = "asc";
-    if (
-      sortConfig &&
-      sortConfig.key === key &&
-      sortConfig.direction === "asc"
-    ) {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
-
+const TableDetails: React.FC<TableDetailsFormProps> = ({
+  states,
+  setFilter,
+  goToPage,
+  handleSort,
+}) => {
   const handleFilterChange = (columnName: string, value: string) => {
-    setFilter((prev) => ({ ...prev, [columnName]: value }));
+    setFilter({ [columnName]: value });
   };
 
-  if (isLoading) return <LoadingIndicator />;
-  if (error) return <div>Error: {error}</div>;
+  if (states.isLoading) return <LoadingIndicator />;
+  if (states.error) return <div>Error: {states.error}</div>;
+
+  const headers = states?.data?.headers;
+  const data = states?.data?.data;
+
+  const sortConfig = states.sortConfig;
+  const filter = states.filter;
+  const totalPage = states.totalPage;
+  const currentPage = states.currentPage;
 
   return (
     <div>
       <table>
         <thead>
           <tr>
-            {tableDetails?.headers.map((header, headerIndex) => (
+            {headers?.map((header, headerIndex) => (
               <th
                 key={headerIndex}
                 onClick={() => handleSort(header.column_name)}
               >
                 {header.column_name}
                 {sortConfig?.key === header.column_name && (
-                  <SortIcon direction={sortConfig.direction} />
+                  <SortIcon direction={sortConfig?.direction} />
                 )}
               </th>
             ))}
@@ -111,7 +60,7 @@ const TableDetails: React.FC<TableDetailsFormProps> = ({ name }) => {
         </thead>
         <tbody>
           <tr className="bg-gray-50">
-            {tableDetails?.headers.map((header) => (
+            {headers?.map((header) => (
               <td key={header.column_name} className="px-6 py-3">
                 <FilterInput
                   columnName={header.column_name}
@@ -123,15 +72,16 @@ const TableDetails: React.FC<TableDetailsFormProps> = ({ name }) => {
               </td>
             ))}
           </tr>
-          {tableDetails?.data.map((row, rowIndex) => (
+          {data?.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {tableDetails?.headers.map((header) => (
+              {headers?.map((header) => (
                 <td key={header.column_name}>{row[header.column_name]}</td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
+      <Pagination {...{ totalPage, currentPage, goToPage }} />
       <style jsx>{`
         table {
           width: 100%;

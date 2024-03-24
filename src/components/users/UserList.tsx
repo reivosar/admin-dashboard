@@ -15,24 +15,24 @@ import UserDetailModal from "./UserDetailModal";
 import { User } from "./UserModels";
 
 type UserListProps = {
-  users: User[];
-  currentPage: number;
-  totalPage: number;
+  states: {
+    data: User[];
+    currentPage: number;
+    totalPage: number;
+    isLoading: boolean;
+    error: string;
+  };
   selectedUsers: string[];
   isOpen: { [key: string]: boolean };
-  setCurrentPage: (page: number) => void;
   setIsOpen: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
   setSelectedUsers: (users: string[]) => void;
   goToPage: (page: number) => void;
 };
 
 const UserList: React.FC<UserListProps> = ({
-  users,
-  currentPage,
-  totalPage,
+  states,
   selectedUsers,
   isOpen,
-  setCurrentPage,
   setIsOpen,
   setSelectedUsers,
   goToPage,
@@ -40,6 +40,9 @@ const UserList: React.FC<UserListProps> = ({
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const users = states.data;
+  const totalPage = states.totalPage;
+  const currentPage = states.currentPage;
 
   const toggleDropdown = (id: string) => {
     setIsOpen((prevState: { [key: string]: boolean }) => ({
