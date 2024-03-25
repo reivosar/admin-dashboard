@@ -12,11 +12,11 @@ import Pagination from "../utils/Pagination";
 import { useRouter } from "next/router";
 import { handleDelceteSelectedUsers } from "./UserActions";
 import UserDetailModal from "./UserDetailModal";
-import { User } from "./UserModels";
+import { UserModel } from "@/types/user";
 
 type UserListProps = {
   states: {
-    data: User[];
+    data: UserModel[];
     currentPage: number;
     totalPage: number;
     isLoading: boolean;
@@ -39,7 +39,7 @@ const UserList: React.FC<UserListProps> = ({
 }) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserModel | null>(null);
   const users = states.data;
   const totalPage = states.totalPage;
   const currentPage = states.currentPage;
@@ -87,7 +87,7 @@ const UserList: React.FC<UserListProps> = ({
     };
   }, [isModalOpen, setIsOpen]);
 
-  const handleOpenModal = (user: User) => {
+  const handleOpenModal = (user: UserModel) => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };

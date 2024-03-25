@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
 import prisma from "./Prisma";
-import { TableDetails, SearchHeaderColumn } from "@/types/debug";
+import { TableDetailsModel, SearchHeaderColumnModel } from "@/types/debug";
 
 export const DebugRepository = {
-  async findAllTables(): Promise<TableDetails[]> {
+  async findAllTables(): Promise<TableDetailsModel[]> {
     const query = `
       WITH table_columns AS (
         SELECT
@@ -98,7 +98,7 @@ export const DebugRepository = {
         tc.table_name;
     `;
 
-    const tables: TableDetails[] = await prisma.$queryRawUnsafe(query);
+    const tables: TableDetailsModel[] = await prisma.$queryRawUnsafe(query);
     return tables.map((table) => ({
       table_name: table.table_name,
       columns: table.columns.map((column) => ({
@@ -115,9 +115,11 @@ export const DebugRepository = {
     }));
   },
 
-  async findHeaderByName(tableName: string): Promise<SearchHeaderColumn[]> {
+  async findHeaderByName(
+    tableName: string
+  ): Promise<SearchHeaderColumnModel[]> {
     try {
-      const columns = await prisma.$queryRaw<SearchHeaderColumn[]>`
+      const columns = await prisma.$queryRaw<SearchHeaderColumnModel[]>`
         SELECT c.column_name, c.data_type, 
           CASE WHEN c.data_type = 'USER-DEFINED' 
             THEN (SELECT string_agg(enumlabel, ', ') FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid WHERE t.typname = c.udt_name) 

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { DebugRepository } from "../../../../repositories/DebugRepository";
+import { DebugRepository } from "@/repositories/DebugRepository";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {

@@ -1,4 +1,4 @@
-export interface TableColumn {
+export interface TableColumnModel {
   column_name: string;
   data_type: string;
   is_primary: boolean;
@@ -10,18 +10,18 @@ export interface TableColumn {
   enum_labels: string | null;
 }
 
-export interface TableDetails {
+export interface TableDetailsModel {
   table_name: string;
-  columns: TableColumn[];
+  columns: TableColumnModel[];
 }
 
-export interface SearchHeaderColumn {
+export interface SearchHeaderColumnModel {
   column_name: string;
   data_type: string;
   enum_labels: string | null;
 }
 
-export interface SearchTableDetails {
-  headers: SearchHeaderColumn[];
+export interface SearchTableDetailsModel {
+  headers: SearchHeaderColumnModel[];
   data: { [key: string]: any }[];
 }

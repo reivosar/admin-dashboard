@@ -2,12 +2,12 @@ import React from "react";
 import { useRouter } from "next/router";
 import { PencilIcon } from "@heroicons/react/solid";
 import { formatDateTime } from "@/utils/dateutils";
-import { User } from "./UserModels";
+import { UserModel } from "@/types/user";
 
 interface UserDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  user: User;
+  user: UserModel;
 }
 
 const UserDetailModal: React.FC<UserDetailModalProps> = ({

@@ -1,15 +1,14 @@
 import { useSearchAndPaginationHook } from "@/hooks/useSearchAndPagination";
-import SearchBar from "../../components/users/SearchBar";
-import UserList from "../../components/users/UserList";
+import SearchBar from "@/components/users/SearchBar";
+import UserList from "@/components/users/UserList";
 import ActionButtons from "@/components/users/ActionButtons";
 import { useState } from "react";
-import { User } from "@/components/users/UserModels";
+import { UserModel } from "@/types/user";
 
 const Users: React.FC = () => {
-  const { states, setFilter, goToPage } = useSearchAndPaginationHook<User>(
-    "/api/users",
-    10
-  );
+  const { states, setFilter, goToPage } = useSearchAndPaginationHook<
+    UserModel[]
+  >("/api/users", 10);
 
   const [isOpen, setIsOpen] = useState({});
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);

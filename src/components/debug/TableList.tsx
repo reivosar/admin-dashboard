@@ -4,10 +4,10 @@ import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import { Tooltip } from "@mui/material";
 import MermaidGraph from "./MermaidGraph";
 import Link from "next/link";
-import { TableDetails } from "@/types/debug";
+import { TableDetailsModel } from "@/types/debug";
 
 const TableList: React.FC = () => {
-  const [tables, setTables] = useState<TableDetails[]>([]);
+  const [tables, setTables] = useState<TableDetailsModel[]>([]);
   const [mermaidDefinition, setMermaidDefinition] = useState<string>("");
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const TableList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const generateMermaidDiagram = (tables: TableDetails[]): string => {
+    const generateMermaidDiagram = (tables: TableDetailsModel[]): string => {
       let diagram = "erDiagram\n";
       tables.forEach((table) => {
         diagram += `    ${table.table_name} {\n`;

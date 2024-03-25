@@ -1,5 +1,5 @@
 import React from "react";
-import DebugMenu from "../../components/debug/DebugMenu";
+import DebugMenu from "@/components/debug/DebugMenu";
 
 const DebugPage: React.FC = () => {
   return (

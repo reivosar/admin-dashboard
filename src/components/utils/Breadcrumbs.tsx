@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { HomeIcon, ChevronRightIcon } from "@heroicons/react/solid"; // heroiconsを使用
+import { HomeIcon, ChevronRightIcon } from "@heroicons/react/solid";
 
 const Breadcrumbs: React.FC<{ paths: { label: string; href?: string }[] }> = ({
   paths,

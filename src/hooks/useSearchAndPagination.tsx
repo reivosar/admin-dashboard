@@ -7,7 +7,7 @@ type SortConfig = {
 
 type UseSearchAndPaginationHookReturnType<T> = {
   states: {
-    data: T[];
+    data: T;
     currentPage: number;
     totalPage: number;
     isLoading: boolean;
@@ -26,7 +26,7 @@ export const useSearchAndPaginationHook = <T,>(
   initialTotalPage = 0
 ): UseSearchAndPaginationHookReturnType<T> => {
   const [states, setStates] = useState({
-    data: [],
+    data: [] as T,
     totalPage: initialTotalPage,
     currentPage: 1,
     isLoading: false,
@@ -66,7 +66,7 @@ export const useSearchAndPaginationHook = <T,>(
           err instanceof Error ? err.message : "An unknown error occurred";
         return {
           ...prev,
-          data: [],
+          data: [] as T,
           error: errorMessage,
           isLoading: false,
         };

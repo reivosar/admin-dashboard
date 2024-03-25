@@ -9,7 +9,7 @@ COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 RUN npx prisma generate
 ARG BUILD_ENV
-COPY .env.${BUILD_ENV} ./.env
+COPY .env ./.env
 RUN npm run build
 
 FROM node:21.5.0-alpine3.19 AS runner

@@ -2,11 +2,11 @@ import { SortIcon } from "../utils/SortIcon";
 import { LoadingIndicator } from "../utils/LoadingIndicator";
 import { FilterInput } from "../utils/FilterInput";
 import Pagination from "../utils/Pagination";
-import { SearchTableDetails } from "@/types/debug";
+import { SearchTableDetailsModel } from "@/types/debug";
 
 type TableDetailsFormProps = {
   states: {
-    data: SearchTableDetails;
+    data: SearchTableDetailsModel;
     currentPage: number;
     totalPage: number;
     isLoading: boolean;

@@ -1,4 +1,14 @@
-export interface UserWithDetails {
+export interface UserModel {
+  id: string;
+  name: string;
+  email: string;
+  gender: "male" | "female" | "other";
+  birth_date: string;
+  activated_at?: string;
+  lastActivity?: string;
+}
+
+export interface UserModelWithDetails {
   id: number;
   name: string | null;
   birth_date: Date | null;
@@ -10,17 +20,17 @@ export interface UserWithDetails {
   lastActivity: Date | null;
 }
 
-export interface UserProfile {
+export interface UserProfileModel {
   name: string;
   birth_date: Date | string;
   gender: string;
 }
 
-export interface UserAuthorization {
+export interface UserAuthorizationModel {
   auth_id: string;
   password_hash: string;
 }
 
-export interface UserContact {
+export interface UserContactModel {
   email: string;
 }

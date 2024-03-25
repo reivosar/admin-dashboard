@@ -1,21 +1,21 @@
 import { $Enums } from "@prisma/client";
 import prisma from "./Prisma";
 import {
-  UserWithDetails,
-  UserProfile,
-  UserAuthorization,
-  UserContact,
-} from "../types/user";
+  UserModelWithDetails,
+  UserProfileModel,
+  UserAuthorizationModel,
+  UserContactModel,
+} from "@/types/user";
 
 export const UserRepository = {
-  async findById(id: number): Promise<UserWithDetails | null> {
+  async findById(id: number): Promise<UserModelWithDetails | null> {
     return (await this.findUsers({ id })).at(0) ?? null;
   },
 
   async findByNameAndEmail(
     name?: string,
     email?: string
-  ): Promise<UserWithDetails[]> {
+  ): Promise<UserModelWithDetails[]> {
     return this.findUsers({ name: name, email: email });
   },
 
@@ -27,7 +27,7 @@ export const UserRepository = {
     id?: number;
     name?: string;
     email?: string;
-  }): Promise<UserWithDetails[]> {
+  }): Promise<UserModelWithDetails[]> {
     let params: any[] = [];
     let whereClause = "";
     if (id) {
@@ -73,7 +73,7 @@ export const UserRepository = {
       ${whereClause}
       `,
       ...params
-    )) as UserWithDetails[];
+    )) as UserModelWithDetails[];
   },
 
   async findByEmail(email: string) {
@@ -90,9 +90,9 @@ export const UserRepository = {
   },
 
   async create(
-    profile: UserProfile,
-    authorization: UserAuthorization,
-    contacts: UserContact
+    profile: UserProfileModel,
+    authorization: UserAuthorizationModel,
+    contacts: UserContactModel
   ) {
     const user = await prisma.user.create({
       data: {
@@ -116,9 +116,9 @@ export const UserRepository = {
 
   async update(
     user_id: number,
-    profile: UserProfile,
-    authorization: UserAuthorization,
-    contact: UserContact
+    profile: UserProfileModel,
+    authorization: UserAuthorizationModel,
+    contact: UserContactModel
   ) {
     const updatedUser = await prisma.$transaction(async (prisma) => {
       await prisma.userProfile.deleteMany({

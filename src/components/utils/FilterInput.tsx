@@ -5,7 +5,7 @@ export const FilterInput: React.FC<{
   onChange: (value: string) => void;
   columnName: string;
   value: string;
-  selectOptions?: string;
+  selectOptions?: string | null;
 }> = ({ onChange, columnName, value, selectOptions }) => {
   const options = selectOptions ? selectOptions.split(",") : [];
 

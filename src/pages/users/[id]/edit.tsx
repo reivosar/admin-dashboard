@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import UserEditForm from "../../../components/users/UserEditForm";
+import UserEditForm from "@/components/users/UserEditForm";
 
 const EditUserPage: React.FC = () => {
   const router = useRouter();

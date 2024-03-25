@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { UserRepository } from "../../../repositories/UserRepository";
-import { generateHash } from "../../../utils/crypt";
+import { UserRepository } from "@/repositories/UserRepository";
+import { generateHash } from "@/utils/crypt";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const {

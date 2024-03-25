@@ -1,4 +1,4 @@
-import TableList from "../../../components/debug/TableList";
+import TableList from "@/components/debug/TableList";
 import Breadcrumbs from "@/components/utils/Breadcrumbs";
 
 const DebugDBPage: React.FC = () => {
