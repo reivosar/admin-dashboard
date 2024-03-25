@@ -2,11 +2,11 @@ import { SortIcon } from "../utils/SortIcon";
 import { LoadingIndicator } from "../utils/LoadingIndicator";
 import { FilterInput } from "../utils/FilterInput";
 import Pagination from "../utils/Pagination";
-import { TableDetails } from "./TableModels";
+import { SearchTableDetails } from "@/types/debug";
 
 type TableDetailsFormProps = {
   states: {
-    data: TableDetails;
+    data: SearchTableDetails;
     currentPage: number;
     totalPage: number;
     isLoading: boolean;
@@ -65,6 +65,7 @@ const TableDetails: React.FC<TableDetailsFormProps> = ({
                 <FilterInput
                   columnName={header.column_name}
                   value={filter[header.column_name] || ""}
+                  selectOptions={header.enum_labels}
                   onChange={(value) =>
                     handleFilterChange(header.column_name, value)
                   }

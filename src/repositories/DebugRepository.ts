@@ -1,26 +1,6 @@
 import { Prisma } from "@prisma/client";
 import prisma from "./Prisma";
-
-interface TableColumn {
-  column_name: string;
-  data_type: string;
-  is_primary: boolean;
-  is_unique: boolean;
-  default_value: string | null;
-  foreign_key: string | null;
-  is_nullable: boolean;
-  foreign_table: string | null;
-}
-
-interface TableDetails {
-  table_name: string;
-  columns: TableColumn[];
-}
-
-interface TableColumn {
-  column_name: string;
-  data_type: string;
-}
+import { TableDetails, SearchHeaderColumn } from "@/types/debug";
 
 export const DebugRepository = {
   async findAllTables(): Promise<TableDetails[]> {
@@ -44,7 +24,14 @@ export const DebugRepository = {
             WHEN uq.constraint_type = 'UNIQUE' THEN TRUE
             ELSE FALSE
           END AS is_unique,
-          fk.referenced_table_name AS foreign_table
+          fk.referenced_table_name AS foreign_table,
+          COALESCE(
+            (SELECT string_agg(e.enumlabel, ', ')
+             FROM pg_enum e
+             JOIN pg_type t ON e.enumtypid = t.oid
+             WHERE t.typname = c.udt_name),
+            ''
+          ) AS enum_labels
         FROM
           information_schema.tables t
           JOIN information_schema.columns c ON t.table_schema = c.table_schema AND t.table_name = c.table_name
@@ -99,7 +86,8 @@ export const DebugRepository = {
             'is_unique', tc.is_unique,
             'default_value', tc.column_default,
             'is_nullable', tc.is_nullable,
-            'foreign_table', tc.foreign_table
+            'foreign_table', tc.foreign_table,
+            'enum_labels', tc.enum_labels
           )
         ) AS columns
       FROM
@@ -107,7 +95,7 @@ export const DebugRepository = {
       GROUP BY
         tc.table_schema, tc.table_name
       ORDER BY
-        tc.table_name;    
+        tc.table_name;
     `;
 
     const tables: TableDetails[] = await prisma.$queryRawUnsafe(query);
@@ -122,17 +110,24 @@ export const DebugRepository = {
         foreign_key: column.foreign_key,
         is_nullable: column.is_nullable,
         foreign_table: column.foreign_table,
+        enum_labels: column.enum_labels,
       })),
     }));
   },
 
-  async findHeaderByName(tableName: string): Promise<TableColumn[]> {
+  async findHeaderByName(tableName: string): Promise<SearchHeaderColumn[]> {
     try {
-      const columns = await prisma.$queryRaw<TableColumn[]>`
-        SELECT column_name, data_type
-        FROM information_schema.columns
-        WHERE table_name = ${tableName}
-        AND table_schema = 'public'`;
+      const columns = await prisma.$queryRaw<SearchHeaderColumn[]>`
+        SELECT c.column_name, c.data_type, 
+          CASE WHEN c.data_type = 'USER-DEFINED' 
+            THEN (SELECT string_agg(enumlabel, ', ') FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid WHERE t.typname = c.udt_name) 
+            ELSE NULL END AS enum_labels
+        FROM information_schema.columns c
+        LEFT JOIN pg_type pt ON pt.typname = c.udt_name
+        WHERE c.table_name = ${tableName}
+        AND c.table_schema = 'public'
+        ORDER BY c.ordinal_position;
+      `;
       return columns;
     } catch (error: unknown) {
       const message = (error as Error).message || "An unknown error occurred";

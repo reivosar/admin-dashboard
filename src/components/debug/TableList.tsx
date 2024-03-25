@@ -4,21 +4,7 @@ import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import { Tooltip } from "@mui/material";
 import MermaidGraph from "./MermaidGraph";
 import Link from "next/link";
-
-interface TableColumn {
-  column_name: string;
-  data_type: string;
-  is_primary: boolean;
-  is_unique: boolean;
-  default_value: string | null;
-  is_nullable: boolean;
-  foreign_table: string | null;
-}
-
-interface TableDetails {
-  table_name: string;
-  columns: TableColumn[];
-}
+import { TableDetails } from "@/types/debug";
 
 const TableList: React.FC = () => {
   const [tables, setTables] = useState<TableDetails[]>([]);
@@ -35,6 +21,7 @@ const TableList: React.FC = () => {
         });
         if (response.ok) {
           const data = await response.json();
+          console.log(data);
           setTables(data);
         }
       } catch (error) {
@@ -133,7 +120,11 @@ const TableList: React.FC = () => {
               {table.columns.map((column, colIndex) => (
                 <tr key={colIndex} className="bg-white">
                   <td className="px-2 py-2">{column.column_name}</td>
-                  <td className="px-2 py-2">{column.data_type}</td>
+                  <td className="px-2 py-2">
+                    {column.enum_labels
+                      ? `enum (${column.enum_labels})`
+                      : column.data_type}
+                  </td>
                   <td className="px-2 py-2 text-center">
                     {renderIcon(column.is_primary)}
                   </td>

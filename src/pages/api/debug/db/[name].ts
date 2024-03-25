@@ -95,6 +95,11 @@ function convertFilterConditions(
         if (isNaN(value)) {
           throw new Error(`Invalid integer format for column '${columnName}'.`);
         }
+      case "timestamp without time zone":
+        break;
+      case "text":
+        break;
+      default:
         break;
     }
 

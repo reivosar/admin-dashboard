@@ -1,32 +1,11 @@
 import { $Enums } from "@prisma/client";
 import prisma from "./Prisma";
-
-interface UserWithDetails {
-  id: number;
-  name: string | null;
-  birth_date: Date | null;
-  gender: string | null;
-  email: string | null;
-  auth_id: string;
-  password_hash: string;
-  activated_at: Date | null;
-  lastActivity: Date | null;
-}
-
-interface UserProfile {
-  name: string;
-  birth_date: Date | string;
-  gender: string;
-}
-
-interface UserAuthorization {
-  auth_id: string;
-  password_hash: string;
-}
-
-interface UserContact {
-  email: string;
-}
+import {
+  UserWithDetails,
+  UserProfile,
+  UserAuthorization,
+  UserContact,
+} from "../types/user";
 
 export const UserRepository = {
   async findById(id: number): Promise<UserWithDetails | null> {

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
-import { PlusIcon, XIcon } from "@heroicons/react/solid";
 
 interface MermaidGraphProps {
   mermaidDefinition: string;
