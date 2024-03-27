@@ -1,7 +1,7 @@
-import { SortIcon } from "../utils/SortIcon";
-import { LoadingIndicator } from "../utils/LoadingIndicator";
-import { FilterInput } from "../utils/FilterInput";
-import Pagination from "../utils/Pagination";
+import { SortIcon } from "../../utils/SortIcon";
+import { LoadingIndicator } from "../../utils/LoadingIndicator";
+import { FilterInput } from "../../utils/FilterInput";
+import Pagination from "../../utils/Pagination";
 import { SearchTableDetailsModel } from "@/types/debug";
 
 type TableDetailsFormProps = {

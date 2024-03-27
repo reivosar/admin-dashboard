@@ -1,11 +1,11 @@
-import { $Enums } from "@prisma/client";
-import prisma from "./Prisma";
+import { PrismaClient, $Enums } from "@prisma/client";
+import prisma from "../Prisma";
 import {
   UserModelWithDetails,
   UserProfileModel,
   UserAuthorizationModel,
   UserContactModel,
-} from "@/types/user";
+} from "@/types/users";
 
 export const UserRepository = {
   async findById(id: number): Promise<UserModelWithDetails | null> {
@@ -31,16 +31,16 @@ export const UserRepository = {
     let params: any[] = [];
     let whereClause = "";
     if (id) {
-      whereClause = `AND "User"."id" = $1`;
+      whereClause = `AND "users"."id" = $1`;
       params.push(id);
     } else {
       let whereParts: string[] = [];
       if (name) {
-        whereParts.push(`"UserProfile"."name" ILIKE $${params.length + 1}`);
+        whereParts.push(`"user_profiles"."name" ILIKE $${params.length + 1}`);
         params.push(`%${name}%`);
       }
       if (email) {
-        whereParts.push(`"UserContact"."email" ILIKE $${params.length + 1}`);
+        whereParts.push(`"user_contacts"."email" ILIKE $${params.length + 1}`);
         params.push(`%${email}%`);
       }
       whereClause =
@@ -50,26 +50,26 @@ export const UserRepository = {
     return (await prisma.$queryRawUnsafe(
       `
       SELECT
-        "User"."id",
-        "UserProfile"."name",
-        "UserProfile"."birth_date",
-        "UserProfile"."gender",
-        "UserContact"."email",
-        "UserAuthorization".auth_id,
-        "UserAuthorization".password_hash,
-        "UserActive".activated_at,
+        "users"."id",
+        "user_profiles"."name",
+        "user_profiles"."birth_date",
+        "user_profiles"."gender",
+        "user_contacts"."email",
+        "user_authorizations".auth_id,
+        "user_authorizations".password_hash,
+        "user_actives".activated_at,
         (
           SELECT MAX("created_at")
-          FROM "UserLog"
-          WHERE "User"."id" = "UserLog"."user_id"
+          FROM "user_logs"
+          WHERE "users"."id" = "user_logs"."user_id"
         ) AS "lastActivity"
-      FROM "User"
-      INNER JOIN "UserProfile" ON "User"."id" = "UserProfile"."user_id"
-      INNER JOIN "UserContact" ON "User"."id" = "UserContact"."user_id"
-      INNER JOIN "UserAuthorization" ON "User"."id" = "UserAuthorization"."user_id"
-      LEFT JOIN "UserActive" ON "User"."id" = "UserActive"."user_id"
-      LEFT JOIN "UserDelete" ON "User"."id" = "UserDelete"."user_id"
-      WHERE "UserDelete"."user_id" IS NULL
+      FROM "users"
+      INNER JOIN "user_profiles" ON "users"."id" = "user_profiles"."user_id"
+      INNER JOIN "user_contacts" ON "users"."id" = "user_contacts"."user_id"
+      INNER JOIN "user_authorizations" ON "users"."id" = "user_authorizations"."user_id"
+      LEFT JOIN "user_actives" ON "users"."id" = "user_actives"."user_id"
+      LEFT JOIN "user_deletes" ON "users"."id" = "user_deletes"."user_id"
+      WHERE "user_deletes"."user_id" IS NULL
       ${whereClause}
       `,
       ...params
@@ -120,40 +120,42 @@ export const UserRepository = {
     authorization: UserAuthorizationModel,
     contact: UserContactModel
   ) {
-    const updatedUser = await prisma.$transaction(async (prisma) => {
-      await prisma.userProfile.deleteMany({
-        where: { user_id },
-      });
-      await prisma.userAuthorization.deleteMany({
-        where: { user_id },
-      });
-      await prisma.userContact.deleteMany({
-        where: { user_id },
-      });
+    const updatedUser = await prisma.$transaction(
+      async (prisma: PrismaClient) => {
+        await prisma.userProfile.deleteMany({
+          where: { user_id },
+        });
+        await prisma.userAuthorization.deleteMany({
+          where: { user_id },
+        });
+        await prisma.userContact.deleteMany({
+          where: { user_id },
+        });
 
-      const updatedProfile = await prisma.userProfile.create({
-        data: {
-          user_id,
-          name: profile.name,
-          birth_date: profile.birth_date,
-          gender: profile.gender as $Enums.GenderType,
-        },
-      });
-      const updatedAuthorization = await prisma.userAuthorization.create({
-        data: {
-          user_id,
-          ...authorization,
-        },
-      });
-      const updatedContacts = await prisma.userContact.create({
-        data: {
-          user_id,
-          ...contact,
-        },
-      });
+        const updatedProfile = await prisma.userProfile.create({
+          data: {
+            user_id,
+            name: profile.name,
+            birth_date: profile.birth_date,
+            gender: profile.gender as $Enums.GenderType,
+          },
+        });
+        const updatedAuthorization = await prisma.userAuthorization.create({
+          data: {
+            user_id,
+            ...authorization,
+          },
+        });
+        const updatedContacts = await prisma.userContact.create({
+          data: {
+            user_id,
+            ...contact,
+          },
+        });
 
-      return { updatedProfile, updatedAuthorization, updatedContacts };
-    });
+        return { updatedProfile, updatedAuthorization, updatedContacts };
+      }
+    );
 
     return updatedUser;
   },

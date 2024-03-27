@@ -25,3 +25,8 @@ export interface SearchTableDetailsModel {
   headers: SearchHeaderColumnModel[];
   data: { [key: string]: any }[];
 }
+
+export interface ExecuteSQLResultType {
+  headers: string[];
+  data: Array<Record<string, any>>;
+}

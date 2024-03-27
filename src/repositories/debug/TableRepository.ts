@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
-import prisma from "./Prisma";
+import prisma from "../Prisma";
 import { TableDetailsModel, SearchHeaderColumnModel } from "@/types/debug";
 
-export const DebugRepository = {
+export const TableRepository = {
   async findAllTables(): Promise<TableDetailsModel[]> {
     const query = `
       WITH table_columns AS (

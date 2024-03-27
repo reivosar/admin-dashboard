@@ -3,7 +3,7 @@ import SearchBar from "@/components/users/SearchBar";
 import UserList from "@/components/users/UserList";
 import ActionButtons from "@/components/users/ActionButtons";
 import { useState } from "react";
-import { UserModel } from "@/types/user";
+import { UserModel } from "@/types/users";
 
 const Users: React.FC = () => {
   const { states, setFilter, goToPage } = useSearchAndPaginationHook<

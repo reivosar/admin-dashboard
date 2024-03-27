@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </div>
       <div className="flex flex-1">
         <Sidebar />
-        <main className="flex-1 pt-4 pl-4 ">
+        <main className="flex-1 pt-4 pl-4 overflow-auto">
           <div
             style={{ display: "flex", justifyContent: "center", width: "100%" }}
           >

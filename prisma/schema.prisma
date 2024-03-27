@@ -22,6 +22,7 @@ model User {
   active           UserActive?
   deletion         UserDelete?
   contacts         UserContact?
+  @@map("users")
 }
 
 model UserLog {
@@ -31,6 +32,7 @@ model UserLog {
   detail     String?
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id])
+  @@map("user_logs")
 }
 
 model UserProfile {
@@ -40,6 +42,7 @@ model UserProfile {
   gender     GenderType
   created_at DateTime   @default(now())
   user       User       @relation(fields: [user_id], references: [id])
+  @@map("user_profiles")
 }
 
 model UserAuthorization {
@@ -48,18 +51,21 @@ model UserAuthorization {
   password_hash String
   created_at    DateTime @default(now())
   user          User   @relation(fields: [user_id], references: [id])
+  @@map("user_authorizations")
 }
 
 model UserActive {
   user_id      Int      @unique
   activated_at DateTime @default(now())
   user         User     @relation(fields: [user_id], references: [id])
+  @@map("user_actives")
 }
 
 model UserDelete {
   user_id    Int      @unique
   deleted_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id])
+  @@map("user_deletes")
 }
 
 model UserContact {
@@ -67,4 +73,5 @@ model UserContact {
   email      String 
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id])
+  @@map("user_contacts")
 }

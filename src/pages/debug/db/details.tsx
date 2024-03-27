@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import TableDetails from "@/components/debug/TableDetails";
+import TableDetails from "@/components/debug/db/TableDetails";
 import { SearchTableDetailsModel, TableDetailsModel } from "@/types/debug";
 import Breadcrumbs from "@/components/utils/Breadcrumbs";
 import { useSearchAndPaginationHook } from "@/hooks/useSearchAndPagination";

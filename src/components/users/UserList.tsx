@@ -12,7 +12,7 @@ import Pagination from "../utils/Pagination";
 import { useRouter } from "next/router";
 import { handleDelceteSelectedUsers } from "./UserActions";
 import UserDetailModal from "./UserDetailModal";
-import { UserModel } from "@/types/user";
+import { UserModel } from "@/types/users";
 
 type UserListProps = {
   states: {

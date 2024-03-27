@@ -1,18 +1,18 @@
-import TableList from "@/components/debug/db/TableList";
+import ExecuteSQL from "@/components/debug/sql/ExecuteSQL";
 import Breadcrumbs from "@/components/utils/Breadcrumbs";
 
-const DebugDBPage: React.FC = () => {
+const DebugSQLPage: React.FC = () => {
   const breadcrumbPaths = [
     { label: "Debug", href: "/debug" },
-    { label: "Database Debugging" },
+    { label: "Execute SQL" },
   ];
 
   return (
     <div>
       <Breadcrumbs paths={breadcrumbPaths} />
-      <TableList />
+      <ExecuteSQL />
     </div>
   );
 };
 
-export default DebugDBPage;
+export default DebugSQLPage;

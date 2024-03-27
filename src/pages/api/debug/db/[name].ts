@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { DebugRepository } from "@/repositories/DebugRepository";
+import { TableRepository } from "@/repositories/debug/TableRepository";
 
 export default async function handler(
   req: NextApiRequest,
@@ -37,7 +37,7 @@ async function handleGet(
     const { sort, direction } = req.query;
     let conditions: Record<string, any> = [];
 
-    const headers = await DebugRepository.findHeaderByName(name);
+    const headers = await TableRepository.findHeaderByName(name);
 
     Object.keys(req.query).forEach((key) => {
       if (key.startsWith("filter[")) {
@@ -57,7 +57,7 @@ async function handleGet(
         ? { key: sort, direction: direction }
         : undefined;
 
-    const data = await DebugRepository.findBy(name, conditions, sortConfig);
+    const data = await TableRepository.findBy(name, conditions, sortConfig);
 
     return res.status(200).json({
       headers,

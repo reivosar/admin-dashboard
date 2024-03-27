@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { PencilIcon } from "@heroicons/react/solid";
 import { formatDateTime } from "@/utils/dateutils";
-import { UserModel } from "@/types/user";
+import { UserModel } from "@/types/users";
 
 interface UserDetailModalProps {
   isOpen: boolean;

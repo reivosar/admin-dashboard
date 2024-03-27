@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { toastError } from "../utils/ToastifyAlerts";
+import { toastError } from "../../utils/ToastifyAlerts";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import { Tooltip } from "@mui/material";
 import MermaidGraph from "./MermaidGraph";
@@ -21,7 +21,6 @@ const TableList: React.FC = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setTables(data);
         }
       } catch (error) {
