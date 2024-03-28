@@ -47,6 +47,29 @@ const ExecuteSQL = () => {
     }
   }, []);
 
+  const simulateBackspace = () => {
+    if (editorView) {
+      const { from, to } = editorView.state.selection.ranges[0];
+      if (from === to && from > 0) {
+        editorView.dispatch({
+          changes: { from: from - 1, to: to },
+        });
+      } else {
+        editorView.dispatch({
+          changes: { from: from, to: to },
+        });
+      }
+    }
+  };
+
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      simulateBackspace();
+      executeQuery();
+    }
+  };
+
   const executeQuery = async () => {
     setError("");
     setResults(null);
@@ -92,7 +115,11 @@ const ExecuteSQL = () => {
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
       <div className="flex justify-center">
         <div className="w-full max-w-[calc(100%-40px)] px-6 py-4">
-          <div ref={editorContainerRef} className="editor-container" />
+          <div
+            ref={editorContainerRef}
+            className="editor-container"
+            onKeyDown={(e) => keyDownHandler(e)}
+          />
           <div className="flex justify-end space-x-3 mt-4">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
