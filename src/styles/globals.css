@@ -3,3 +3,5 @@
 @tailwind utilities;
 
 @import url("./tooltip.css");
+
+@import "react-toastify/dist/ReactToastify.css";
