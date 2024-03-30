@@ -58,15 +58,15 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ id }) => {
     showConfirmDialog({
       message: "Are you sure you want to update the user information?",
       onConfirm: async () => {
-        const { error } = await put<null>(`/api/users/${id}`, {
+        const { error } = await put(`/api/users/${id}`, {
           formData,
         });
         if (error) {
           toastError(error.message);
+        } else {
+          toastSuccess("User updated successfully!");
           router.push("/users");
         }
-        toastSuccess("User updated successfully!");
-        router.push("/users");
       },
     });
   };

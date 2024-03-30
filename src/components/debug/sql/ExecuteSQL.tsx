@@ -101,6 +101,18 @@ const ExecuteSQL = () => {
     setQuery(initialQuery);
   };
 
+  const renderValue = (value: any) => {
+    if (Array.isArray(value)) {
+      return value.map((item, index) => (
+        <div key={index}>{JSON.stringify(item)}</div>
+      ));
+    } else if (typeof value === "object") {
+      return <pre>{JSON.stringify(value, null, 2)}</pre>;
+    } else {
+      return value.toString();
+    }
+  };
+
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
       <div className="flex justify-center">
@@ -150,7 +162,7 @@ const ExecuteSQL = () => {
                       key={`${rowIndex}-${header}`}
                       className="px-6 py-4 whitespace-nowrap"
                     >
-                      {row[header]}
+                      {renderValue(row[header])}
                     </td>
                   ))}
                 </tr>

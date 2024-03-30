@@ -12,7 +12,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     case "GET":
       return handleGet(Number(id), req, res);
     case "PUT":
-      return handlePost(Number(id), req, res);
+      return handlePut(Number(id), req, res);
     default:
       res.setHeader("Allow", ["GET", "PUT"]);
       res.status(405).end(`Method ${method} Not Allowed`);
@@ -37,13 +37,13 @@ async function handleGet(
     });
 }
 
-async function handlePost(
+async function handlePut(
   id: number,
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const { username, email, gender, birthdate } = req.body;
+    const { username, email, gender, birthdate } = req.body.formData;
 
     const existingUser = await UserRepository.findById(id);
     if (!existingUser) {

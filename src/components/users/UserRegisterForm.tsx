@@ -22,7 +22,7 @@ function UserRegisterForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { error } = await post<null>("/api/users", {
+      const { error } = await post("/api/users", {
         formData,
       });
       if (error) {

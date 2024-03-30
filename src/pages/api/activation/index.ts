@@ -11,5 +11,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
+  const { activationCode, email, password } = req.body;
+
   return res.status(200).json("OK");
 }

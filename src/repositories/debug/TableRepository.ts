@@ -5,97 +5,69 @@ import { TableDetailsModel, SearchHeaderColumnModel } from "@/types/debug";
 export const TableRepository = {
   async findAllTables(): Promise<TableDetailsModel[]> {
     const query = `
-      WITH table_columns AS (
+        WITH table_columns AS (
+          SELECT
+            n.nspname AS schema_name,
+            cl.relname AS table_name,
+            a.attname AS column_name,
+            a.attnum AS column_order,
+            pg_catalog.format_type(a.atttypid, a.atttypmod) AS data_type,
+            NOT a.attnotnull AS is_nullable,
+            pg_catalog.pg_get_expr(ad.adbin, ad.adrelid) AS default_value,
+            EXISTS (
+              SELECT 1
+              FROM pg_catalog.pg_constraint con
+              WHERE con.conrelid = cl.oid AND con.contype = 'p' AND con.conkey::smallint[] @> ARRAY[a.attnum]
+            ) AS is_primary,
+            EXISTS (
+              SELECT 1
+              FROM pg_catalog.pg_index ind
+              WHERE ind.indrelid = cl.oid AND ind.indisunique AND ind.indkey::smallint[] @> ARRAY[a.attnum]
+            ) AS is_unique,
+            COALESCE(
+              (SELECT string_agg(enumlabel, ',') FROM pg_enum WHERE enumtypid = a.atttypid),
+              ''
+            ) AS enum_labels,
+            COALESCE(
+              (SELECT fk_cl.relname 
+              FROM pg_catalog.pg_constraint con
+              JOIN pg_catalog.pg_class fk_cl ON con.confrelid = fk_cl.oid
+              WHERE con.conrelid = cl.oid AND con.contype = 'f' AND con.conkey::smallint[] @> ARRAY[a.attnum]),
+              ''
+            ) AS foreign_table
+          FROM
+            pg_catalog.pg_attribute a
+            JOIN pg_catalog.pg_class cl ON a.attrelid = cl.oid
+            JOIN pg_catalog.pg_namespace n ON cl.relnamespace = n.oid
+            LEFT JOIN pg_catalog.pg_attrdef ad ON a.attrelid = ad.adrelid AND a.attnum = ad.adnum
+          WHERE
+            a.attnum > 0 AND NOT a.attisdropped
+            AND n.nspname NOT IN ('pg_catalog', 'information_schema')
+            AND cl.relkind = 'r' 
+        )
         SELECT
-          t.table_schema,
-          t.table_name,
-          c.column_name,
-          c.data_type,
-          c.column_default,
-          CASE
-            WHEN c.is_nullable = 'YES' THEN TRUE
-            ELSE FALSE
-          END AS is_nullable,
-          CASE
-            WHEN pk.constraint_type = 'PRIMARY KEY' THEN TRUE
-            ELSE FALSE
-          END AS is_primary,
-          CASE
-            WHEN uq.constraint_type = 'UNIQUE' THEN TRUE
-            ELSE FALSE
-          END AS is_unique,
-          fk.referenced_table_name AS foreign_table,
-          COALESCE(
-            (SELECT string_agg(e.enumlabel, ', ')
-             FROM pg_enum e
-             JOIN pg_type t ON e.enumtypid = t.oid
-             WHERE t.typname = c.udt_name),
-            ''
-          ) AS enum_labels
+          schema_name,
+          table_name,
+          json_agg(
+            json_build_object(
+              'column_name', column_name,
+              'data_type', data_type,
+              'is_primary', is_primary,
+              'is_unique', is_unique,
+              'default_value', default_value,
+              'is_nullable', is_nullable,
+              'foreign_table', foreign_table,
+              'enum_labels', enum_labels
+            ) order by column_order
+          ) AS columns
         FROM
-          information_schema.tables t
-          JOIN information_schema.columns c ON t.table_schema = c.table_schema AND t.table_name = c.table_name
-          LEFT JOIN (
-            SELECT
-              tc.table_schema,
-              tc.table_name,
-              ccu.column_name,
-              tc.constraint_type
-            FROM
-              information_schema.table_constraints tc
-              JOIN information_schema.constraint_column_usage ccu ON tc.constraint_schema = ccu.constraint_schema AND tc.constraint_name = ccu.constraint_name
-            WHERE
-              tc.constraint_type = 'PRIMARY KEY'
-          ) pk ON t.table_schema = pk.table_schema AND t.table_name = pk.table_name AND c.column_name = pk.column_name
-          LEFT JOIN (
-            SELECT
-              tc.table_schema,
-              tc.table_name,
-              ccu.column_name,
-              tc.constraint_type
-            FROM
-              information_schema.table_constraints tc
-              JOIN information_schema.constraint_column_usage ccu ON tc.constraint_schema = ccu.constraint_schema AND tc.constraint_name = ccu.constraint_name
-            WHERE
-              tc.constraint_type = 'UNIQUE'
-          ) uq ON t.table_schema = uq.table_schema AND t.table_name = uq.table_name AND c.column_name = uq.column_name
-          LEFT JOIN (
-            SELECT
-              kcu.table_schema,
-              kcu.table_name,
-              kcu.column_name,
-              ccu.table_name AS referenced_table_name
-            FROM
-              information_schema.referential_constraints rc
-              JOIN information_schema.key_column_usage kcu ON rc.constraint_schema = kcu.constraint_schema AND rc.constraint_name = kcu.constraint_name
-              JOIN information_schema.constraint_column_usage ccu ON rc.unique_constraint_schema = ccu.constraint_schema AND rc.unique_constraint_name = ccu.constraint_name
-          ) fk ON t.table_schema = fk.table_schema AND t.table_name = fk.table_name AND c.column_name = fk.column_name
-        WHERE
-          t.table_schema = 'public'
-          AND t.table_type = 'BASE TABLE'
-          AND NOT t.table_name LIKE '_prisma_%'
-        ORDER BY t.table_name, c.ordinal_position
-      )
-      SELECT
-        tc.table_name,
-        json_agg(
-          json_build_object(
-            'column_name', tc.column_name,
-            'data_type', tc.data_type,
-            'is_primary', tc.is_primary,
-            'is_unique', tc.is_unique,
-            'default_value', tc.column_default,
-            'is_nullable', tc.is_nullable,
-            'foreign_table', tc.foreign_table,
-            'enum_labels', tc.enum_labels
-          )
-        ) AS columns
-      FROM
-        table_columns tc
-      GROUP BY
-        tc.table_schema, tc.table_name
-      ORDER BY
-        tc.table_name;
+          table_columns
+        WHERE schema_name = 'public'
+          AND NOT table_name LIKE '_prisma_%'
+        GROUP BY
+          schema_name, table_name
+        ORDER BY
+          table_name;     
     `;
 
     const tables: TableDetailsModel[] = await prisma.$queryRawUnsafe(query);

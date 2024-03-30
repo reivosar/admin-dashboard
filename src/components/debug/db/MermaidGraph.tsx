@@ -15,7 +15,7 @@ const MermaidGraph: React.FC<MermaidGraphProps> = ({
 
   useEffect(() => {
     if (mermaidDefinition && ref.current) {
-      mermaid.init({}, ref.current);
+      mermaid.init(undefined, ref.current);
     }
 
     const handleFullscreenChange = () => {

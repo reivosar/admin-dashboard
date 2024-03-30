@@ -29,7 +29,9 @@ const TableList: React.FC = () => {
       tables.forEach((table) => {
         diagram += `    ${table.table_name} {\n`;
         table.columns.forEach((column) => {
-          const dataType = column.data_type.replace(/\s+/g, "_");
+          const dataType = column.data_type
+            .replace(/["']/g, "")
+            .replace(/\s+/g, "_");
           const primaryKeyIndicator = column.is_primary ? "PK" : "";
           diagram += `        ${column.column_name} ${dataType} ${primaryKeyIndicator}\n`;
         });
