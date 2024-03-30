@@ -5,6 +5,7 @@ import { Tooltip } from "@mui/material";
 import MermaidGraph from "./MermaidGraph";
 import Link from "next/link";
 import { TableDetailsModel } from "@/types/debug";
+import { get } from "@/utils/api";
 
 const TableList: React.FC = () => {
   const [tables, setTables] = useState<TableDetailsModel[]>([]);
@@ -12,19 +13,11 @@ const TableList: React.FC = () => {
 
   useEffect(() => {
     const fetchTableData = async () => {
-      try {
-        const response = await fetch("/api/debug/db", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setTables(data);
-        }
-      } catch (error) {
-        toastError("Failed to load table data.");
+      const response = await get<TableDetailsModel[]>("/api/debug/db");
+      if (response.error) {
+        toastError(response.error.message);
+      } else if (response.data) {
+        setTables(response.data);
       }
     };
     fetchTableData();

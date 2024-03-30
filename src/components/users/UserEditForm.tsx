@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { toastError, toastSuccess } from "../utils/ToastifyAlerts";
 import { showConfirmDialog } from "../utils/ConfirmDialog";
+import { put } from "@/utils/api";
 
 type UserEditFormProps = {
   id: string;
@@ -57,25 +58,15 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ id }) => {
     showConfirmDialog({
       message: "Are you sure you want to update the user information?",
       onConfirm: async () => {
-        try {
-          const response = await fetch(`/api/users/${id}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          });
-
-          if (!response.ok) {
-            throw new Error("Something went wrong with the update");
-          }
-
-          toastSuccess("User updated successfully!");
-          router.push("/users");
-        } catch (error) {
-          toastError("Failed to update user. Please try again.");
+        const { error } = await put<null>(`/api/users/${id}`, {
+          formData,
+        });
+        if (error) {
+          toastError(error.message);
           router.push("/users");
         }
+        toastSuccess("User updated successfully!");
+        router.push("/users");
       },
     });
   };

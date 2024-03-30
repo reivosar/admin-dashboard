@@ -14,14 +14,15 @@ enum GenderType {
 }
 
 model User {
-  id               Int                @id @default(autoincrement())
-  created_at       DateTime           @default(now())
-  logs             UserLog[]
-  authorization    UserAuthorization?
-  profile          UserProfile?
-  active           UserActive?
-  deletion         UserDelete?
-  contacts         UserContact?
+  id                    Int                   @id @default(autoincrement())
+  created_at            DateTime              @default(now())
+  logs                  UserLog[]
+  user_activation_codes UserActivationCode?
+  user_authorizations   UserAuthorization?
+  user_profiles         UserProfile?
+  user_actives          UserActive?
+  user_deletes          UserDelete?
+  user_contacts         UserContact?
   @@map("users")
 }
 
@@ -46,11 +47,12 @@ model UserProfile {
 }
 
 model UserAuthorization {
-  user_id       Int    @unique
-  auth_id       String @unique
-  password_hash String
-  created_at    DateTime @default(now())
-  user          User   @relation(fields: [user_id], references: [id])
+  user_id           Int     @unique
+  auth_id           String  @unique
+  password_hash     String
+  is_initial_password Boolean @default(true)
+  created_at        DateTime @default(now())
+  user              User    @relation(fields: [user_id], references: [id])
   @@map("user_authorizations")
 }
 
@@ -74,4 +76,12 @@ model UserContact {
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id])
   @@map("user_contacts")
+}
+
+model UserActivationCode {
+  user_id         Int      @unique
+  activation_code String   @unique
+  expires_at      DateTime
+  user            User     @relation(fields: [user_id], references: [id])
+  @@map("user_activation_codes")
 }

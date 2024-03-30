@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { UserRepository } from "@/repositories/users/UserRepository";
-import { generateHash } from "@/utils/crypt";
+import { generateHash, generateRandomString } from "@/utils/crypt";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
@@ -45,22 +45,32 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
       birth_date: new Date(birthdate),
       gender: gender,
     };
+
     const authIdHash = await generateHash(email);
     const passwordHash = await generateHash(password);
     const authorizationData = {
       auth_id: authIdHash,
       password_hash: passwordHash,
     };
+
     const contactData = {
       email: email,
     };
+
+    const activation_code = generateRandomString();
+    const expires_at = new Date();
+    expires_at.setHours(expires_at.getHours() + 24);
+    const userActivationCode = { activation_code, expires_at };
+
     const savedUser = await UserRepository.create(
       profileData,
       authorizationData,
-      contactData
+      contactData,
+      userActivationCode
     );
     return res.status(201).json(savedUser);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: "Failed to save user." });
   }
 }

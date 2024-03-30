@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toastError, toastSuccess } from "../utils/ToastifyAlerts";
+import { post } from "@/utils/api";
 
 function UserRegisterForm() {
   const [formData, setFormData] = useState({
@@ -21,18 +22,12 @@ function UserRegisterForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const { error } = await post<null>("/api/users", {
+        formData,
       });
-
-      if (!response.ok) {
-        throw new Error("Something went wrong with the submission");
+      if (error) {
+        throw new Error(error.message);
       }
-
       toastSuccess("Registration successful!");
       setFormData({
         username: "",

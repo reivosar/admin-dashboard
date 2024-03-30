@@ -4,6 +4,7 @@ import { EditorView, ViewUpdate } from "@codemirror/view";
 import { basicSetup } from "codemirror";
 import { sql } from "@codemirror/lang-sql";
 import { ExecuteSQLResultType } from "@/types/debug";
+import { post } from "@/utils/api";
 
 const ExecuteSQL = () => {
   const editorContainerRef = useRef<HTMLDivElement | null>(null);
@@ -74,25 +75,14 @@ const ExecuteSQL = () => {
     setError("");
     setResults(null);
 
-    try {
-      const response = await fetch("/api/debug/sql", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
-      });
+    const response = await post<ExecuteSQLResultType | null>("/api/debug/sql", {
+      query,
+    });
 
-      if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setResults(data);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unknown error occurred"
-      );
+    if (response.error) {
+      setError(response.error.message);
+    } else if (response.data) {
+      setResults(response.data);
     }
   };
 

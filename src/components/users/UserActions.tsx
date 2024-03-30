@@ -1,6 +1,7 @@
 import { NextRouter } from "next/router";
 import { showConfirmDialog } from "../utils/ConfirmDialog";
 import { toastError } from "../utils/ToastifyAlerts";
+import { del } from "@/utils/api";
 
 export const handleDelceteSelectedUsers = async (
   router: NextRouter,
@@ -9,23 +10,13 @@ export const handleDelceteSelectedUsers = async (
   showConfirmDialog({
     message: "Are you sure you want to delete the selected users?",
     onConfirm: async () => {
-      try {
-        const response = await fetch("/api/users", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userIds: selectedUsers }),
-        });
-
-        if (response.ok) {
-          router.reload();
-        } else {
-          toastError("Failed to delete users");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        toastError("An error occurred");
+      const response = await del<null>("/api/users", {
+        userIds: selectedUsers,
+      });
+      if (response.error) {
+        toastError(response.error.message);
+      } else {
+        router.reload();
       }
     },
   });

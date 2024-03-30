@@ -5,6 +5,7 @@ import {
   UserProfileModel,
   UserAuthorizationModel,
   UserContactModel,
+  UserActivationCodeModel,
 } from "@/types/users";
 
 export const UserRepository = {
@@ -82,7 +83,7 @@ export const UserRepository = {
         email: email,
         user: {
           NOT: {
-            deletion: {},
+            user_deletes: {},
           },
         },
       },
@@ -92,22 +93,26 @@ export const UserRepository = {
   async create(
     profile: UserProfileModel,
     authorization: UserAuthorizationModel,
-    contacts: UserContactModel
+    contacts: UserContactModel,
+    activationCode: UserActivationCodeModel
   ) {
     const user = await prisma.user.create({
       data: {
-        profile: {
+        user_profiles: {
           create: {
             name: profile.name,
             birth_date: profile.birth_date,
             gender: profile.gender as $Enums.GenderType,
           },
         },
-        authorization: {
+        user_authorizations: {
           create: { ...authorization },
         },
-        contacts: {
+        user_contacts: {
           create: { ...contacts },
+        },
+        user_activation_codes: {
+          create: { ...activationCode },
         },
       },
     });
@@ -122,17 +127,17 @@ export const UserRepository = {
   ) {
     const updatedUser = await prisma.$transaction(
       async (prisma: PrismaClient) => {
-        await prisma.userProfile.deleteMany({
+        await prisma.user_profiles.deleteMany({
           where: { user_id },
         });
-        await prisma.userAuthorization.deleteMany({
+        await prisma.user_authorizations.deleteMany({
           where: { user_id },
         });
-        await prisma.userContact.deleteMany({
+        await prisma.user_contacts.deleteMany({
           where: { user_id },
         });
 
-        const updatedProfile = await prisma.userProfile.create({
+        const updatedProfile = await prisma.user_profiles.create({
           data: {
             user_id,
             name: profile.name,
@@ -140,13 +145,13 @@ export const UserRepository = {
             gender: profile.gender as $Enums.GenderType,
           },
         });
-        const updatedAuthorization = await prisma.userAuthorization.create({
+        const updatedAuthorization = await prisma.user_authorizations.create({
           data: {
             user_id,
             ...authorization,
           },
         });
-        const updatedContacts = await prisma.userContact.create({
+        const updatedContacts = await prisma.user_contacts.create({
           data: {
             user_id,
             ...contact,
@@ -164,12 +169,12 @@ export const UserRepository = {
     try {
       const transaction = userIds.map((userId) => {
         return prisma.$transaction([
-          prisma.userDelete.create({
+          prisma.user_deletes.create({
             data: {
               user_id: userId,
             },
           }),
-          prisma.userAuthorization.deleteMany({
+          prisma.user_authorizations.deleteMany({
             where: {
               user_id: userId,
             },

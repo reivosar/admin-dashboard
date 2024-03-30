@@ -28,7 +28,11 @@ export const refreshTokenExpiry = () => {
 };
 
 export const shouldRedirectToLogin = (pathname: string) => {
-  const noAuthRequiredPages = ["/login"];
+  const noAuthRequiredPages = [
+    "/login",
+    "/activation",
+    "/activation/password-change",
+  ];
   const pathIsProtected = !noAuthRequiredPages.includes(pathname);
   return pathIsProtected && !getTokenData();
 };

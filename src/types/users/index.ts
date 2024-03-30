@@ -34,3 +34,8 @@ export interface UserAuthorizationModel {
 export interface UserContactModel {
   email: string;
 }
+
+export interface UserActivationCodeModel {
+  activation_code: string;
+  expires_at: Date;
+}
