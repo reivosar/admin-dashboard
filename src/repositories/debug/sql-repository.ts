@@ -1,12 +1,12 @@
-import prisma from "../Prisma";
+import prisma from "../prisma";
 import { ExecuteSQLResultType } from "@/types/debug";
 
 function autoQuoteIdentifiersEnhanced(sql: string): string {
   return sql;
 }
 
-export const SQLRepository = {
-  async findBy(sql: string): Promise<ExecuteSQLResultType> {
+export const SqlRepository = {
+  async exectueSql(sql: string): Promise<ExecuteSQLResultType> {
     try {
       const processedSql = autoQuoteIdentifiersEnhanced(sql);
 

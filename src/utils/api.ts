@@ -1,4 +1,5 @@
 type ApiResponse<T> = {
+  result: boolean;
   data?: T;
   error?: {
     code: number;
@@ -27,15 +28,17 @@ async function fetchData<T>(
     const data = await response.json();
     if (!response.ok) {
       return {
+        result: false,
         error: {
           code: response.status,
-          message: data.message || "An error occurred",
+          message: data.message || data.error || "An error occurred",
         },
       };
     }
-    return { data };
+    return { result: true, data };
   } catch (error) {
     return {
+      result: false,
       error: {
         code: 500,
         message:
@@ -99,6 +102,7 @@ export async function put<T>(
 
 export async function del<T>(
   endpoint: string,
+  data: any,
   params?: Record<string, any>
 ): Promise<ApiResponse<T>> {
   return fetchData<T>(
@@ -108,6 +112,7 @@ export async function del<T>(
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(data),
     },
     params
   );

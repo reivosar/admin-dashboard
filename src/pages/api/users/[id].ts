@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { UserRepository } from "@/repositories/users/UserRepository";
-import { generateHash } from "@/utils/crypt";
+import { UserService } from "@/services/users/user-service";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
@@ -24,17 +23,7 @@ async function handleGet(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  return UserRepository.findById(Number(id))
-    .then((result) => {
-      if (!result) {
-        return res.status(404).json({ message: "No users found." });
-      } else {
-        return res.status(200).json(result);
-      }
-    })
-    .catch(() => {
-      return res.status(500).json({ message: "Internal Server Error" });
-    });
+  return (await UserService.getUser(id)).toResponse(res);
 }
 
 async function handlePut(
@@ -42,42 +31,8 @@ async function handlePut(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  try {
-    const { username, email, gender, birthdate } = req.body.formData;
-
-    const existingUser = await UserRepository.findById(id);
-    if (!existingUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    if (existingUser.email !== email) {
-      const emailAlreadyRegistered = await UserRepository.findByEmail(email);
-      if (emailAlreadyRegistered) {
-        return res.status(400).json({ message: "Email already registered." });
-      }
-    }
-
-    const profileData = {
-      name: username,
-      birth_date: new Date(birthdate),
-      gender: gender,
-    };
-    const authIdHash = await generateHash(email);
-    const authorizationData = {
-      auth_id: authIdHash,
-      password_hash: existingUser.password_hash,
-    };
-    const contactData = {
-      email: email,
-    };
-    const updatedUser = UserRepository.update(
-      id,
-      profileData,
-      authorizationData,
-      contactData
-    );
-    return res.status(200).json(updatedUser);
-  } catch (error) {
-    return res.status(500).json({ message: "Failed to save user." });
-  }
+  const { username, email, gender, birthdate } = req.body.formData;
+  return (
+    await UserService.update(id, username, email, gender, birthdate)
+  ).toResponse(res);
 }

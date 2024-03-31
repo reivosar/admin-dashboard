@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { post } from "@/utils/api";
+import { get, post } from "@/utils/api";
+import { ActivationUser } from "@/types/activation";
 
 type ActivationProps = {
   activationCode: string | undefined;
@@ -14,17 +15,34 @@ const Activation: React.FC<ActivationProps> = ({ activationCode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!activationCode) {
-      router.push({
-        pathname: "/error",
-        query: {
-          message:
-            "Activation code is missing. Please check your email for the activation link.",
-        },
-      });
-      return;
-    }
+    const checkAndNavigate = async () => {
+      const exists = activationCode
+        ? await checkActivationCodeExists(activationCode)
+        : false;
+      if (!activationCode || !exists) {
+        router.push({
+          pathname: "/error",
+          query: {
+            message:
+              "Activation code is missing. Please check your email for the activation link.",
+          },
+        });
+      }
+    };
+    checkAndNavigate();
   }, [activationCode, router]);
+
+  async function checkActivationCodeExists(activationCode: string) {
+    try {
+      const response = await get<ActivationUser>(
+        `/api/activation?code=${encodeURIComponent(activationCode)}`
+      );
+      return response.result;
+    } catch (error) {
+      console.error("Error checking activation code:", error);
+      return false;
+    }
+  }
 
   const handleActivation = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

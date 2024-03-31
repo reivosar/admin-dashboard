@@ -1,5 +1,5 @@
 import { PrismaClient, $Enums } from "@prisma/client";
-import prisma from "../Prisma";
+import prisma from "../prisma";
 import {
   UserModelWithDetails,
   UserProfileModel,
@@ -166,13 +166,13 @@ export const UserRepository = {
     try {
       const transaction = userIds.map((userId) => {
         return prisma.$transaction([
-          prisma.userDelete.create({
-            data: {
+          prisma.userAuthorization.deleteMany({
+            where: {
               user_id: userId,
             },
           }),
-          prisma.userAuthorization.deleteMany({
-            where: {
+          prisma.userDelete.create({
+            data: {
               user_id: userId,
             },
           }),
@@ -184,6 +184,7 @@ export const UserRepository = {
         message: "Users successfully deleted and their authorizations removed.",
       };
     } catch (error) {
+      console.error(error);
       throw new Error("Failed to delete users and their authorizations.");
     }
   },

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import prisma from "../Prisma";
+import prisma from "../prisma";
 import { TableDetailsModel, SearchHeaderColumnModel } from "@/types/debug";
 
 export const TableRepository = {

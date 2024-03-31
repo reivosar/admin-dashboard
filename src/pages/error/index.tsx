@@ -24,4 +24,10 @@ const ErrorPage = () => {
   );
 };
 
+ErrorPage.getInitialProps = async () => {
+  return {
+    noLayout: true,
+  };
+};
+
 export default ErrorPage;

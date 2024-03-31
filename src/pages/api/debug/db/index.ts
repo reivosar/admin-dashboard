@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { TableRepository } from "@/repositories/debug/TableRepository";
+import { TablenService } from "@/services/debug/table-service";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
@@ -12,15 +12,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
-  return TableRepository.findAllTables()
-    .then((results) => {
-      if (results.length === 0) {
-        return res.status(404).json({ message: "No tables found." });
-      } else {
-        return res.status(200).json(results);
-      }
-    })
-    .catch(() => {
-      return res.status(500).json({ message: "Internal Server Error" });
-    });
+  return (await TablenService.getAllTables()).toResponse(res);
 }

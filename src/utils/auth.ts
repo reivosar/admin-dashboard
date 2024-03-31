@@ -30,6 +30,7 @@ export const refreshTokenExpiry = () => {
 export const shouldRedirectToLogin = (pathname: string) => {
   const noAuthRequiredPages = [
     "/login",
+    "/error",
     "/activation",
     "/activation/password-change",
   ];

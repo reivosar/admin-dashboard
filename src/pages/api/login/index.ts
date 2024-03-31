@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { LoginService } from "@/services/login/login-service";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
@@ -11,5 +12,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-  return res.status(200).json("OK");
+  const { email, password } = req.body;
+  return (await LoginService.login(email, password)).toResponse(res);
 }

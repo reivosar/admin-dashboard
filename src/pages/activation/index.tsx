@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 
 const ActivationPage = () => {
   const router = useRouter();
-  const { param } = router.query;
+  const { code } = router.query;
 
-  const activationCode = Array.isArray(param) ? param[0] : param;
+  const activationCode = Array.isArray(code) ? code[0] : code;
 
   const activationProps = {
     activationCode,
