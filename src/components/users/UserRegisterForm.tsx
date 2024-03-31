@@ -26,7 +26,8 @@ function UserRegisterForm() {
         formData,
       });
       if (error) {
-        throw new Error(error.message);
+        toastError(error.message);
+        return;
       }
       toastSuccess("Registration successful!");
       setFormData({

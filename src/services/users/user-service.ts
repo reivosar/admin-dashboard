@@ -59,6 +59,11 @@ export const UserService = {
     birthdate: Date
   ) {
     return commandServiceOperation(async () => {
+      const emailAlreadyRegistered = await UserRepository.findByEmail(email);
+      if (emailAlreadyRegistered) {
+        throw new BadRequestError("Email already registered.");
+      }
+
       const passwordHash = await generateHash(password);
       const profileData = {
         name: username,
