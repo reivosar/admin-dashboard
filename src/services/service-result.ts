@@ -2,7 +2,7 @@ import { NextApiResponse } from "next";
 import { APIError } from "@/errors";
 
 export class APIServiceResult<T> {
-  private success: boolean;
+  success: boolean;
   private statusCode: number;
   private message?: string;
   data?: T;

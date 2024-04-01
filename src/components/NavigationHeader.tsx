@@ -77,13 +77,13 @@ const NavigationHeader: React.FC = () => {
           className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-20"
           style={{ top: "4rem" }}
         >
-          <Link href="/profile" legacyBehavior>
+          <Link href="/my/profile" legacyBehavior>
             <a className="flex items-center space-x-3 px-4 py-3 text-base text-gray-700 hover:bg-gray-100">
               <UserIcon className="h-6 w-6 text-gray-600" />
               <span>Profile</span>
             </a>
           </Link>
-          <Link href="/settings" legacyBehavior>
+          <Link href="/my/settings" legacyBehavior>
             <a className="flex items-center space-x-3 px-4 py-3 text-base text-gray-700 hover:bg-gray-100">
               <CogIcon className="h-6 w-6 text-gray-600" />
               <span>Settings</span>

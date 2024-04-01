@@ -17,21 +17,26 @@ function buildUrl(endpoint: string, params?: Record<string, any>): string {
   return url.toString();
 }
 
-async function fetchData<T>(
+async function fetchWithAuth<T>(
   endpoint: string,
   options: RequestInit = {},
-  params?: Record<string, any>
+  params?: Record<string, any>,
+  customHeaders?: Record<string, string>
 ): Promise<ApiResponse<T>> {
   const url = buildUrl(endpoint, params);
+  const headers = {
+    "Content-Type": "application/json",
+    ...customHeaders,
+  };
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(url, { ...options, headers });
     const data = await response.json();
     if (!response.ok) {
       return {
         result: false,
         error: {
           code: response.status,
-          message: data.message || data.error || "An error occurred",
+          message: data.message || "An error occurred",
         },
       };
     }
@@ -50,9 +55,10 @@ async function fetchData<T>(
 
 export async function get<T>(
   endpoint: string,
-  params?: Record<string, any>
+  params?: Record<string, any>,
+  customHeaders?: Record<string, string>
 ): Promise<ApiResponse<T>> {
-  return fetchData<T>(
+  return fetchWithAuth<T>(
     endpoint,
     {
       method: "GET",
@@ -60,16 +66,18 @@ export async function get<T>(
         "Content-Type": "application/json",
       },
     },
-    params
+    params,
+    customHeaders
   );
 }
 
 export async function post<T>(
   endpoint: string,
   data: any,
-  params?: Record<string, any>
+  params?: Record<string, any>,
+  customHeaders?: Record<string, string>
 ): Promise<ApiResponse<T>> {
-  return fetchData<T>(
+  return fetchWithAuth<T>(
     endpoint,
     {
       method: "POST",
@@ -78,16 +86,18 @@ export async function post<T>(
       },
       body: JSON.stringify(data),
     },
-    params
+    params,
+    customHeaders
   );
 }
 
 export async function put<T>(
   endpoint: string,
   data: any,
-  params?: Record<string, any>
+  params?: Record<string, any>,
+  customHeaders?: Record<string, string>
 ): Promise<ApiResponse<T>> {
-  return fetchData<T>(
+  return fetchWithAuth<T>(
     endpoint,
     {
       method: "PUT",
@@ -96,16 +106,18 @@ export async function put<T>(
       },
       body: JSON.stringify(data),
     },
-    params
+    params,
+    customHeaders
   );
 }
 
 export async function del<T>(
   endpoint: string,
   data: any,
-  params?: Record<string, any>
+  params?: Record<string, any>,
+  customHeaders?: Record<string, string>
 ): Promise<ApiResponse<T>> {
-  return fetchData<T>(
+  return fetchWithAuth<T>(
     endpoint,
     {
       method: "DELETE",
@@ -114,6 +126,7 @@ export async function del<T>(
       },
       body: JSON.stringify(data),
     },
-    params
+    params,
+    customHeaders
   );
 }

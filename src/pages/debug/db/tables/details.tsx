@@ -18,7 +18,7 @@ const DBTableDetailsPage: React.FC = () => {
 
   const { states, setFilter, goToPage, handleSort } =
     useSearchAndPaginationHook<SearchTableDetailsModel>(
-      `/api/debug/db/${tableName}`,
+      `/api/debug/db/tables/${name}`,
       10
     );
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { saveToken } from "@/utils/auth";
+import { clearToken, saveToken } from "@/utils/auth";
 import { post } from "@/utils/api";
 
 const Login = () => {
@@ -14,17 +14,16 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const { data, error } = await post<{ token: string }>("/api/login", {
+    const { data, error } = await post<string>("/api/login", {
       email,
       password,
     });
     if (error) {
       setError(error.message);
     } else if (data) {
-      saveToken(data.token);
+      saveToken(new Date().toISOString());
       router.push("/");
     }
-
     setLoading(false);
   };
 

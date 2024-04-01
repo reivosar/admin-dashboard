@@ -13,7 +13,7 @@ const TableList: React.FC = () => {
 
   useEffect(() => {
     const fetchTableData = async () => {
-      const response = await get<TableDetailsModel[]>("/api/debug/db");
+      const response = await get<TableDetailsModel[]>("/api/debug/db/tables");
       if (response.error) {
         toastError(response.error.message);
       } else if (response.data) {
@@ -73,7 +73,7 @@ const TableList: React.FC = () => {
         >
           <h3 className="text-lg font-semibold bg-gray-50 px-4 py-2">
             <Link
-              href={`/debug/db/details?name=${table.table_name}`}
+              href={`/debug/db/tables/details?name=${table.table_name}`}
               legacyBehavior
             >
               <a className="text-blue-500 hover:text-blue-700">

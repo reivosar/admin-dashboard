@@ -22,7 +22,7 @@ const DebugMenu: React.FC = () => {
           <tbody>
             <tr>
               <td className="px-6 py-4 whitespace-nowrap">
-                <Link href="/debug/db/" legacyBehavior>
+                <Link href="/debug/db/tables" legacyBehavior>
                   <a className="text-blue-600 hover:text-blue-900">
                     Database Debugging
                   </a>
@@ -34,7 +34,7 @@ const DebugMenu: React.FC = () => {
             </tr>
             <tr>
               <td className="px-6 py-4 whitespace-nowrap">
-                <Link href="/debug/sql/" legacyBehavior>
+                <Link href="/debug/db/sql/" legacyBehavior>
                   <a className="text-blue-600 hover:text-blue-900">
                     Execute SQL
                   </a>
