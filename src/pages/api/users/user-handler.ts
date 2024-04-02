@@ -9,9 +9,17 @@ class UserHandler extends APIHandler {
   }
 
   protected async handlePost(req: NextApiRequest, res: NextApiResponse) {
-    const { username, email, password, gender, birthdate } = req.body.formData;
+    const { firstName, lastName, email, password, gender, birthdate } =
+      req.body;
     return (
-      await UserService.create(username, email, password, gender, birthdate)
+      await UserService.create(
+        firstName,
+        lastName,
+        email,
+        password,
+        gender,
+        birthdate
+      )
     ).toResponse(res);
   }
 

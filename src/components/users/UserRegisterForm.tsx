@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { toastError, toastSuccess } from "../utils/ToastifyAlerts";
 import { post } from "@/utils/api";
 
 function UserRegisterForm() {
   const [formData, setFormData] = useState({
-    username: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
+    confirmPassword: "",
+    autoGeneratePassword: true,
     gender: "",
     birthdate: "2000-01-01",
   });
@@ -16,31 +18,26 @@ function UserRegisterForm() {
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (formData.autoGeneratePassword) {
+      formData.password = "GeneratedStrongPassword123!";
+    }
+
     try {
-      const { error } = await post("/api/users", {
-        formData,
-      });
+      const { error } = await post("/api/users", formData);
       if (error) {
         toastError(error.message);
         return;
       }
       toastSuccess("Registration successful!");
-      setFormData({
-        username: "",
-        email: "",
-        password: "",
-        gender: "",
-        birthdate: "2000-01-01",
-      });
-
-      setTimeout(() => {
-        router.push("/users");
-      }, 300);
+      router.push("/users");
     } catch (error) {
       toastError("Failed to register. Please try again.");
     }
@@ -49,25 +46,43 @@ function UserRegisterForm() {
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="username"
-            className="block text-sm font-bold text-gray-700"
-          >
-            Username
-          </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-            minLength={4}
-            maxLength={20}
-            pattern="^[a-zA-Z0-9_]+$"
-            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <label
+              htmlFor="firstName"
+              className="block text-sm font-bold text-gray-700"
+            >
+              First Name
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="John"
+            />
+          </div>
+          <div className="flex-1">
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-bold text-gray-700"
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Doe"
+            />
+          </div>
         </div>
 
         <div>
@@ -84,29 +99,66 @@ function UserRegisterForm() {
             value={formData.email}
             onChange={handleChange}
             required
-            pattern="^[a-zA-Z0-9.!#$&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$"
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="john.doe@example.com"
           />
         </div>
 
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-bold text-gray-700"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            minLength={8}
-            maxLength={20}
-            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
+          <div className="flex gap-4 items-center">
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-bold text-gray-700"
+              >
+                Password
+              </label>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="autoGeneratePassword"
+                name="autoGeneratePassword"
+                checked={formData.autoGeneratePassword}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              <label
+                htmlFor="autoGeneratePassword"
+                className="text-sm font-bold text-gray-700"
+              >
+                Auto-generate
+              </label>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required={!formData.autoGeneratePassword}
+                disabled={formData.autoGeneratePassword}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Password"
+              />
+            </div>
+            <div className="flex-1">
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required={!formData.autoGeneratePassword}
+                disabled={formData.autoGeneratePassword}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Confirm Password"
+              />
+            </div>
+          </div>
         </div>
 
         <div>
@@ -197,13 +249,6 @@ function UserRegisterForm() {
           Register
         </button>
       </form>
-      <div className="mt-6 text-center">
-        <Link href="/users" legacyBehavior>
-          <a className="text-indigo-600 hover:text-indigo-500 text-sm">
-            ← Back to user list
-          </a>
-        </Link>
-      </div>
     </div>
   );
 }

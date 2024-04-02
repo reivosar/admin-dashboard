@@ -1,6 +1,7 @@
 export interface UserModel {
   id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   gender: "male" | "female" | "other";
   birth_date: string;
@@ -10,7 +11,8 @@ export interface UserModel {
 
 export interface UserModelWithDetails {
   id: number;
-  name: string | null;
+  first_name: string | null;
+  last_name: string | null;
   birth_date: Date | null;
   gender: string | null;
   email: string | null;
@@ -21,7 +23,8 @@ export interface UserModelWithDetails {
 }
 
 export interface UserProfileModel {
-  name: string;
+  first_name: string;
+  last_name: string;
   birth_date: Date | string;
   gender: string;
 }

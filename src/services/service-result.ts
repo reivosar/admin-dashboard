@@ -43,6 +43,9 @@ export class APIServiceResult<T> {
 
   public toResponse(res: NextApiResponse) {
     if (this.success) {
+      if (!this.data) {
+        return res.status(this.statusCode);
+      }
       return res.status(this.statusCode).json(this.data);
     }
     return res.status(this.statusCode).json({ message: this.message });

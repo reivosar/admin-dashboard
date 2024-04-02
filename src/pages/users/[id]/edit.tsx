@@ -1,17 +1,19 @@
 import { useRouter } from "next/router";
 import UserEditForm from "@/components/users/UserEditForm";
+import Breadcrumbs from "@/components/utils/Breadcrumbs";
 
 const EditUserPage: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
 
+  const breadcrumbPaths = [
+    { label: "Users", href: "/users" },
+    { label: "Edit User" },
+  ];
+
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center">
-          <h1 className="text-3xl font-bold">Edit User</h1>
-        </div>
-      </div>
+    <div>
+      <Breadcrumbs paths={breadcrumbPaths} />
       {typeof id === "string" && <UserEditForm id={id} />}
     </div>
   );

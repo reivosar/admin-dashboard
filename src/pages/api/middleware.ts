@@ -26,6 +26,7 @@ export function withAuth(handler: ApiHandler): ApiHandler {
       if (error instanceof APIError) {
         return res.status(error.statusCode).json({ message: error.message });
       } else {
+        console.error(error);
         return res.status(500).json({ message: "Internal Server Error" });
       }
     }

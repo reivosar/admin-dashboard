@@ -12,7 +12,8 @@ export const UserService = {
   },
   async update(
     id: number,
-    username: string,
+    first_name: string,
+    last_name: string,
     email: string,
     gender: string,
     birthdate: Date
@@ -31,10 +32,12 @@ export const UserService = {
       }
 
       const profileData = {
-        name: username,
+        first_name: first_name,
+        last_name: last_name,
         birth_date: new Date(birthdate),
         gender: gender,
       };
+
       const authorizationData = {
         auth_id: email,
         password_hash: existingUser.password_hash,
@@ -52,7 +55,8 @@ export const UserService = {
     }, "Users successfully updated.");
   },
   async create(
-    username: string,
+    first_name: string,
+    last_name: string,
     email: string,
     password: string,
     gender: string,
@@ -66,7 +70,8 @@ export const UserService = {
 
       const passwordHash = await generateHash(password);
       const profileData = {
-        name: username,
+        first_name: first_name,
+        last_name: last_name,
         birth_date: new Date(birthdate),
         gender: gender,
       };
@@ -93,7 +98,7 @@ export const UserService = {
   async delete(userIds: number[]) {
     return commandServiceOperation(async () => {
       UserRepository.delete(userIds);
-    }, "Users successfully deleted.");
+    });
   },
   async getUserBySearchTerm(searchTerm: string | undefined) {
     return queryServiceOperation(

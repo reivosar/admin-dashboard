@@ -1,4 +1,4 @@
-import Profile from "@/components/my/profile";
+import Profile from "@/components/my/Profile";
 
 const ProfilePage: React.FC = () => {
   return (

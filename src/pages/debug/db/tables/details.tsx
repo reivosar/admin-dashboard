@@ -12,7 +12,7 @@ const DBTableDetailsPage: React.FC = () => {
 
   const breadcrumbPaths = [
     { label: "Debug", href: "/debug" },
-    { label: "Database Debugging", href: "/debug/db" },
+    { label: "Database Debugging", href: "/debug/db/tables" },
     { label: tableName || "Details" },
   ];
 

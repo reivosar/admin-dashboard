@@ -37,7 +37,12 @@ export const UserRepository = {
     } else {
       let whereParts: string[] = [];
       if (name) {
-        whereParts.push(`"user_profiles"."name" ILIKE $${params.length + 1}`);
+        whereParts.push(
+          `"user_profiles"."first_name" ILIKE $${params.length + 1}`
+        );
+        whereParts.push(
+          `"user_profiles"."last_name" ILIKE $${params.length + 1}`
+        );
         params.push(`%${name}%`);
       }
       if (email) {
@@ -52,7 +57,8 @@ export const UserRepository = {
       `
       SELECT
         "users"."id",
-        "user_profiles"."name",
+        "user_profiles"."first_name",
+        "user_profiles"."last_name",
         "user_profiles"."birth_date",
         "user_profiles"."gender",
         "user_contacts"."email",
@@ -100,7 +106,8 @@ export const UserRepository = {
       data: {
         user_profiles: {
           create: {
-            name: profile.name,
+            first_name: profile.first_name,
+            last_name: profile.last_name,
             birth_date: profile.birth_date,
             gender: profile.gender as $Enums.GenderType,
           },
@@ -139,7 +146,8 @@ export const UserRepository = {
       const updatedProfile = await prisma.userProfile.create({
         data: {
           user_id,
-          name: profile.name,
+          first_name: profile.first_name,
+          last_name: profile.last_name,
           birth_date: profile.birth_date,
           gender: profile.gender as $Enums.GenderType,
         },
@@ -179,12 +187,7 @@ export const UserRepository = {
         ]);
       });
       await Promise.all(transaction);
-
-      return {
-        message: "Users successfully deleted and their authorizations removed.",
-      };
     } catch (error) {
-      console.error(error);
       throw new Error("Failed to delete users and their authorizations.");
     }
   },

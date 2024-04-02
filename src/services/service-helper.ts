@@ -24,6 +24,7 @@ export async function commandServiceOperation<T>(
     const result = await operation();
     return new APIServiceResult<T>(result, undefined, successMessage);
   } catch (error) {
+    console.error(error);
     return new APIServiceResult<T>(undefined, error);
   }
 }

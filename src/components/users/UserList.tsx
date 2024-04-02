@@ -127,7 +127,9 @@ const UserList: React.FC<UserListProps> = ({
                       className="form-checkbox"
                     />
                   </td>
-                  <td className="px-4 py-2 w-1/4">{user.name}</td>
+                  <td className="px-4 py-2 w-1/4">
+                    {user.first_name} {user.last_name}{" "}
+                  </td>
                   <td className="px-4 py-2 w-1/4">{user.email}</td>
                   <td className="px-4 py-2 w-1/6 text-center relative">
                     {user.activated_at ? (

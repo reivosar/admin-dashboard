@@ -11,7 +11,8 @@ type UserEditFormProps = {
 
 const UserEditForm: React.FC<UserEditFormProps> = ({ id }) => {
   const [formData, setFormData] = useState({
-    username: "",
+    firstName: "",
+    lastName: "",
     email: "",
     gender: "",
     birthdate: "",
@@ -34,7 +35,8 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ id }) => {
         const userData = await response.json();
         if (userData) {
           setFormData({
-            username: userData.name,
+            firstName: userData.first_name,
+            lastName: userData.last_name,
             email: userData.email,
             gender: userData.gender,
             birthdate: userData.birth_date.substring(0, 10),
@@ -74,25 +76,41 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ id }) => {
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="username"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Username
-          </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-            minLength={4}
-            maxLength={20}
-            pattern="^[a-zA-Z0-9_]+$"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <label
+              htmlFor="firstName"
+              className="block text-sm font-bold text-gray-700"
+            >
+              First Name
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex-1">
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-bold text-gray-700"
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
         </div>
 
         <div>
