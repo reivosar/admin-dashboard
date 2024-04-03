@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { toastError, toastSuccess } from "../utils/ToastifyAlerts";
 import { showConfirmDialog } from "../utils/ConfirmDialog";
-import { put } from "@/utils/api";
+import { UserModelWithDetails } from "@/types/users";
+import { get, put } from "@/utils/api";
 
 type UserEditFormProps = {
   id: string;
@@ -22,29 +22,23 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ id }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       if (!id) return;
-      try {
-        const response = await fetch(`/api/users/${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch user data");
-        }
-        const userData = await response.json();
-        if (userData) {
-          setFormData({
-            firstName: userData.first_name,
-            lastName: userData.last_name,
-            email: userData.email,
-            gender: userData.gender,
-            birthdate: userData.birth_date.substring(0, 10),
-          });
-        }
-      } catch (error) {
-        toastError("Failed to load user data.");
+      const response = await get<UserModelWithDetails>(`/api/users/${id}`);
+      if (response.error) {
+        toastError(response.error.message);
         router.push("/users");
+      }
+      const userData = response.data;
+      if (userData) {
+        setFormData({
+          firstName: userData.first_name ?? "",
+          lastName: userData.last_name ?? "",
+          email: userData.email ?? "",
+          gender: userData.gender ?? "",
+          birthdate:
+            (userData.birth_date
+              ? userData.birth_date.toString().substring(0, 10)
+              : "") ?? "",
+        });
       }
     };
 
@@ -53,6 +47,10 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ id }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCancel = () => {
+    router.push("/users");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -215,21 +213,23 @@ const UserEditForm: React.FC<UserEditFormProps> = ({ id }) => {
             </label>
           </div>
         </div>
-
-        <button
-          type="submit"
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Update
-        </button>
+        <hr className="my-4 border-gray-300" />
+        <div className="flex justify-between">
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="flex-1 mr-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="flex-1 ml-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Update
+          </button>
+        </div>
       </form>
-      <div className="mt-6 text-center">
-        <Link href="/users" legacyBehavior>
-          <a className="text-indigo-600 hover:text-indigo-500 text-sm">
-            ← Back to user list
-          </a>
-        </Link>
-      </div>
     </div>
   );
 };

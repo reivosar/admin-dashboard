@@ -40,14 +40,14 @@ const Profile: React.FC = () => {
           onClick={() => handleEditClick("name")}
         />
         <Detail
-          label="Birth Date"
+          label="Birthdate"
           value={
             userData?.birth_date
               ? formatDateTime(new Date(userData.birth_date), "YYYY-MM-DD")
               : "N/A"
           }
           icon={<CalendarIcon className="h-5 w-5 text-gray-400" />}
-          onClick={() => handleEditClick("birth-date")}
+          onClick={() => handleEditClick("birthdate")}
         />
         <Detail
           label="Gender"
