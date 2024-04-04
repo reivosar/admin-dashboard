@@ -4,7 +4,12 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { refreshTokenExpiry, shouldRedirectToLogin } from "../utils/auth";
+import {
+  clearToken,
+  getTokenData,
+  refreshTokenExpiry,
+  shouldRedirectToLogin,
+} from "../utils/auth";
 import AdminHeader from "../components/AdminHeader";
 import NavigationHeader from "../components/NavigationHeader";
 import Sidebar from "../components/Sidebar";
@@ -28,6 +33,18 @@ function MyApp({ Component, pageProps }: AppProps) {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router]);
+
+  useEffect(() => {
+    const onLoginSuccess = () => {
+      setInterval(() => {
+        if (!getTokenData()) {
+          clearToken();
+          router.push("/login");
+        }
+      }, 1 * 60 * 1000);
+    };
+    onLoginSuccess();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
