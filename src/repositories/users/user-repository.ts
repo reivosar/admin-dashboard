@@ -128,42 +128,54 @@ export const UserRepository = {
 
   async update(
     user_id: number,
-    profile: UserProfileModel,
-    authorization: UserAuthorizationModel,
-    contact: UserContactModel
+    profile?: UserProfileModel | null,
+    authorization?: UserAuthorizationModel | null,
+    contact?: UserContactModel | null
   ) {
     const updatedUser = await prisma.$transaction(async (prisma) => {
-      await prisma.userProfile.deleteMany({
-        where: { user_id },
-      });
-      await prisma.userAuthorization.deleteMany({
-        where: { user_id },
-      });
-      await prisma.userContact.deleteMany({
-        where: { user_id },
-      });
+      let updatedProfile;
+      let updatedAuthorization;
+      let updatedContacts;
 
-      const updatedProfile = await prisma.userProfile.create({
-        data: {
-          user_id,
-          first_name: profile.first_name,
-          last_name: profile.last_name,
-          birth_date: profile.birth_date,
-          gender: profile.gender as $Enums.GenderType,
-        },
-      });
-      const updatedAuthorization = await prisma.userAuthorization.create({
-        data: {
-          user_id,
-          ...authorization,
-        },
-      });
-      const updatedContacts = await prisma.userContact.create({
-        data: {
-          user_id,
-          ...contact,
-        },
-      });
+      if (profile) {
+        await prisma.userProfile.deleteMany({
+          where: { user_id },
+        });
+        updatedProfile = await prisma.userProfile.create({
+          data: {
+            user_id,
+            first_name: profile.first_name,
+            last_name: profile.last_name,
+            birth_date: profile.birth_date,
+            gender: profile.gender as $Enums.GenderType,
+          },
+        });
+      }
+
+      if (authorization) {
+        await prisma.userAuthorization.deleteMany({
+          where: { user_id },
+        });
+        updatedAuthorization = await prisma.userAuthorization.create({
+          data: {
+            user_id,
+            ...authorization,
+          },
+        });
+      }
+
+      if (contact) {
+        await prisma.userContact.deleteMany({
+          where: { user_id },
+        });
+        updatedContacts = await prisma.userContact.create({
+          data: {
+            user_id,
+            ...contact,
+          },
+        });
+      }
+
       return { updatedProfile, updatedAuthorization, updatedContacts };
     });
 

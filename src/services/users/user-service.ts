@@ -1,6 +1,6 @@
 import { UserRepository } from "@/repositories/users/user-repository";
 import { generateHash, generateRandomString } from "@/utils/crypt";
-import { BadRequestError, NotFoundError } from "@/errors";
+import { BadRequestError, NotFoundError, ConflictError } from "@/errors";
 import {
   commandServiceOperation,
   queryServiceOperation,
@@ -12,11 +12,11 @@ export const UserService = {
   },
   async update(
     id: number,
-    first_name: string,
-    last_name: string,
-    email: string,
-    gender: string,
-    birthdate: Date
+    first_name?: string,
+    last_name?: string,
+    email?: string,
+    gender?: string,
+    birth_date?: Date
   ) {
     return commandServiceOperation(async () => {
       const existingUser = await UserRepository.findById(id);
@@ -24,35 +24,54 @@ export const UserService = {
         throw new NotFoundError("User not found");
       }
 
-      if (existingUser.email !== email) {
-        const emailAlreadyRegistered = await UserRepository.findByEmail(email);
-        if (emailAlreadyRegistered) {
-          throw new BadRequestError("Email already registered.");
+      if (email && email !== existingUser.email) {
+        const emailExists = await UserRepository.findByEmail(email);
+        if (emailExists) {
+          throw new ConflictError("Email already registered");
         }
       }
 
-      const profileData = {
-        first_name: first_name,
-        last_name: last_name,
-        birth_date: new Date(birthdate),
-        gender: gender,
+      const needsUpdate = {
+        profile:
+          first_name !== undefined ||
+          last_name !== undefined ||
+          birth_date !== undefined ||
+          gender !== undefined,
+        authorization: email !== undefined,
+        contact: email !== undefined,
       };
 
-      const authorizationData = {
-        auth_id: email,
-        password_hash: existingUser.password_hash,
-      };
-      const contactData = {
-        email: email,
-      };
+      const profileData = needsUpdate.profile
+        ? {
+            first_name: first_name ?? existingUser.first_name ?? "",
+            last_name: last_name ?? existingUser.last_name ?? "",
+            birth_date: birth_date
+              ? new Date(birth_date)
+              : existingUser.birth_date ?? "",
+            gender: gender ?? existingUser.gender ?? "",
+          }
+        : undefined;
 
-      return UserRepository.update(
+      const authorizationData = needsUpdate.authorization
+        ? {
+            auth_id: email ?? "",
+            password_hash: existingUser.password_hash,
+          }
+        : undefined;
+
+      const contactData = needsUpdate.contact
+        ? {
+            email: email ?? "",
+          }
+        : undefined;
+
+      return await UserRepository.update(
         id,
         profileData,
         authorizationData,
         contactData
       );
-    }, "Users successfully updated.");
+    }, "User successfully updated.");
   },
   async create(
     first_name: string,

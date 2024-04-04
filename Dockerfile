@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 RUN npx prisma generate
-RUN npm run seed
+RUN npx prisma db seed
 ARG BUILD_ENV
 COPY .env ./.env
 RUN npm run build

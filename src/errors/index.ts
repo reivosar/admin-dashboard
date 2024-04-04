@@ -32,6 +32,12 @@ export class ForbiddenError extends APIError {
   }
 }
 
+export class ConflictError extends APIError {
+  constructor(message = "Conflict") {
+    super(message, 409);
+  }
+}
+
 export class InternalServerError extends APIError {
   constructor(message = "Internal Server Error") {
     super(message, 500);

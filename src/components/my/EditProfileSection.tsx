@@ -45,7 +45,7 @@ const UserEditForm: React.FC = () => {
       const result = await get<UserModelWithDetails>("/api/my/profile");
       if (result.error) {
         toastError("Failed to load user data.");
-        router.push("/users");
+        router.push("/login");
       }
       const userData = result.data;
       if (userData) {
@@ -75,7 +75,9 @@ const UserEditForm: React.FC = () => {
     showConfirmDialog({
       message: "Are you sure you want to update the your information?",
       onConfirm: async () => {
-        const { error } = await put(`/api/my/profile/${section}`, formData);
+        const { error } = await put(`/api/my/profile/${section}`, {
+          formData,
+        });
         if (error) {
           toastError(error.message);
         } else {
@@ -157,7 +159,7 @@ const UserEditForm: React.FC = () => {
             <div className="p-4 rounded-lg shadow mb-6 flex items-center space-x-4 border-l-4 border-yellow-500 bg-yellow-50">
               <ExclamationIcon className="h-5 w-5 text-yellow-600" />
               <p className="text-yellow-800 font-medium">
-                Changing the email address will also change the user's login ID.
+                Changing the email address will also change the your login ID.
               </p>
             </div>
 
