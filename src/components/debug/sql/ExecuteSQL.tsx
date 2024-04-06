@@ -75,9 +75,12 @@ const ExecuteSQL = () => {
     setError("");
     setResults(null);
 
-    const response = await post<ExecuteSQLResultType | null>("/api/debug/sql", {
-      query,
-    });
+    const response = await post<ExecuteSQLResultType | null>(
+      "/api/debug/db/sql",
+      {
+        query,
+      }
+    );
 
     if (response.error) {
       setError(response.error.message);
@@ -124,16 +127,16 @@ const ExecuteSQL = () => {
           />
           <div className="flex justify-end space-x-3 mt-4">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={executeQuery}
-            >
-              Execute
-            </button>
-            <button
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               onClick={clearQuery}
             >
               Clear
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={executeQuery}
+            >
+              Execute
             </button>
           </div>
         </div>
