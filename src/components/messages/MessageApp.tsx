@@ -1,19 +1,48 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
+  ContentBlock,
+  DraftEditorCommand,
+  DraftBlockType,
   Editor,
   EditorState,
   RichUtils,
-  DraftEditorCommand,
-  DraftBlockType,
 } from "draft-js";
 import "draft-js/dist/Draft.css";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
+import { stateToHTML } from "draft-js-export-html";
+import MessageChannel from "./MssageChannel";
+import DOMPurify from "dompurify";
 
 const MessageApp = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [messages, setMessages] = useState([
     { id: 0, text: "Welcome to Slack clone!" },
   ]);
+
+  const options = useMemo(
+    () => ({
+      blockRenderers: {
+        "unordered-list-item": (block: ContentBlock) =>
+          `<div style="padding-left: 25px;"><li style="list-style-type: disc;">${block.getText()}</li></div>`,
+        "ordered-list-item": (block: ContentBlock) =>
+          `<div style="padding-left: 25px;"><li style="list-style-type: decimal;">${block.getText()}</li></div>`,
+      },
+    }),
+    []
+  );
+
+  const handleSend = () => {
+    const contentState = editorState.getCurrentContent();
+    const dirtyHtml = stateToHTML(contentState, options);
+    const cleanHtml = DOMPurify.sanitize(dirtyHtml);
+    if (cleanHtml.trim() !== "") {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { id: prevMessages.length, text: cleanHtml },
+      ]);
+      setEditorState(EditorState.createEmpty());
+    }
+  };
 
   const handleKeyCommand = (command: DraftEditorCommand) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -32,39 +61,24 @@ const MessageApp = () => {
     setEditorState(RichUtils.toggleBlockType(editorState, type));
   };
 
-  const handleSend = () => {
-    const contentState = editorState.getCurrentContent();
-    const text = contentState.getPlainText();
-    if (text.trim() !== "") {
-      const newMsg = { id: messages.length, text };
-      setMessages([...messages, newMsg]);
-      setEditorState(EditorState.createEmpty());
-    }
+  const onToggleInlineCode = () => {
+    setEditorState(RichUtils.toggleInlineStyle(editorState, "CODE"));
   };
 
   return (
     <div className="app-container flex" style={{ height: "80vh" }}>
-      <div className="channel-list bg-gray-900 text-white w-64 p-4">
-        <h2 className="text-xl font-semibold mb-4">Channels</h2>
-        <ul className="list-none">
-          <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
-            <i className="fas fa-comments mr-2"></i> # general
-          </li>
-          <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
-            <i className="fas fa-random mr-2"></i> # random
-          </li>
-        </ul>
-      </div>
+      <MessageChannel />
       <div className="message-area flex flex-col flex-1 bg-gray-100">
         <div className="messages flex-1 overflow-y-auto p-4">
-          {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className="message bg-white p-2 my-2 rounded shadow"
-            >
-              {msg.text}
-            </div>
-          ))}
+          {messages.map((msg) => {
+            return (
+              <div
+                key={msg.id}
+                className="message bg-white p-2 my-2 rounded shadow"
+                dangerouslySetInnerHTML={{ __html: msg.text }}
+              ></div>
+            );
+          })}
         </div>
         <div className="editor bg-white p-4 border rounded flex flex-col justify-between">
           <div
@@ -115,6 +129,15 @@ const MessageApp = () => {
               >
                 123
               </button>
+              <button
+                onClick={() => onToggleBlockType("code-block")}
+                className="mr-2"
+              >
+                {"{ }"}
+              </button>
+              <button onClick={onToggleInlineCode} className="tool-btn">
+                ` `
+              </button>
             </div>
             <div className="flex items-center">
               <button onClick={handleSend} className="icon-button">
@@ -158,13 +181,13 @@ const MessageApp = () => {
         .icon-button {
           background-color: #f0f0f0;
           border-radius: 8px;
-          box-shadow: 4px 4px 8px #e0e0e0, -4px -4px 8px #ffffff; /* ソフトな陰影で立体感を演出 */
+          box-shadow: 4px 4px 8px #e0e0e0, -4px -4px 8px #ffffff;
           padding: 8px;
           cursor: pointer;
         }
 
         .icon-button:hover {
-          box-shadow: 2px 2px 4px #e0e0e0, -2px -2px 4px #ffffff; /* ホバー時に陰影を細かく */
+          box-shadow: 2px 2px 4px #e0e0e0, -2px -2px 4px #ffffff;
         }
       `}</style>
     </div>

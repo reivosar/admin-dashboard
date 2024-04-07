@@ -6,6 +6,7 @@ import {
   UserAuthorizationModel,
   UserContactModel,
   UserActivationCodeModel,
+  UserNameModel,
 } from "@/types/users";
 
 export const UserRepository = {
@@ -18,6 +19,32 @@ export const UserRepository = {
     email?: string
   ): Promise<UserModelWithDetails[]> {
     return this.findUsers({ name: name, email: email });
+  },
+
+  async findUserNamesBy(name?: string): Promise<UserNameModel[]> {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        user_profiles: {
+          select: {
+            first_name: true,
+            last_name: true,
+          },
+        },
+      },
+      where: {
+        user_deletes: null,
+      },
+      orderBy: {
+        user_profiles: {
+          first_name: "asc",
+        },
+      },
+    });
+    return users.map((user) => ({
+      id: user.id,
+      name: `${user.user_profiles?.first_name} ${user.user_profiles?.last_name}`,
+    }));
   },
 
   async findUsers({

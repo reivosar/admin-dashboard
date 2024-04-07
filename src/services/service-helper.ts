@@ -12,6 +12,7 @@ export async function queryServiceOperation<T>(
     }
     return new APIServiceResult<T>(result, undefined, successMessage);
   } catch (error) {
+    console.error(error);
     return new APIServiceResult<T>(undefined, error);
   }
 }

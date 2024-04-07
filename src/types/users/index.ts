@@ -9,6 +9,11 @@ export interface UserModel {
   lastActivity?: string;
 }
 
+export interface UserNameModel {
+  id: number;
+  name: string;
+}
+
 export interface UserModelWithDetails {
   id: number;
   first_name: string | null;

@@ -124,4 +124,7 @@ export const UserService = {
       UserRepository.findByNameAndEmail(searchTerm, searchTerm)
     );
   },
+  async getUserNames(searchTerm: string | undefined) {
+    return queryServiceOperation(UserRepository.findUserNamesBy(searchTerm));
+  },
 };

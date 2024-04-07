@@ -10,7 +10,7 @@ interface VerifyResult {
 }
 
 interface CustomJwtPayload extends JwtPayload {
-  user_id: string;
+  user_id: number;
   loginDate: string;
 }
 

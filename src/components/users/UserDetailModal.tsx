@@ -1,6 +1,5 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { PencilIcon } from "@heroicons/react/solid";
 import { formatDateTime } from "@/utils/dateutils";
 import { UserModel } from "@/types/users";
 
@@ -97,17 +96,16 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
         </table>
         <div className="flex justify-end space-x-3 mt-4">
           <button
-            onClick={handleEdit}
-            className="inline-flex items-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            <PencilIcon className="w-5 h-5 mr-2" />
-            Edit
-          </button>
-          <button
             onClick={onClose}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
           >
             Close
+          </button>
+          <button
+            onClick={handleEdit}
+            className="inline-flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Edit
           </button>
         </div>
       </div>

@@ -14,16 +14,17 @@ enum GenderType {
 }
 
 model User {
-  id                    Int                   @id @default(autoincrement())
-  created_at            DateTime              @default(now())
-  logs                  UserLog[]
-  user_activation_codes UserActivationCode?
-  user_authorizations   UserAuthorization?
-  user_profiles         UserProfile?
-  user_actives          UserActive?
-  user_deletes          UserDelete?
-  user_contacts         UserContact?
-  user_tokens           UserToken?
+  id                      Int                   @id @default(autoincrement())
+  created_at              DateTime              @default(now())
+  logs                    UserLog[]
+  user_activation_codes   UserActivationCode?
+  user_authorizations     UserAuthorization?
+  user_profiles           UserProfile?
+  user_actives            UserActive?
+  user_deletes            UserDelete?
+  user_contacts           UserContact?
+  user_tokens             UserToken?
+  message_channel_members MessageChannelMember[]
   @@map("users")
 }
 
@@ -91,8 +92,48 @@ model UserActivationCode {
 model UserToken {
   user_id     Int      @unique
   token       String   
-  expires_at  DateTime 
+  expires_at  DateTime
   created_at  DateTime @default(now()) 
   user        User     @relation(fields: [user_id], references: [id])
   @@map("user_tokens")
+}
+
+model MessageChannel {
+  id                         Int      @id @default(autoincrement())
+  created_at                 DateTime @default(now())
+  message_channel_visibility MessageChannelVisibility?
+  message_channel_profiles   MessageChannelProfile?
+  message_channel_members    MessageChannelMember[]
+  @@map("message_channels")
+}
+
+model MessageChannelVisibility {
+  channel_id  Int      @unique
+  is_public   Boolean
+  created_at  DateTime @default(now())
+  message_channels MessageChannel @relation(fields: [channel_id], references: [id])
+  @@map("message_channel_visibility")
+}
+
+model MessageChannelProfile {
+  channel_id   Int      @unique
+  name         String
+  description  String?
+  created_at   DateTime @default(now())
+  message_channels  MessageChannel @relation(fields: [channel_id], references: [id])
+  @@map("message_channel_profiles")
+}
+
+model MessageChannelMember {
+  channel_id       Int      
+  user_id          Int             
+  can_post         Boolean         @default(false) 
+  can_view         Boolean         @default(true)  
+  can_edit         Boolean         @default(false) 
+  can_delete       Boolean         @default(false) 
+  joined_at        DateTime        @default(now()) 
+  message_channels MessageChannel  @relation(fields: [channel_id], references: [id])
+  user             User            @relation(fields: [user_id], references: [id])
+  @@unique([channel_id, user_id]) 
+  @@map("message_channel_members")
 }
