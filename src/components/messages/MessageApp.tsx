@@ -10,7 +10,7 @@ import {
 import "draft-js/dist/Draft.css";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
 import { stateToHTML } from "draft-js-export-html";
-import MessageChannel from "./MssageChannel";
+import MessageChannel from "./MessageChannel";
 import DOMPurify from "dompurify";
 
 const MessageApp = () => {
