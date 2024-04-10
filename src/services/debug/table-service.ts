@@ -29,6 +29,7 @@ export const TablenService = {
 
         const data = await TableRepository.findBy(
           table_name,
+          headers,
           convertedConditions,
           sortConfig
         );

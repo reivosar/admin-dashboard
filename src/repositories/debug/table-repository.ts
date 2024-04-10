@@ -113,6 +113,7 @@ export const TableRepository = {
 
   async findBy(
     tableName: string,
+    headers: SearchHeaderColumnModel[],
     conditions: Record<string, any>,
     sortConfig?: { key: string; direction: string }
   ): Promise<Record<string, string>[]> {
@@ -120,10 +121,25 @@ export const TableRepository = {
       let query = `SELECT * FROM "${tableName}"`;
 
       if (Object.keys(conditions).length > 0) {
-        const whereClauses = Object.entries(conditions)
-          .map(([key, value]) => `"${key}" = '${value}'`)
+        const whereClauses = headers
+          .map((header) => {
+            const value = conditions[header.column_name];
+            if (!value) return "";
+
+            if (header.data_type === "enum" && header.enum_labels) {
+              return `"${header.column_name}" = '${value}'`;
+            } else if (header.data_type === "jsonb") {
+              return `to_tsvector("${header.column_name}") @@ to_tsquery('${value}')`;
+            } else {
+              return `"${header.column_name}" ILIKE '%${value}%'`;
+            }
+          })
+          .filter((clause) => clause.length > 0)
           .join(" AND ");
-        query += ` WHERE ${whereClauses}`;
+
+        if (whereClauses.length > 0) {
+          query += ` WHERE ${whereClauses}`;
+        }
       }
 
       if (sortConfig) {
@@ -136,7 +152,7 @@ export const TableRepository = {
 
       return results.map((row) =>
         Object.fromEntries(
-          Object.entries(row).map(([key, value]) => [key, value.toString()])
+          Object.entries(row).map(([key, value]) => [key, value])
         )
       );
     } catch (error: unknown) {

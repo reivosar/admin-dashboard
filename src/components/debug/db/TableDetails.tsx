@@ -19,6 +19,18 @@ type TableDetailsFormProps = {
   handleSort: (key: string) => void;
 };
 
+const renderValue = (value: any) => {
+  if (Array.isArray(value)) {
+    return value.map((item, index) => (
+      <div key={index}>{JSON.stringify(item)}</div>
+    ));
+  } else if (typeof value === "object") {
+    return <pre>{JSON.stringify(value, null, 2)}</pre>;
+  } else {
+    return value?.toString();
+  }
+};
+
 const TableDetails: React.FC<TableDetailsFormProps> = ({
   states,
   setFilter,
@@ -76,7 +88,9 @@ const TableDetails: React.FC<TableDetailsFormProps> = ({
           {data?.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {headers?.map((header) => (
-                <td key={header.column_name}>{row[header.column_name]}</td>
+                <td key={header.column_name}>
+                  {renderValue(row[header.column_name])}
+                </td>
               ))}
             </tr>
           ))}

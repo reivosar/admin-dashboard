@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 
-type MessageDisplayProps = {
-  channelId: number;
+type CMessageResponderProps = {
+  channelId: number | undefined;
 };
 
-const MessageDisplay: React.FC<MessageDisplayProps> = ({ channelId }) => {
+const MessageResponder: React.FC<CMessageResponderProps> = ({ channelId }) => {
   const [messages, setMessages] = useState([
     { id: 0, text: "Welcome to Slack clone!" },
   ]);
+
+  useEffect(() => {
+    const fetchMessage = async () => {
+      setMessages([{ id: 0, text: "Welcome to the channel!" }]);
+    };
+    fetchMessage();
+  }, [channelId]);
 
   return (
     <div className="messages flex-1 overflow-y-auto p-4">
@@ -41,4 +48,4 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({ channelId }) => {
   );
 };
 
-export default MessageDisplay;
+export default MessageResponder;

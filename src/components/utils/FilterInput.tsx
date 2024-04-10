@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { SearchIcon } from "@heroicons/react/solid";
+import debounce from "lodash/debounce";
 
 export const FilterInput: React.FC<{
   onChange: (value: string) => void;
@@ -7,7 +8,18 @@ export const FilterInput: React.FC<{
   value: string;
   selectOptions?: string | null;
 }> = ({ onChange, columnName, value, selectOptions }) => {
+  const [inputValue, setInputValue] = useState(value);
   const options = selectOptions ? selectOptions.split(",") : [];
+  const debouncedOnChange = debounce(onChange, 600);
+
+  useEffect(() => {
+    if (inputValue !== value) {
+      debouncedOnChange(inputValue);
+    }
+    return () => {
+      debouncedOnChange.cancel();
+    };
+  }, [inputValue, debouncedOnChange]);
 
   return (
     <div className="relative text-gray-400 focus-within:text-gray-600">
@@ -15,7 +27,7 @@ export const FilterInput: React.FC<{
         <select
           className="py-2 px-3 w-full text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => setInputValue(e.target.value)}
         >
           <option value="">Select {columnName}</option>
           {options.map((option) => (
@@ -29,8 +41,8 @@ export const FilterInput: React.FC<{
           type="text"
           className="py-2 px-3 pl-8 w-full text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
           placeholder={`Filter ${columnName}...`}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
       )}
       <div className="absolute inset-y-0 left-0 flex items-center pl-2">

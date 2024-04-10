@@ -1,4 +1,4 @@
-import MessageApp from "@/components/messages/MessageApp";
+import Messanger from "@/components/messages/Managerr";
 
 const MessagesPage: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const MessagesPage: React.FC = () => {
           <h1 className="text-3xl font-bold">Messages</h1>
         </div>
       </div>
-      <MessageApp />
+      <Messanger />
     </div>
   );
 };

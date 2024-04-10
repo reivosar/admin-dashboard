@@ -8,13 +8,16 @@ const main = async () => {
   const last_name = "last";
   const birth_date = new Date("2000/01/01");
   const gender = "other";
+  const operator = "seed";
   const authorizationData = {
     auth_id: "sample@admindashboard.com",
     password_hash:
       "$2b$10$mPihCO1HYilKwoc9bzqRWOV9h.1iyc8FICHuAKkTdfGUocshE3YLm",
+    created_by: operator,
   };
   const contactData = {
     email: "sample@admindashboard.com",
+    created_by: operator,
   };
 
   const user = await prisma.user.create({
@@ -25,6 +28,7 @@ const main = async () => {
           last_name: last_name,
           birth_date: birth_date,
           gender: gender,
+          created_by: operator,
         },
       },
       user_authorizations: {

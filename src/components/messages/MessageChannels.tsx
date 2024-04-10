@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { get } from "@/utils/api";
 import { PlusIcon } from "@heroicons/react/solid";
-import ChannelCreateModal from "./ChannelCreateModal";
+import ChannelCreateModal from "./MessageChannelSettingsModal";
 import { ChannelModel } from "@/types/messages/channels";
 import { LockClosedIcon } from "@heroicons/react/solid";
 
-const MessageChannel = () => {
+interface MessageChannelsProps {
+  onChannelSelect: (id: number) => void;
+}
+
+const MessageChannels: React.FC<MessageChannelsProps> = ({
+  onChannelSelect,
+}) => {
   const [channels, setChannels] = useState<ChannelModel[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -38,6 +44,7 @@ const MessageChannel = () => {
           <li
             key={channel.id}
             className="hover:bg-gray-700 p-2 rounded cursor-pointer"
+            onClick={() => onChannelSelect(channel.id)}
           >
             <div className="flex items-center">
               {channel.isPublic ? (
@@ -101,4 +108,4 @@ const MessageChannel = () => {
   );
 };
 
-export default MessageChannel;
+export default MessageChannels;

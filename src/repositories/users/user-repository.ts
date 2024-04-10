@@ -93,9 +93,9 @@ export const UserRepository = {
         "user_authorizations".password_hash,
         "user_actives".activated_at,
         (
-          SELECT MAX("created_at")
-          FROM "user_logs"
-          WHERE "users"."id" = "user_logs"."user_id"
+          SELECT MAX("audit_logs"."request_started_at")
+          FROM "audit_logs"
+          WHERE "audit_logs"."user_id" = "users"."id"
         ) AS "lastActivity"
       FROM "users"
       INNER JOIN "user_profiles" ON "users"."id" = "user_profiles"."user_id"

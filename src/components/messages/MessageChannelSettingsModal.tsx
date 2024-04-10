@@ -27,7 +27,7 @@ interface OptionType {
 
 const animatedComponents = makeAnimated();
 
-const ChannelCreateModal: React.FC<ChannelCreateModalProps> = ({
+const MessageChannelSettingsModal: React.FC<ChannelCreateModalProps> = ({
   isOpen,
   onClose,
 }) => {
@@ -313,4 +313,4 @@ const ChannelCreateModal: React.FC<ChannelCreateModalProps> = ({
   );
 };
 
-export default ChannelCreateModal;
+export default MessageChannelSettingsModal;

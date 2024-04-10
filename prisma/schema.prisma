@@ -16,7 +16,7 @@ enum GenderType {
 model User {
   id                      Int                   @id @default(autoincrement())
   created_at              DateTime              @default(now())
-  logs                    UserLog[]
+  audit_logs              AuditLog[]
   user_activation_codes   UserActivationCode?
   user_authorizations     UserAuthorization?
   user_profiles           UserProfile?
@@ -28,14 +28,21 @@ model User {
   @@map("users")
 }
 
-model UserLog {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  action     String
-  detail     String?
-  created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id])
-  @@map("user_logs")
+model AuditLog {
+  id                 Int      @id @default(autoincrement())
+  url                String 
+  method             String 
+  user_id            Int? 
+  description        String?
+  parameters         String?
+  query              String?
+  ip_address         String?
+  response_status    Int?
+  response_message   String?
+  request_started_at DateTime 
+  request_ended_at   DateTime 
+  user               User?    @relation(fields: [user_id], references: [id])
+  @@map("audit_logs")
 }
 
 model UserProfile {
@@ -44,18 +51,20 @@ model UserProfile {
   last_name  String
   birth_date DateTime
   gender     GenderType
+  created_by String
   created_at DateTime   @default(now())
   user       User       @relation(fields: [user_id], references: [id])
   @@map("user_profiles")
 }
 
 model UserAuthorization {
-  user_id           Int     @unique
-  auth_id           String  @unique
-  password_hash     String
+  user_id             Int     @unique
+  auth_id             String  @unique
+  password_hash       String
   is_initial_password Boolean @default(true)
-  created_at        DateTime @default(now())
-  user              User    @relation(fields: [user_id], references: [id])
+  created_by          String
+  created_at          DateTime @default(now())
+  user                User     @relation(fields: [user_id], references: [id])
   @@map("user_authorizations")
 }
 
@@ -68,6 +77,7 @@ model UserActive {
 
 model UserDelete {
   user_id    Int      @unique
+  deleted_by String 
   deleted_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id])
   @@map("user_deletes")
@@ -75,7 +85,8 @@ model UserDelete {
 
 model UserContact {
   user_id    Int  @unique
-  email      String 
+  email      String
+  created_by String 
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id])
   @@map("user_contacts")
@@ -93,7 +104,6 @@ model UserToken {
   user_id     Int      @unique
   token       String   
   expires_at  DateTime
-  created_at  DateTime @default(now()) 
   user        User     @relation(fields: [user_id], references: [id])
   @@map("user_tokens")
 }
@@ -104,7 +114,17 @@ model MessageChannel {
   message_channel_visibility MessageChannelVisibility?
   message_channel_profiles   MessageChannelProfile?
   message_channel_members    MessageChannelMember[]
+  message_channel_deletes    MessageChannelDelete?
+  messages                   Message[]
   @@map("message_channels")
+}
+
+model MessageChannelDelete {
+  channel_id  Int      @unique
+  deleted_by  String 
+  deleted_at  DateTime @default(now())
+  message_channels MessageChannel @relation(fields: [channel_id], references: [id])
+  @@map("message_channel_deletes")
 }
 
 model MessageChannelVisibility {
@@ -119,6 +139,7 @@ model MessageChannelProfile {
   channel_id   Int      @unique
   name         String
   description  String?
+  created_by   String 
   created_at   DateTime @default(now())
   message_channels  MessageChannel @relation(fields: [channel_id], references: [id])
   @@map("message_channel_profiles")
@@ -131,9 +152,44 @@ model MessageChannelMember {
   can_view         Boolean         @default(true)  
   can_edit         Boolean         @default(false) 
   can_delete       Boolean         @default(false) 
+  joined_by        String           
   joined_at        DateTime        @default(now()) 
   message_channels MessageChannel  @relation(fields: [channel_id], references: [id])
   user             User            @relation(fields: [user_id], references: [id])
   @@unique([channel_id, user_id]) 
   @@map("message_channel_members")
+}
+
+model Message {
+  id               Int             @id @default(autoincrement())
+  channel_id       Int
+  sended_by        Int          
+  sended_at        DateTime        @default(now())
+  message_channels MessageChannel  @relation(fields: [channel_id], references: [id]) 
+  message_contents MessageContent?     
+  message_deletes  MessageDelete?     
+  @@map("messages")
+}
+
+model MessageContent {
+  message_id  Int @unique
+  contentType ContentType    
+  content     Json           
+  message     Message       @relation(fields: [message_id], references: [id])
+  @@map("message_contents")
+}
+
+model MessageDelete {
+  message_id  Int      @unique
+  deleted_by  String 
+  deleted_at  DateTime @default(now())
+  message     Message  @relation(fields: [message_id], references: [id])
+  @@map("message_deletes")
+}
+
+enum ContentType {
+  text
+  link
+  image
+  video
 }
