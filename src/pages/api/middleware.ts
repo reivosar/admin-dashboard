@@ -111,12 +111,12 @@ async function logRequest(
     try {
       return JSON.stringify(obj, (key, value) => {
         if (key === "password") {
-          return undefined;
+          return "";
         }
-        return value ? value : "{}";
+        return value ? value : "";
       });
     } catch (error) {
-      return "{}";
+      return "";
     }
   }
 
