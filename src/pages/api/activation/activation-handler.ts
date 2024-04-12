@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { APIHandler } from "../api-handler";
+import { AuthenticatedApiHandler } from "../authenticated-api-handler";
 import { ActivationService } from "@/services/activation/activation-service";
 
-class ActivationHandler extends APIHandler {
+class ActivationHandler extends AuthenticatedApiHandler {
   protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
     const {
       query: { code },

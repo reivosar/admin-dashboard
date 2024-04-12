@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { APIHandler } from "../../api-handler";
+import { AuthenticatedApiHandler } from "../../authenticated-api-handler";
 import { UserService } from "@/services/users/user-service";
 
-class UserIdHandler extends APIHandler {
+class UserIdHandler extends AuthenticatedApiHandler {
   protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
     const parsedId = parseInt(id as string);

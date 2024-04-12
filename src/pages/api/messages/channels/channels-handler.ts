@@ -1,9 +1,9 @@
-import { APIHandler } from "../../api-handler";
+import { AuthenticatedApiHandler } from "../../authenticated-api-handler";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getTokenFromCookie, getUseIdFromCookie } from "../../utils/cookie";
 import { ChannelsService } from "@/services/messages/channels";
 
-class ChannelsHandler extends APIHandler {
+class ChannelsHandler extends AuthenticatedApiHandler {
   protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
     const userId = getUseIdFromCookie(req);
     const searchQuery = req.query["searchTeam"] as string | undefined;

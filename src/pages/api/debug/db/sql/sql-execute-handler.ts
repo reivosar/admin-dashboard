@@ -1,8 +1,8 @@
-import { APIHandler } from "../../../api-handler";
+import { AuthenticatedApiHandler } from "../../../authenticated-api-handler";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { SqlService } from "@/services/debug/sql-service";
 
-class SQLExecuteHandler extends APIHandler {
+class SQLExecuteHandler extends AuthenticatedApiHandler {
   protected async handlePost(req: NextApiRequest, res: NextApiResponse) {
     const { query } = req.body;
     if (!query) {

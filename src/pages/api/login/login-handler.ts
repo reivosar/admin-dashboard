@@ -1,9 +1,9 @@
-import { APIHandler } from "../api-handler";
+import { AuthenticatedApiHandler } from "../authenticated-api-handler";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LoginService } from "@/services/login/login-service";
 import { serialize } from "cookie";
 
-class LoginHandler extends APIHandler {
+class LoginHandler extends AuthenticatedApiHandler {
   protected async handlePost(req: NextApiRequest, res: NextApiResponse) {
     const { email, password } = req.body;
 

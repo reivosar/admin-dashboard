@@ -1,9 +1,9 @@
-import { APIHandler } from "../../../api-handler";
+import { AuthenticatedApiHandler } from "../../../authenticated-api-handler";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MyProfileService } from "@/services/my/profile";
 import { getTokenFromCookie } from "../../../utils/cookie";
 
-class MyProfileSectionHandler extends APIHandler {
+class MyProfileSectionHandler extends AuthenticatedApiHandler {
   protected async handlePut(req: NextApiRequest, res: NextApiResponse) {
     const token = getTokenFromCookie(req);
     const section = Array.isArray(req.query.section)

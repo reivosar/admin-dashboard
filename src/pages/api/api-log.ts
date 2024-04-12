@@ -1,67 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getTokenFromCookie } from "./utils/cookie";
-import { verify } from "./utils/jwt";
-import { APIError, UnauthorizedError } from "../../errors";
 import { AuditLogService } from "@/services/log/audit-log-service";
+import { NextApiRequest } from "next";
 
-type ApiHandler = (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => Promise<void | NextApiResponse<any>>;
-
-export function withAuth(handler: ApiHandler): ApiHandler {
-  const startTime = new Date();
-  return async (req, res) => {
-    try {
-      const token = getTokenFromCookie(req);
-      if (!token) {
-        throw new UnauthorizedError("Token is required but was not provided.");
-      }
-      const verifyResult = verify(token);
-      if (verifyResult.error) {
-        throw new UnauthorizedError(
-          `Token verification failed: ${verifyResult.error}`
-        );
-      }
-      const result = await handler(req, res);
-      logRequest(
-        req,
-        startTime,
-        verifyResult.payload?.user_id,
-        undefined,
-        res.statusCode,
-        undefined
-      );
-      return result;
-    } catch (error) {
-      if (error instanceof APIError) {
-        logRequest(
-          req,
-          startTime,
-          undefined,
-          "API Error",
-          error.statusCode,
-          error.message
-        );
-        return res.status(error.statusCode).json({ message: error.message });
-      } else {
-        console.error(error);
-        const errorMessage = error instanceof Error ? error.message : "";
-        logRequest(
-          req,
-          startTime,
-          undefined,
-          "System Error",
-          500,
-          errorMessage
-        );
-        return res.status(500).json({ message: errorMessage });
-      }
-    }
-  };
-}
-
-async function logRequest(
+export async function logRequest(
   req: NextApiRequest,
   startTime: Date,
   userId?: number,

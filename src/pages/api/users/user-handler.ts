@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { APIHandler } from "../api-handler";
+import { AuthenticatedApiHandler } from "../authenticated-api-handler";
 import { UserService } from "@/services/users/user-service";
 
-class UserHandler extends APIHandler {
+class UserHandler extends AuthenticatedApiHandler {
   protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
     const searchQuery = req.query["filter[searchTerm]"] as string | undefined;
     return (await UserService.getUserBySearchTerm(searchQuery)).toResponse(res);

@@ -13,21 +13,6 @@ enum GenderType {
   other
 }
 
-model User {
-  id                      Int                   @id @default(autoincrement())
-  created_at              DateTime              @default(now())
-  audit_logs              AuditLog[]
-  user_activation_codes   UserActivationCode?
-  user_authorizations     UserAuthorization?
-  user_profiles           UserProfile?
-  user_actives            UserActive?
-  user_deletes            UserDelete?
-  user_contacts           UserContact?
-  user_tokens             UserToken?
-  message_channel_members MessageChannelMember[]
-  @@map("users")
-}
-
 model AuditLog {
   id                 Int      @id @default(autoincrement())
   url                String 
@@ -45,24 +30,41 @@ model AuditLog {
   @@map("audit_logs")
 }
 
+model User {
+  id                      Int                   @id @default(autoincrement())
+  created_by              String?
+  created_at              DateTime              @default(now())
+  audit_logs              AuditLog[]
+  user_activation_codes   UserActivationCode?
+  user_authorizations     UserAuthorization?
+  user_profiles           UserProfile?
+  user_actives            UserActive?
+  user_deletes            UserDelete?
+  user_contacts           UserContact?
+  user_tokens             UserToken?
+  user_roles              UserRole[]
+  message_channel_members MessageChannelMember[]
+  @@map("users")
+}
+
 model UserProfile {
   user_id    Int        @unique
   first_name String
   last_name  String
   birth_date DateTime
   gender     GenderType
-  created_by String
+  created_by String?
   created_at DateTime   @default(now())
   user       User       @relation(fields: [user_id], references: [id])
   @@map("user_profiles")
 }
 
 model UserAuthorization {
-  user_id             Int     @unique
-  auth_id             String  @unique
+  user_id             Int      @unique
+  auth_id             String   @unique
   password_hash       String
-  is_initial_password Boolean @default(true)
-  created_by          String
+  is_initial_password Boolean  @default(true)
+  created_by          String?
   created_at          DateTime @default(now())
   user                User     @relation(fields: [user_id], references: [id])
   @@map("user_authorizations")
@@ -77,7 +79,7 @@ model UserActive {
 
 model UserDelete {
   user_id    Int      @unique
-  deleted_by String 
+  deleted_by String? 
   deleted_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id])
   @@map("user_deletes")
@@ -86,7 +88,7 @@ model UserDelete {
 model UserContact {
   user_id    Int  @unique
   email      String
-  created_by String 
+  created_by String? 
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id])
   @@map("user_contacts")
@@ -110,6 +112,7 @@ model UserToken {
 
 model MessageChannel {
   id                         Int      @id @default(autoincrement())
+  created_by                 String? 
   created_at                 DateTime @default(now())
   message_channel_visibility MessageChannelVisibility?
   message_channel_profiles   MessageChannelProfile?
@@ -121,16 +124,17 @@ model MessageChannel {
 
 model MessageChannelDelete {
   channel_id  Int      @unique
-  deleted_by  String 
+  deleted_by  String? 
   deleted_at  DateTime @default(now())
   message_channels MessageChannel @relation(fields: [channel_id], references: [id])
   @@map("message_channel_deletes")
 }
 
 model MessageChannelVisibility {
-  channel_id  Int      @unique
-  is_public   Boolean
-  created_at  DateTime @default(now())
+  channel_id       Int            @unique
+  is_public        Boolean
+  created_by       String? 
+  created_at       DateTime       @default(now())
   message_channels MessageChannel @relation(fields: [channel_id], references: [id])
   @@map("message_channel_visibility")
 }
@@ -139,7 +143,7 @@ model MessageChannelProfile {
   channel_id   Int      @unique
   name         String
   description  String?
-  created_by   String 
+  created_by   String? 
   created_at   DateTime @default(now())
   message_channels  MessageChannel @relation(fields: [channel_id], references: [id])
   @@map("message_channel_profiles")
@@ -152,7 +156,7 @@ model MessageChannelMember {
   can_view         Boolean         @default(true)  
   can_edit         Boolean         @default(false) 
   can_delete       Boolean         @default(false) 
-  joined_by        String           
+  joined_by        String?           
   joined_at        DateTime        @default(now()) 
   message_channels MessageChannel  @relation(fields: [channel_id], references: [id])
   user             User            @relation(fields: [user_id], references: [id])
@@ -163,7 +167,7 @@ model MessageChannelMember {
 model Message {
   id               Int             @id @default(autoincrement())
   channel_id       Int
-  sended_by        Int          
+  sended_by        Int?          
   sended_at        DateTime        @default(now())
   message_channels MessageChannel  @relation(fields: [channel_id], references: [id]) 
   message_contents MessageContent?     
@@ -181,7 +185,7 @@ model MessageContent {
 
 model MessageDelete {
   message_id  Int      @unique
-  deleted_by  String 
+  deleted_by  String? 
   deleted_at  DateTime @default(now())
   message     Message  @relation(fields: [message_id], references: [id])
   @@map("message_deletes")
@@ -192,4 +196,97 @@ enum ContentType {
   link
   image
   video
+}
+
+model Role {
+  id           Int          @id @default(autoincrement())
+  created_by   String?
+  created_at   DateTime     @default(now())
+  role_actions RoleAction[]
+  user_roles   UserRole[]
+  @@map("roles")
+}
+
+model RoleProfile {
+  id           Int         @id @default(autoincrement())
+  name         String      @unique
+  description  String?
+  created_by   String
+  created_at   DateTime     @default(now())
+  @@map("role_profiles")
+}
+
+model UserRole {
+  user_id Int
+  role_id Int
+  User    User @relation(fields: [user_id], references: [id])
+  Role    Role @relation(fields: [role_id], references: [id])
+  @@id([user_id, role_id])
+  @@map("user_roles")
+}
+
+model RoleAction {
+  role_id   Int
+  action_id Int
+  Role      Role   @relation(fields: [role_id], references: [id])
+  Action    Action @relation(fields: [action_id], references: [id])
+  @@id([role_id, action_id])
+  @@map("role_actions")
+}
+
+model Action {
+  id          Int      @id @default(autoincrement())
+  created_by  String?
+  created_at  DateTime @default(now())
+  action_profiles  ActionProfile?
+  action_resources ActionResource[]
+  role_actions     RoleAction[]
+  @@map("actions")
+}
+
+model ActionProfile {
+  action_id   Int      @unique
+  name        String   @unique
+  description String?
+  created_by  String
+  created_at  DateTime @default(now())
+  action      Action   @relation(fields: [action_id], references: [id])
+  @@map("action_profiles")
+}
+
+model ActionResource {
+  action_id   Int
+  resource_id Int
+  action      Action      @relation(fields: [action_id], references: [id])
+  resource    Resource    @relation(fields: [resource_id], references: [id])
+  @@id([action_id, resource_id])
+  @@map("action_resources")
+}
+
+model Resource {
+  id               Int            @id @default(autoincrement())
+  created_at       DateTime       @default(now())
+  api_resources    ApiResource[] 
+  page_resources   PageResource[]
+  action_resources ActionResource[]
+  @@map("resources")
+}
+
+model ApiResource {
+  id          Int        @id @default(autoincrement())
+  resource_id Int
+  endpoint    String     
+  method      String
+  resource    Resource   @relation(fields: [resource_id], references: [id])
+  created_at  DateTime   @default(now())
+  @@map("api_resources")
+}
+
+model PageResource {
+  id          Int        @id @default(autoincrement())
+  resource_id Int
+  name        String 
+  resource    Resource   @relation(fields: [resource_id], references: [id])
+  created_at  DateTime   @default(now())
+  @@map("page_resources")
 }
