@@ -49,7 +49,7 @@ export const LoginService = {
         throw new InternalServerError("Failed to create user token.");
       }
 
-      return token;
+      return { user_id, token };
     }, "Login successed.");
   },
 };

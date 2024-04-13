@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { AuthenticatedApiHandler } from "../../../../authenticated-api-handler";
 import { TablenService } from "@/services/debug/table-service";
+import { AuthenticatedApiHandler } from "@/pages/api/api-handler";
 
 class TablesNameHandler extends AuthenticatedApiHandler {
   protected async handleGet(req: NextApiRequest, res: NextApiResponse) {

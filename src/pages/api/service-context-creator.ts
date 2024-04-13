@@ -28,8 +28,9 @@ function evaluatePolicy(
   );
 }
 
-export async function createServiceContext(
-  req: NextApiRequest
+export async function createIdentifiedServiceContext(
+  req: NextApiRequest,
+  startTime: Date
 ): Promise<ServiceContext> {
   const userId = getUseIdFromCookie(req);
   const permissions = (await PermissionService.getUserPermissions(userId)).data;
@@ -37,10 +38,24 @@ export async function createServiceContext(
     userId: userId,
     permissions: permissions ?? [],
     requestId: (req.headers["x-request-id"] as string) || crypto.randomUUID(),
-    requestStartedAt: new Date(),
+    requestStartedAt: startTime,
     locale: req.headers["accept-language"],
     evaluatePolicy: (action, resource) =>
       evaluatePolicy(permissions || [], action, resource),
+  };
+  return serviceContext;
+}
+
+export async function createAnonymousServiceContext(
+  req: NextApiRequest,
+  startTime: Date
+): Promise<ServiceContext> {
+  const serviceContext: ServiceContext = {
+    userId: 0,
+    permissions: [],
+    requestId: (req.headers["x-request-id"] as string) || crypto.randomUUID(),
+    requestStartedAt: startTime,
+    locale: req.headers["accept-language"],
   };
   return serviceContext;
 }

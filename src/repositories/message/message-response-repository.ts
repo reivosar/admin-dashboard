@@ -18,6 +18,11 @@ export const MessageResponseRepository = {
       where: whereCondition,
       include: {
         message_contents: true,
+        users: {
+          include: {
+            user_profiles: true,
+          },
+        },
       },
       orderBy: {
         id: "asc",
@@ -28,7 +33,16 @@ export const MessageResponseRepository = {
       id: message.id,
       content: message.message_contents?.content,
       contentType: message.message_contents?.contentType || "text",
-      sendedBy: message.sended_by,
+      isOwnMessage: message.sended_by === context.userId,
+      sendedBy: {
+        id: message.sended_by,
+        name: [
+          message.users?.user_profiles?.first_name,
+          message.users?.user_profiles?.last_name,
+        ]
+          .filter(Boolean)
+          .join(" "),
+      },
       sendedAt: message.sended_at,
     }));
   },

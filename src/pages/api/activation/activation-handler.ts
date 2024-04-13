@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { AuthenticatedApiHandler } from "../authenticated-api-handler";
 import { ActivationService } from "@/services/activation/activation-service";
+import { BadRequestError } from "@/errors";
+import { AnonymousApiHandler } from "../api-handler";
 
-class ActivationHandler extends AuthenticatedApiHandler {
+class ActivationHandler extends AnonymousApiHandler {
   protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
     const {
       query: { code },
@@ -10,7 +11,7 @@ class ActivationHandler extends AuthenticatedApiHandler {
     } = req;
 
     if (typeof code !== "string" || !code) {
-      return res.status(400).end(`Activaton code is required`);
+      throw new BadRequestError("Activaton code is required");
     }
     return (await ActivationService.getActivation(code)).toResponse(res);
   }
@@ -19,7 +20,7 @@ class ActivationHandler extends AuthenticatedApiHandler {
     const { activationCode, email, password } = req.body;
 
     if (!activationCode) {
-      return res.status(400).json({ message: "Activaton code is required" });
+      throw new BadRequestError("Activaton code is required");
     }
 
     return (

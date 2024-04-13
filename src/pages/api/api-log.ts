@@ -53,6 +53,12 @@ export async function logRequest(
         if (key === "password") {
           return "";
         }
+        if (key === "confirmPassword") {
+          return "";
+        }
+        if (key === "autoGeneratePassword") {
+          return "";
+        }
         return value ? value : "";
       });
     } catch (error) {

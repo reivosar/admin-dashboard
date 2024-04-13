@@ -1,10 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ServiceContext } from "@/types/shared/service-context";
-import { APIError } from "@/errors";
 import { logRequest } from "./api-log";
-import { createServiceContext } from "./service-context-creator";
+import {
+  createAnonymousServiceContext,
+  createIdentifiedServiceContext,
+} from "./service-context-creator";
+import { handleError } from "./api-error-handler";
 
-export class AuthenticatedApiHandler {
+abstract class ApiHandler {
   protected handleGet(
     req: NextApiRequest,
     res: NextApiResponse,
@@ -47,27 +50,38 @@ export class AuthenticatedApiHandler {
   }
 
   public async handleRequest(req: NextApiRequest, res: NextApiResponse) {
+    const startTime = new Date();
     const handler = this.getHandlerForMethod(req.method);
     if (!handler) {
       return this.methodNotAllowed(req, res);
     }
     let context;
-    const startTime = new Date();
     try {
-      context = await createServiceContext(req);
+      context = await this.createServiceContext(req, startTime);
       await handler(req, res, context);
       logRequest(
         req,
         startTime,
-        context.userId,
+        context.userId !== 0 ? context.userId : undefined,
         undefined,
         res.statusCode,
         undefined
       );
     } catch (error) {
-      this.handleError(req, res, startTime, context, error);
+      handleError(
+        req,
+        res,
+        startTime,
+        context?.userId !== 0 ? context?.userId : undefined,
+        error
+      );
     }
   }
+
+  protected abstract createServiceContext(
+    req: NextApiRequest,
+    startTime: Date
+  ): Promise<ServiceContext>;
 
   private getHandlerForMethod(
     method: string | undefined
@@ -89,37 +103,22 @@ export class AuthenticatedApiHandler {
         return this.methodNotAllowed.bind(this);
     }
   }
+}
 
-  private handleError(
+export class AnonymousApiHandler extends ApiHandler {
+  protected async createServiceContext(
     req: NextApiRequest,
-    res: NextApiResponse,
-    startTime: Date,
-    context: ServiceContext | undefined,
-    error: any
-  ) {
-    if (error instanceof APIError) {
-      logRequest(
-        req,
-        startTime,
-        context?.userId,
-        "API Error",
-        error.statusCode,
-        error.message
-      );
-      res.status(error.statusCode).json({ message: error.message });
-    } else {
-      console.error(error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Internal Server Error";
-      logRequest(
-        req,
-        startTime,
-        context?.userId,
-        "System Error",
-        500,
-        errorMessage
-      );
-      res.status(500).json({ message: errorMessage });
-    }
+    startTime: Date
+  ): Promise<ServiceContext> {
+    return await createAnonymousServiceContext(req, startTime);
+  }
+}
+
+export class AuthenticatedApiHandler extends ApiHandler {
+  protected async createServiceContext(
+    req: NextApiRequest,
+    startTime: Date
+  ): Promise<ServiceContext> {
+    return await createIdentifiedServiceContext(req, startTime);
   }
 }

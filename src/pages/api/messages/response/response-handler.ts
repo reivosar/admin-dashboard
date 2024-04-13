@@ -1,9 +1,10 @@
 import { ServiceContext } from "@/types/shared/service-context";
 import { NextApiRequest, NextApiResponse } from "next";
-import { AuthenticatedApiHandler } from "../../authenticated-api-handler";
 import { MessageResponseService } from "@/services/messages/response";
 import { MessageResponse } from "@/types/messages";
 import { sseManager } from "../../utils/sme";
+import { AuthenticatedApiHandler } from "../../api-handler";
+
 class ResponseHandler extends AuthenticatedApiHandler {
   protected async handleGet(
     req: NextApiRequest,
@@ -41,10 +42,14 @@ class ResponseHandler extends AuthenticatedApiHandler {
 
         const eventData = newMessages.data.map((message: MessageResponse) => ({
           id: message.id,
-          timestamp: message.sendedAt,
+          sendedAt: message.sendedAt,
           content: message.content,
           contentType: message.contentType,
-          sendedBy: message.sendedBy,
+          isOwnMessage: message.isOwnMessage,
+          sendedBy: {
+            id: message.sendedBy?.id,
+            name: message.sendedBy?.name,
+          },
         }));
 
         if (eventData.length > 0) {

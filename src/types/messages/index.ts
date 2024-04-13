@@ -13,6 +13,10 @@ export interface MessageResponse {
   id: number;
   content: any;
   contentType: MessageContentType;
-  sendedBy?: number | null;
+  isOwnMessage: boolean;
+  sendedBy?: {
+    id?: number | null;
+    name?: string | null;
+  };
   sendedAt: Date;
 }

@@ -1,8 +1,8 @@
-import { AuthenticatedApiHandler } from "../../authenticated-api-handler";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ServiceContext } from "@/types/shared/service-context";
 import { MessageSendService } from "@/services/messages/send";
 import { MessageRequest } from "@/types/messages";
+import { AuthenticatedApiHandler } from "../../api-handler";
 
 class SendHandler extends AuthenticatedApiHandler {
   protected async handlePost(

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import { MessageResponse } from "@/types/messages";
+import { UserCircleIcon } from "@heroicons/react/solid";
 
 type CMessageResponderProps = {
   channelId: number | undefined;
@@ -49,30 +50,38 @@ const MessageResponder: React.FC<CMessageResponderProps> = ({ channelId }) => {
   return (
     <div className="messages flex-1 overflow-y-auto p-4">
       {messages.map((msg) => {
+        const isCurrentUser = msg.isOwnMessage;
+        const alignmentClass = isCurrentUser
+          ? "items-end text-right"
+          : "items-start text-left";
+        const backgroundClass = isCurrentUser ? "bg-white" : "bg-gray-100";
         const cleanHTML = DOMPurify.sanitize(msg.content);
         return (
-          <div
-            key={msg.id}
-            className="message bg-white p-2 my-2 rounded shadow"
-            dangerouslySetInnerHTML={{ __html: cleanHTML }}
-          ></div>
+          <div>
+            <div className={`text-xs text-gray-600 ${alignmentClass}`}>
+              <span>
+                {new Date(msg.sendedAt).toLocaleDateString()}{" "}
+                {new Date(msg.sendedAt).toLocaleTimeString()}
+              </span>
+            </div>
+            <div
+              key={msg.id}
+              className={`message flex flex-col my-2 mx-3 p-3 rounded-lg shadow ${backgroundClass} ${alignmentClass} space-y-1`}
+            >
+              <div
+                dangerouslySetInnerHTML={{ __html: cleanHTML }}
+                className="message-text"
+              ></div>
+            </div>
+            <div className={`flex space-x-2 ${alignmentClass}`}>
+              <UserCircleIcon className="h-6 w-6 text-gray-500" />
+              <span className="font-medium">
+                {msg.sendedBy?.name || "Unknown"}
+              </span>
+            </div>
+          </div>
         );
       })}
-
-      <style jsx>{`
-        .channel-list {
-          background-color: #003366;
-          color: white;
-          width: 256px;
-          padding: 20px;
-          border-radius: 8px;
-        }
-
-        .channel-list li:hover {
-          background-color: #676767;
-          transition: background-color 0.3s ease;
-        }
-      `}</style>
     </div>
   );
 };

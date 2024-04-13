@@ -1,7 +1,7 @@
-import { AuthenticatedApiHandler } from "../../authenticated-api-handler";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ChannelsService } from "@/services/messages/channels";
 import { ServiceContext } from "@/types/shared/service-context";
+import { AuthenticatedApiHandler } from "../../api-handler";
 
 class ChannelsHandler extends AuthenticatedApiHandler {
   protected async handleGet(

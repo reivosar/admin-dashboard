@@ -43,6 +43,7 @@ model User {
   user_contacts           UserContact?
   user_tokens             UserToken?
   user_roles              UserRole[]
+  messages                Message[]
   message_channel_members MessageChannelMember[]
   @@map("users")
 }
@@ -171,7 +172,8 @@ model Message {
   sended_at        DateTime        @default(now())
   message_channels MessageChannel  @relation(fields: [channel_id], references: [id]) 
   message_contents MessageContent?     
-  message_deletes  MessageDelete?     
+  message_deletes  MessageDelete?
+  users            User?           @relation(fields: [sended_by], references: [id])   
   @@map("messages")
 }
 

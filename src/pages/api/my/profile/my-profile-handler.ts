@@ -1,7 +1,7 @@
-import { AuthenticatedApiHandler } from "../../authenticated-api-handler";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MyProfileService } from "@/services/my/profile";
 import { getTokenFromCookie } from "../../utils/cookie";
+import { AuthenticatedApiHandler } from "../../api-handler";
 
 class MyProfileHandler extends AuthenticatedApiHandler {
   protected async handleGet(req: NextApiRequest, res: NextApiResponse) {

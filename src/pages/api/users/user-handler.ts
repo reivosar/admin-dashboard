@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { AuthenticatedApiHandler } from "../authenticated-api-handler";
 import { UserService } from "@/services/users/user-service";
+import { AuthenticatedApiHandler } from "../api-handler";
 
 class UserHandler extends AuthenticatedApiHandler {
   protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
