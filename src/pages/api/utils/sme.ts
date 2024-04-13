@@ -5,7 +5,7 @@ class SSEManager {
 
   constructor() {}
 
-  addClient(
+  start(
     response: ServerResponse,
     onData: () => Promise<any | any[]>,
     interval = 1000
@@ -14,6 +14,7 @@ class SSEManager {
     response.setHeader("Content-Type", "text/event-stream");
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Connection", "keep-alive");
+    response.setHeader("Content-Encoding", "none");
 
     this.clients.push(response);
 
@@ -30,8 +31,9 @@ class SSEManager {
     }, interval);
 
     response.on("close", () => {
+      console.log("Connection closed by the client");
       clearInterval(intervalId);
-      this.removeClient(response);
+      sseManager.removeClient(response);
       response.end();
     });
   }

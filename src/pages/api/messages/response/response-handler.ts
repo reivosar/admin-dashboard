@@ -4,7 +4,6 @@ import { AuthenticatedApiHandler } from "../../authenticated-api-handler";
 import { MessageResponseService } from "@/services/messages/response";
 import { MessageResponse } from "@/types/messages";
 import { sseManager } from "../../utils/sme";
-
 class ResponseHandler extends AuthenticatedApiHandler {
   protected async handleGet(
     req: NextApiRequest,
@@ -58,13 +57,7 @@ class ResponseHandler extends AuthenticatedApiHandler {
       }
     };
 
-    sseManager.addClient(res, onData);
-
-    req.on("close", () => {
-      console.log("Connection closed by the client");
-      sseManager.removeClient(res);
-      res.end();
-    });
+    sseManager.start(res, onData);
 
     return res.flushHeaders();
   }
