@@ -1,3 +1,4 @@
+import { post } from "@/utils/api";
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
 import DOMPurify from "dompurify";
 import {
@@ -10,6 +11,7 @@ import {
 } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
 import { useState, useMemo } from "react";
+import { toastError } from "../utils/ToastifyAlerts";
 
 type MessageSenderProps = {
   channelId: number | undefined;
@@ -30,10 +32,23 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
     []
   );
 
-  const handleSend = () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const contentState = editorState.getCurrentContent();
     const dirtyHtml = stateToHTML(contentState, options);
     const cleanHtml = DOMPurify.sanitize(dirtyHtml);
+    const contentType = "text";
+
+    const { error } = await post("/api/messages/send", {
+      channelId: channelId,
+      type: contentType,
+      content: cleanHtml,
+    });
+    if (error) {
+      toastError(error.message);
+    } else {
+      setEditorState(EditorState.createEmpty());
+    }
   };
 
   const handleKeyCommand = (command: DraftEditorCommand) => {
@@ -58,7 +73,10 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
   };
 
   return (
-    <div className="editor bg-white p-4 border rounded flex flex-col justify-between">
+    <form
+      onSubmit={handleSubmit}
+      className="editor bg-white p-4 border rounded flex flex-col justify-between"
+    >
       <div
         style={{
           minHeight: "15px",
@@ -70,7 +88,6 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
           editorState={editorState}
           onChange={setEditorState}
           handleKeyCommand={handleKeyCommand}
-          placeholder="Type your message here..."
         />
       </div>
       <div className="flex justify-between items-center w-full mt- pt-2 border-t-2 border-gray-200">
@@ -118,7 +135,7 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
           </button>
         </div>
         <div className="flex items-center">
-          <button onClick={handleSend} className="icon-button">
+          <button type="submit" className="icon-button">
             <PaperAirplaneIcon className="h-8 w-8" />{" "}
           </button>
         </div>
@@ -153,7 +170,7 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
           box-shadow: 2px 2px 4px #e0e0e0, -2px -2px 4px #ffffff;
         }
       `}</style>
-    </div>
+    </form>
   );
 };
 export default MessageSender;

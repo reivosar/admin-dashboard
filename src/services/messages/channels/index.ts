@@ -1,5 +1,4 @@
-import { getUseIdFromCookie } from "@/pages/api/utils/cookie";
-import { ChannelsRepository } from "@/repositories/messages/channels-repository";
+import { ChannelsRepository } from "@/repositories/message/channels-repository";
 import {
   commandServiceOperation,
   queryServiceOperation,

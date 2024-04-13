@@ -1,4 +1,4 @@
-import Messanger from "@/components/messages/Managerr";
+import Messanger from "@/components/messages/Messanger";
 
 const MessagesPage: React.FC = () => {
   return (

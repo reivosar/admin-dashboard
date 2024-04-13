@@ -1,26 +1,55 @@
 import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
+import { MessageResponse } from "@/types/messages";
 
 type CMessageResponderProps = {
   channelId: number | undefined;
 };
 
 const MessageResponder: React.FC<CMessageResponderProps> = ({ channelId }) => {
-  const [messages, setMessages] = useState([
-    { id: 0, text: "Welcome to Slack clone!" },
-  ]);
+  const [messages, setMessages] = useState<MessageResponse[]>([]);
 
   useEffect(() => {
-    const fetchMessage = async () => {
-      setMessages([{ id: 0, text: "Welcome to the channel!" }]);
+    if (!channelId) {
+      console.log("Channel ID is undefined");
+      return;
+    }
+    setMessages([]);
+
+    const eventSource = new EventSource(
+      `/api/messages/response?channelId=${channelId}`
+    );
+
+    eventSource.onmessage = (event) => {
+      try {
+        console.log("Received data:", event.data);
+        const newMessage = JSON.parse(event.data);
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      } catch (error) {
+        console.error("Error parsing message data:", error);
+      }
     };
-    fetchMessage();
+
+    eventSource.onerror = (event) => {
+      const source = event.currentTarget as EventSource;
+      if (source.readyState === EventSource.CLOSED) {
+        console.log("EventSource closed by the server.");
+      } else {
+        console.error("EventSource encountered an error:", event);
+      }
+      eventSource.close();
+    };
+
+    return () => {
+      console.log("Closing EventSource.");
+      eventSource.close();
+    };
   }, [channelId]);
 
   return (
     <div className="messages flex-1 overflow-y-auto p-4">
       {messages.map((msg) => {
-        const cleanHTML = DOMPurify.sanitize(msg.text);
+        const cleanHTML = DOMPurify.sanitize(msg.content);
         return (
           <div
             key={msg.id}

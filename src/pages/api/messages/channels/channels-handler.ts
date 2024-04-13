@@ -1,11 +1,15 @@
 import { AuthenticatedApiHandler } from "../../authenticated-api-handler";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getTokenFromCookie, getUseIdFromCookie } from "../../utils/cookie";
 import { ChannelsService } from "@/services/messages/channels";
+import { ServiceContext } from "@/types/shared/service-context";
 
 class ChannelsHandler extends AuthenticatedApiHandler {
-  protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
-    const userId = getUseIdFromCookie(req);
+  protected async handleGet(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    context: ServiceContext
+  ) {
+    const userId = context.userId;
     const searchQuery = req.query["searchTeam"] as string | undefined;
     return (
       await ChannelsService.getUserBySearchTerm(userId, searchQuery)
