@@ -53,14 +53,17 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       {!noLayout && (
-        <div className="flex justify-between items-center bg-gray-900 text-white w-full">
+        <div className="flex justify-between items-center bg-gray-900 text-white w-full fixed top-0 left-0 right-0 z-10">
           <AdminHeader />
           <NavigationHeader />
         </div>
       )}
       <div className="flex flex-1">
         {!noLayout && <Sidebar />}
-        <main className="flex-1 pt-4 pl-4 overflow-auto">
+        <main
+          className="flex-1 pt-4 pl-4 overflow-auto"
+          style={{ paddingTop: "85px" }}
+        >
           <div
             style={{ display: "flex", justifyContent: "center", width: "100%" }}
           >

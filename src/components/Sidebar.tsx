@@ -10,7 +10,10 @@ import {
 
 const Sidebar: React.FC = () => {
   return (
-    <aside className="w-64 min-h-screen bg-white border-r border-gray-200">
+    <aside
+      className="w-64 min-h-screen bg-white border-r border-gray-200 "
+      style={{ paddingTop: "67px" }}
+    >
       <div className="overflow-y-auto py-4 px-3">
         <ul className="space-y-2">
           <li>
