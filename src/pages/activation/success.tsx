@@ -1,14 +1,14 @@
 import React from "react";
-import ActivationSuccess from "@/components/activation/ActivationSuccess";
+import ActivationConfirmation from "@/components/activation/ActivationConfirmation";
 
-const ActivationSuccessPage = () => {
-  return <ActivationSuccess />;
+const ActivationConfirmationPage = () => {
+  return <ActivationConfirmation />;
 };
 
-ActivationSuccessPage.getInitialProps = async () => {
+ActivationConfirmationPage.getInitialProps = async () => {
   return {
     noLayout: true,
   };
 };
 
-export default ActivationSuccessPage;
+export default ActivationConfirmationPage;

@@ -1,11 +1,11 @@
 import { useSearchAndPaginationHook } from "@/hooks/useSearchAndPagination";
-import SearchBar from "@/components/users/SearchBar";
-import UserList from "@/components/users/UserList";
-import ActionButtons from "@/components/users/ActionButtons";
+import UserSearchBar from "@/components/users/UserSearchBar";
+import UserListView from "@/components/users/UserListView";
+import ActionButtons from "@/components/users/UserActionButtons";
 import { useState } from "react";
 import { UserModel } from "@/types/users";
 
-const Users: React.FC = () => {
+const UserListPage: React.FC = () => {
   const { states, setFilter, goToPage } = useSearchAndPaginationHook<
     UserModel[]
   >("/api/users", 10);
@@ -42,13 +42,13 @@ const Users: React.FC = () => {
       </div>
 
       <div className="flex justify-center items-center space-x-2">
-        <SearchBar {...searchProps} />
+        <UserSearchBar {...searchProps} />
         <ActionButtons {...actionProps} />
       </div>
 
-      <UserList {...userListProps} />
+      <UserListView {...userListProps} />
     </div>
   );
 };
 
-export default Users;
+export default UserListPage;

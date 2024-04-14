@@ -1,4 +1,4 @@
-import Messanger from "@/components/messages/Messanger";
+import MessagingPanel from "@/components/messages/MessagingPanel";
 
 const MessagesPage: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const MessagesPage: React.FC = () => {
           <h1 className="text-3xl font-bold">Messages</h1>
         </div>
       </div>
-      <Messanger />
+      <MessagingPanel />
     </div>
   );
 };

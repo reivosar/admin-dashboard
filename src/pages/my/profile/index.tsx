@@ -1,6 +1,6 @@
-import Profile from "@/components/my/Profile";
+import UserProfileViewer from "@/components/my/UserProfileViewer";
 
-const ProfilePage: React.FC = () => {
+const UserProfilepage: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center mb-4">
@@ -8,9 +8,9 @@ const ProfilePage: React.FC = () => {
           <h1 className="text-3xl font-bold">User Profile</h1>
         </div>
       </div>
-      <Profile />
+      <UserProfileViewer />
     </div>
   );
 };
 
-export default ProfilePage;
+export default UserProfilepage;

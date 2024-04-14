@@ -1,7 +1,7 @@
-import TableList from "@/components/debug/db/TableList";
-import Breadcrumbs from "@/components/utils/Breadcrumbs";
+import TableListViewer from "@/components/debug/db/TableListViewer";
+import NavigationBreadcrumbs from "@/components/utils/NavigationBreadcrumbs";
 
-const DebugDBPage: React.FC = () => {
+const TableListPage: React.FC = () => {
   const breadcrumbPaths = [
     { label: "Debug", href: "/debug" },
     { label: "Database Debugging" },
@@ -9,10 +9,10 @@ const DebugDBPage: React.FC = () => {
 
   return (
     <div>
-      <Breadcrumbs paths={breadcrumbPaths} />
-      <TableList />
+      <NavigationBreadcrumbs paths={breadcrumbPaths} />
+      <TableListViewer />
     </div>
   );
 };
 
-export default DebugDBPage;
+export default TableListPage;

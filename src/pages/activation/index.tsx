@@ -1,5 +1,5 @@
 import React from "react";
-import Activation from "@/components/activation/Activation";
+import UserActivationForm from "@/components/activation/UserActivationForm";
 import { useRouter } from "next/router";
 
 const ActivationPage = () => {
@@ -12,7 +12,7 @@ const ActivationPage = () => {
     activationCode,
   };
 
-  return <Activation {...activationProps} />;
+  return <UserActivationForm {...activationProps} />;
 };
 
 ActivationPage.getInitialProps = async () => {

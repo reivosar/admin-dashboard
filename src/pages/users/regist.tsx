@@ -1,7 +1,7 @@
-import UserRegisterForm from "../../components/users/UserRegisterForm";
-import Breadcrumbs from "@/components/utils/Breadcrumbs";
+import UserRegistrationForm from "../../components/users/UserRegistrationForm";
+import NavigationBreadcrumbs from "@/components/utils/NavigationBreadcrumbs";
 
-const RegistUserPage: React.FC = () => {
+const UserRegistrationPage: React.FC = () => {
   const breadcrumbPaths = [
     { label: "Users", href: "/users" },
     { label: "Regist User" },
@@ -9,10 +9,10 @@ const RegistUserPage: React.FC = () => {
 
   return (
     <div>
-      <Breadcrumbs paths={breadcrumbPaths} />
-      <UserRegisterForm />
+      <NavigationBreadcrumbs paths={breadcrumbPaths} />
+      <UserRegistrationForm />
     </div>
   );
 };
 
-export default RegistUserPage;
+export default UserRegistrationPage;

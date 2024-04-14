@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import TableDetails from "@/components/debug/db/TableDetails";
+import TableDetailsViewer from "@/components/debug/db/TableDetailsViewer";
 import { SearchTableDetailsModel, TableDetailsModel } from "@/types/debug";
-import Breadcrumbs from "@/components/utils/Breadcrumbs";
+import NavigationBreadcrumbs from "@/components/utils/NavigationBreadcrumbs";
 import { useSearchAndPaginationHook } from "@/hooks/useSearchAndPagination";
 
-const DBTableDetailsPage: React.FC = () => {
+const TableDetailsPage: React.FC = () => {
   const router = useRouter();
   const { name } = router.query;
 
@@ -31,12 +31,12 @@ const DBTableDetailsPage: React.FC = () => {
 
   return (
     <div>
-      <Breadcrumbs paths={breadcrumbPaths} />
+      <NavigationBreadcrumbs paths={breadcrumbPaths} />
       {typeof tableName === "string" && (
-        <TableDetails {...tableDetailsFormProps} />
+        <TableDetailsViewer {...tableDetailsFormProps} />
       )}
     </div>
   );
 };
 
-export default DBTableDetailsPage;
+export default TableDetailsPage;

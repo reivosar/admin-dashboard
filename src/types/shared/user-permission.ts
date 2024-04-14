@@ -20,7 +20,7 @@ interface ActionDetails {
   id: number;
   action_profiles: {
     action_id: number;
-    name: string;
+    name?: string;
   };
   action_resources: {
     action_id: number;

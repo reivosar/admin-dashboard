@@ -1,9 +1,9 @@
 import React from "react";
 import { useRouter } from "next/router";
-import EditProfileSection from "@/components/my/EditProfileSection";
-import Breadcrumbs from "@/components/utils/Breadcrumbs";
+import NavigationBreadcrumbs from "@/components/utils/NavigationBreadcrumbs";
+import ProfileEditor from "@/components/my/ProfileEditor";
 
-const EditProfilePage: React.FC = () => {
+const ProfileEditPage: React.FC = () => {
   const router = useRouter();
   const { section } = router.query;
 
@@ -19,10 +19,10 @@ const EditProfilePage: React.FC = () => {
 
   return (
     <div>
-      <Breadcrumbs paths={breadcrumbPaths} />
-      <EditProfileSection section={section as string} />
+      <NavigationBreadcrumbs paths={breadcrumbPaths} />
+      <ProfileEditor />
     </div>
   );
 };
 
-export default EditProfilePage;
+export default ProfileEditPage;

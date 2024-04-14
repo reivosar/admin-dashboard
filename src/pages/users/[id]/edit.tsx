@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
-import UserEditForm from "@/components/users/UserEditForm";
-import Breadcrumbs from "@/components/utils/Breadcrumbs";
+import UserEditorForm from "@/components/users/UserEditorForm";
+import NavigationBreadcrumbs from "@/components/utils/NavigationBreadcrumbs";
 
-const EditUserPage: React.FC = () => {
+const UserEditorPage: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
 
@@ -13,10 +13,10 @@ const EditUserPage: React.FC = () => {
 
   return (
     <div>
-      <Breadcrumbs paths={breadcrumbPaths} />
-      {typeof id === "string" && <UserEditForm id={id} />}
+      <NavigationBreadcrumbs paths={breadcrumbPaths} />
+      {typeof id === "string" && <UserEditorForm id={id} />}
     </div>
   );
 };
 
-export default EditUserPage;
+export default UserEditorPage;

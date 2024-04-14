@@ -10,9 +10,9 @@ import {
   refreshTokenExpiry,
   shouldRedirectToLogin,
 } from "../utils/auth";
-import AdminHeader from "../components/AdminHeader";
-import NavigationHeader from "../components/NavigationHeader";
-import Sidebar from "../components/Sidebar";
+import DashboardHeader from "../components/DashboardHeader";
+import DashboardNavigation from "../components/DashboardNavigation";
+import DashboardSidebar from "../components/DashboardSidebar";
 import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -54,12 +54,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       {!noLayout && (
         <div className="flex justify-between items-center bg-gray-900 text-white w-full fixed top-0 left-0 right-0 z-10">
-          <AdminHeader />
-          <NavigationHeader />
+          <DashboardHeader />
+          <DashboardNavigation />
         </div>
       )}
       <div className="flex flex-1">
-        {!noLayout && <Sidebar />}
+        {!noLayout && <DashboardSidebar />}
         <main
           className="flex-1 pt-4 pl-4 overflow-auto"
           style={{ paddingTop: "85px" }}

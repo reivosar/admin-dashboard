@@ -1,8 +1,8 @@
 import React from "react";
-import Login from "@/components/login/Login";
+import UserLoginForm from "@/components/login/UserLoginForm";
 
 const LoginPage = () => {
-  return <Login />;
+  return <UserLoginForm />;
 };
 
 LoginPage.getInitialProps = async () => {

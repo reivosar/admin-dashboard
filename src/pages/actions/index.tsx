@@ -1,4 +1,4 @@
-const Dashboard: React.FC = () => {
+const DashboardPage: React.FC = () => {
   return (
     <div>
       <div>
@@ -9,4 +9,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardPage;

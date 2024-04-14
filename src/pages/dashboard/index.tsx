@@ -1,6 +1,6 @@
-import TrendDashboard from "@/components/dashborad/TrendDashboard";
+import TrendsOverviewDashboard from "@/components/dashborad/TrendsOverviewDashboard";
 
-const Dashboard: React.FC = () => {
+const DashboardPage: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center mb-4">
@@ -8,9 +8,9 @@ const Dashboard: React.FC = () => {
           <h1 className="text-3xl font-bold">Dashboard</h1>
         </div>
       </div>
-      <TrendDashboard />
+      <TrendsOverviewDashboard />
     </div>
   );
 };
 
-export default Dashboard;
+export default DashboardPage;

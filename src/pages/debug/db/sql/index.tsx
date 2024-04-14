@@ -1,7 +1,7 @@
-import ExecuteSQL from "@/components/debug/sql/ExecuteSQL";
-import Breadcrumbs from "@/components/utils/Breadcrumbs";
+import SQLExecutorPanel from "@/components/debug/sql/SQLExecutorPanel";
+import NavigationBreadcrumbs from "@/components/utils/NavigationBreadcrumbs";
 
-const DebugSQLPage: React.FC = () => {
+const SQLExecutorPage: React.FC = () => {
   const breadcrumbPaths = [
     { label: "Debug", href: "/debug" },
     { label: "Execute SQL" },
@@ -9,10 +9,10 @@ const DebugSQLPage: React.FC = () => {
 
   return (
     <div>
-      <Breadcrumbs paths={breadcrumbPaths} />
-      <ExecuteSQL />
+      <NavigationBreadcrumbs paths={breadcrumbPaths} />
+      <SQLExecutorPanel />
     </div>
   );
 };
 
-export default DebugSQLPage;
+export default SQLExecutorPage;
