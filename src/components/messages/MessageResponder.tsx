@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import { MessageResponse } from "@/types/messages";
 import { UserCircleIcon } from "@heroicons/react/solid";
@@ -48,40 +48,41 @@ const MessageResponder: React.FC<CMessageResponderProps> = ({ channelId }) => {
   }, [channelId]);
 
   return (
-    <div className="messages flex-1 overflow-y-auto p-4">
-      {messages.map((msg) => {
-        const isCurrentUser = msg.isOwnMessage;
-        const alignmentClass = isCurrentUser
-          ? "items-end text-right"
-          : "items-start text-left";
-        const backgroundClass = isCurrentUser ? "bg-white" : "bg-gray-100";
-        const cleanHTML = DOMPurify.sanitize(msg.content);
-        return (
-          <div>
-            <div className={`text-xs text-gray-600 ${alignmentClass}`}>
-              <span>
-                {new Date(msg.sendedAt).toLocaleDateString()}{" "}
-                {new Date(msg.sendedAt).toLocaleTimeString()}
-              </span>
-            </div>
+    <div className="relative overflow-y-auto">
+      <div className="sticky top-0 bg-white p-4 shadow-md z-10">
+        <h1 className="text-xl font-bold">{"Unknown Channel"}</h1>
+        <p className="text-gray-600">Channel ID: {channelId}</p>
+      </div>
+      <div className="messages flex-1 p-4">
+        {messages.map((msg) => {
+          const cleanHTML = DOMPurify.sanitize(msg.content);
+          const userName = msg.sendedBy?.name || "Unknown User";
+          return (
             <div
+              id={`message-${msg.id}`}
               key={msg.id}
-              className={`message flex flex-col my-2 mx-3 p-3 rounded-lg shadow ${backgroundClass} ${alignmentClass} space-y-1`}
+              className="flex flex-col justify-start items-start my-4 mx-auto max-w-6xl"
             >
-              <div
-                dangerouslySetInnerHTML={{ __html: cleanHTML }}
-                className="message-text"
-              ></div>
+              <div className="flex items-center space-x-4 mb-2">
+                <UserCircleIcon className="h-10 w-10 text-gray-500" />
+                <div className="flex items-center">
+                  <span className="font-semibold">{userName}</span>
+                  <span className="text-xs text-gray-600 ml-4">
+                    {new Date(msg.sendedAt).toLocaleDateString()}{" "}
+                    {new Date(msg.sendedAt).toLocaleTimeString()}
+                  </span>
+                </div>
+              </div>
+              <div className="message p-3 bg-white rounded-lg shadow flex flex-col space-y-1 w-full">
+                <div
+                  dangerouslySetInnerHTML={{ __html: cleanHTML }}
+                  className="message-text"
+                ></div>
+              </div>
             </div>
-            <div className={`flex space-x-2 ${alignmentClass}`}>
-              <UserCircleIcon className="h-6 w-6 text-gray-500" />
-              <span className="font-medium">
-                {msg.sendedBy?.name || "Unknown"}
-              </span>
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };

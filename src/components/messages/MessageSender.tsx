@@ -32,8 +32,7 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
     []
   );
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     const contentState = editorState.getCurrentContent();
     const dirtyHtml = stateToHTML(contentState, options);
     const cleanHtml = DOMPurify.sanitize(dirtyHtml);
@@ -51,15 +50,6 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
     }
   };
 
-  const handleKeyCommand = (command: DraftEditorCommand) => {
-    const newState = RichUtils.handleKeyCommand(editorState, command);
-    if (newState) {
-      setEditorState(newState);
-      return "handled";
-    }
-    return "not-handled";
-  };
-
   const onToggleStyle = (style: string) => {
     setEditorState(RichUtils.toggleInlineStyle(editorState, style));
   };
@@ -73,10 +63,7 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="editor bg-white p-4 border rounded flex flex-col justify-between"
-    >
+    <div className="editor bg-white p-4 border rounded flex flex-col justify-between">
       <div
         style={{
           minHeight: "15px",
@@ -85,9 +72,9 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
         }}
       >
         <Editor
+          editorKey="message-sender"
           editorState={editorState}
           onChange={setEditorState}
-          handleKeyCommand={handleKeyCommand}
         />
       </div>
       <div className="flex justify-between items-center w-full mt- pt-2 border-t-2 border-gray-200">
@@ -135,7 +122,7 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
           </button>
         </div>
         <div className="flex items-center">
-          <button type="submit" className="icon-button">
+          <button onClick={handleSubmit} className="icon-button">
             <PaperAirplaneIcon className="h-8 w-8" />{" "}
           </button>
         </div>
@@ -170,7 +157,7 @@ const MessageSender: React.FC<MessageSenderProps> = ({ channelId }) => {
           box-shadow: 2px 2px 4px #e0e0e0, -2px -2px 4px #ffffff;
         }
       `}</style>
-    </form>
+    </div>
   );
 };
 export default MessageSender;
