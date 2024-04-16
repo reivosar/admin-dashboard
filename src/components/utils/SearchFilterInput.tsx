@@ -24,9 +24,14 @@ export const SearchFilterInput: React.FC<{
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-    if (type === "integer" || type === "number") {
+    if (type === "integer" || type === "numner") {
       const validInteger = newValue.match(/^\d*$/);
       if (validInteger) {
+        setInputValue(newValue);
+      }
+    } else if (type === "timestamp(3) without time zone" || type === "Date") {
+      const validTimestamp = newValue.match(/^[0-9:/\-]*$/);
+      if (validTimestamp) {
         setInputValue(newValue);
       }
     } else {
