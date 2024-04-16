@@ -20,23 +20,30 @@ export const SearchFilterInput: React.FC<{
     return () => {
       debouncedOnChange.cancel();
     };
-  }, [inputValue, debouncedOnChange]);
+  }, [inputValue]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    if (type === "integer" || type === "numner") {
-      const validInteger = newValue.match(/^\d*$/);
-      if (validInteger) {
-        setInputValue(newValue);
-      }
-    } else if (type === "timestamp(3) without time zone" || type === "Date") {
-      const validTimestamp = newValue.match(/^[0-9:/\-]*$/);
-      if (validTimestamp) {
-        setInputValue(newValue);
-      }
-    } else {
-      setInputValue(newValue);
+    if (validateInput(event.target.value)) {
+      setInputValue(event.target.value);
     }
+  };
+
+  const getInputType = () => {
+    if (type.includes("integer")) {
+      return "text";
+    } else if (type.includes("timestamp")) {
+      return "text";
+    }
+    return "text";
+  };
+
+  const validateInput = (value: string) => {
+    if (type.includes("integer") && !/^\d*$/.test(value)) {
+      return false;
+    } else if (type.includes("timestamp") && !/^[0-9:/ \\-]*$/.test(value)) {
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -44,7 +51,7 @@ export const SearchFilterInput: React.FC<{
       {options.length > 0 ? (
         <select
           className="py-2 px-3 w-full text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
-          value={value}
+          value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         >
           <option value="">Select {columnName}</option>
@@ -56,7 +63,7 @@ export const SearchFilterInput: React.FC<{
         </select>
       ) : (
         <input
-          type="text"
+          type={getInputType()}
           className="py-2 px-3 pl-8 w-full text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
           placeholder={`Filter ${columnName}...`}
           value={inputValue}

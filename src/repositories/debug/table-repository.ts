@@ -130,10 +130,9 @@ export const TableRepository = {
               return `"${header.column_name}" = '${value}'`;
             } else if (header.data_type === "jsonb") {
               return `to_tsvector("${header.column_name}") @@ to_tsquery('${value}')`;
-            } else if (
-              header.data_type === "integer" ||
-              header.data_type === "numeric"
-            ) {
+            } else if (["integer", "numeric"].includes(header.data_type)) {
+              return `CAST("${header.column_name}" AS TEXT) ILIKE '%${value}%'`;
+            } else if (header.data_type.includes("timestamp")) {
               return `CAST("${header.column_name}" AS TEXT) ILIKE '%${value}%'`;
             } else {
               return `"${header.column_name}" ILIKE '%${value}%'`;
