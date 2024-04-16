@@ -76,6 +76,7 @@ const TableDetailsViewer: React.FC<TableDetailsViewerProps> = ({
               <td key={header.column_name} className="px-6 py-3">
                 <SearchFilterInput
                   columnName={header.column_name}
+                  type={header.data_type}
                   value={filter[header.column_name] || ""}
                   selectOptions={header.enum_labels}
                   onChange={(value) =>
