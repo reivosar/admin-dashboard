@@ -53,10 +53,10 @@ const TableDetailsViewer: React.FC<TableDetailsViewerProps> = ({
   const currentPage = states.currentPage;
 
   return (
-    <div>
+    <div className="max-h-[650px] overflow-y-auto border border-gray-300">
       <table>
         <thead>
-          <tr>
+          <tr className="sticky top-0 z-10">
             {headers?.map((header, headerIndex) => (
               <th
                 key={headerIndex}
@@ -71,7 +71,7 @@ const TableDetailsViewer: React.FC<TableDetailsViewerProps> = ({
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-gray-50">
+          <tr className="bg-gray-50 sticky top-10 z-10">
             {headers?.map((header) => (
               <td key={header.column_name} className="px-6 py-3">
                 <SearchFilterInput
@@ -89,7 +89,10 @@ const TableDetailsViewer: React.FC<TableDetailsViewerProps> = ({
           {data?.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {headers?.map((header) => (
-                <td key={header.column_name}>
+                <td
+                  key={header.column_name}
+                  className="px-6 py-3 whitespace-normal"
+                >
                   {renderValue(row[header.column_name])}
                 </td>
               ))}
