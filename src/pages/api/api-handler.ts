@@ -110,7 +110,6 @@ abstract class ApiHandler {
   }
 }
 
-@injectable()
 export class AnonymousApiHandler extends ApiHandler {
   protected async createServiceContext(
     req: NextApiRequest,

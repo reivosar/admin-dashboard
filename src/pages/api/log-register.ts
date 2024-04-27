@@ -40,6 +40,7 @@ export class LogRegister {
       message || ""
     );
   }
+
   private extractUrlPath(
     fullUrl: string | undefined,
     req: NextApiRequest
