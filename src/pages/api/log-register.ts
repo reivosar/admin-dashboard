@@ -1,38 +1,46 @@
-import { AuditLogService } from "@/app/services/log/audit-log-service";
-import { log } from "console";
+import type { LogService } from "@/app/services/log";
+import { injectable, inject } from "inversify";
 import { NextApiRequest } from "next";
+import "reflect-metadata";
 
-export async function logRequest(
-  req: NextApiRequest,
-  startTime: Date,
-  userId?: number,
-  description?: string,
-  statusCode?: number,
-  message?: string
-) {
-  const { method, url, body, query } = req;
-  const urlPath = extractUrlPath(url, req);
-  const parameters = safeStringify(body);
-  const queryParams = safeStringify(query);
-  const ip_address = extractIpAddress(req);
-  const finalStatusCode = statusCode ?? 500;
-  const endTime = new Date();
+@injectable()
+export class LogRegister {
+  constructor(
+    @inject("LogService")
+    private logService: LogService
+  ) {}
 
-  await AuditLogService.createAPILog({
-    url: urlPath,
-    method: method || "",
-    user_id: userId,
-    description: description || "API request",
-    parameters: parameters,
-    query: queryParams,
-    ip_address: ip_address,
-    response_status: finalStatusCode,
-    response_message: message || "",
-    request_started_at: startTime,
-    request_ended_at: endTime,
-  });
+  async execute(
+    req: NextApiRequest,
+    startTime: Date,
+    userId?: number,
+    description?: string,
+    statusCode?: number,
+    message?: string
+  ) {
+    const { method, url, body, query } = req;
+    const urlPath = this.extractUrlPath(url, req);
+    const parameters = this.safeStringify(body);
+    const queryParams = this.safeStringify(query);
+    const ip_address = this.extractIpAddress(req);
+    const finalStatusCode = statusCode ?? 500;
+    const endTime = new Date();
 
-  function extractUrlPath(
+    await this.logService.registerAuditLog(
+      urlPath,
+      method || "",
+      finalStatusCode,
+      startTime,
+      endTime,
+      userId,
+      description || "API request",
+      parameters,
+      queryParams,
+      ip_address,
+      message || ""
+    );
+  }
+  private extractUrlPath(
     fullUrl: string | undefined,
     req: NextApiRequest
   ): string {
@@ -48,7 +56,7 @@ export async function logRequest(
     }
   }
 
-  function safeStringify(obj: any) {
+  private safeStringify(obj: any) {
     try {
       return JSON.stringify(obj, (key, value) => {
         if (key === "password") {
@@ -67,7 +75,7 @@ export async function logRequest(
     }
   }
 
-  function extractIpAddress(req: NextApiRequest): string | undefined {
+  private extractIpAddress(req: NextApiRequest): string | undefined {
     const xForwardedFor = req.headers["x-forwarded-for"];
     if (typeof xForwardedFor === "string") {
       return xForwardedFor.split(",")[0].trim();

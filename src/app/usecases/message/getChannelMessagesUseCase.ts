@@ -1,8 +1,8 @@
 import type { MessageResponseQueryService } from "@/app/services/query/message/response";
-import { queryServiceOperation } from "@/app/services/service-helper";
 import { ServiceContext } from "@/types/shared/service-context";
 import { injectable, inject } from "inversify";
 import "reflect-metadata";
+import { queryUseCaseOperation } from "../usecaseHelper";
 
 export interface GetChannelMessagesUseCaseQuery {
   channelId: number;
@@ -17,7 +17,7 @@ export class GetChannelMessagesUseCase {
   ) {}
 
   execute(context: ServiceContext, request: GetChannelMessagesUseCaseQuery) {
-    return queryServiceOperation(
+    return queryUseCaseOperation(
       this.messageResponseQueryService.getMessages(
         context,
         request.channelId,

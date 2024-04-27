@@ -1,8 +1,8 @@
 import type { DatabaseTableQueryService } from "@/app/services/query/debug/db/tables";
-import { queryServiceOperation } from "@/app/services/service-helper";
 import { ServiceContext } from "@/types/shared/service-context";
 import { injectable, inject } from "inversify";
 import "reflect-metadata";
+import { queryUseCaseOperation } from "../usecaseHelper";
 
 @injectable()
 export class GetAllTablesUseCase {
@@ -12,7 +12,7 @@ export class GetAllTablesUseCase {
   ) {}
 
   execute(context: ServiceContext) {
-    return queryServiceOperation(
+    return queryUseCaseOperation(
       this.databaseTableQueryService.getAllTables(context)
     );
   }

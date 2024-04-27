@@ -1,8 +1,8 @@
 import type { UserQueryService } from "@/app/services/query/user";
-import { queryServiceOperation } from "@/app/services/service-helper";
 import { ServiceContext } from "@/types/shared/service-context";
 import { injectable, inject } from "inversify";
 import "reflect-metadata";
+import { queryUseCaseOperation } from "../usecaseHelper";
 
 export interface GetUsersBySearchTermUseCaseQuery {
   searchTerm: string | undefined;
@@ -16,7 +16,7 @@ export class GetUsersBySearchTermUseCase {
   ) {}
 
   execute(context: ServiceContext, request: GetUsersBySearchTermUseCaseQuery) {
-    return queryServiceOperation(
+    return queryUseCaseOperation(
       this.userQueryService.getUsersBySearchTerm(context, request.searchTerm)
     );
   }

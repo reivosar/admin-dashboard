@@ -1,14 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ServiceContext } from "@/types/shared/service-context";
-import { logRequest } from "./api-log";
-import {
-  createAnonymousServiceContext,
-  createIdentifiedServiceContext,
-} from "./service-context-creator";
-import { handleError } from "./api-error-handler";
-import { log } from "console";
+import { LogRegister } from "./log-register";
+import { ContextCreator } from "./context-creator";
+import { injectable } from "inversify";
+import { container } from "@/container";
+import { ErrorHandler } from "./error-handler";
 
 abstract class ApiHandler {
+  constructor(
+    protected serviceContextCreator = container.get(ContextCreator),
+    private logRegister = container.get(LogRegister),
+    private errorHandler = container.get(ErrorHandler)
+  ) {}
+
   protected handleGet(
     req: NextApiRequest,
     res: NextApiResponse,
@@ -60,7 +64,7 @@ abstract class ApiHandler {
     try {
       context = await this.createServiceContext(req, startTime);
       await handler(req, res, context);
-      logRequest(
+      this.logRegister.execute(
         req,
         startTime,
         context.userId !== 0 ? context.userId : undefined,
@@ -69,7 +73,7 @@ abstract class ApiHandler {
         undefined
       );
     } catch (error) {
-      handleError(
+      this.errorHandler.handleError(
         req,
         res,
         startTime,
@@ -106,12 +110,16 @@ abstract class ApiHandler {
   }
 }
 
+@injectable()
 export class AnonymousApiHandler extends ApiHandler {
   protected async createServiceContext(
     req: NextApiRequest,
     startTime: Date
   ): Promise<ServiceContext> {
-    return await createAnonymousServiceContext(req, startTime);
+    return await this.serviceContextCreator.createAnonymousServiceContext(
+      req,
+      startTime
+    );
   }
 }
 
@@ -120,6 +128,9 @@ export class AuthenticatedApiHandler extends ApiHandler {
     req: NextApiRequest,
     startTime: Date
   ): Promise<ServiceContext> {
-    return await createIdentifiedServiceContext(req, startTime);
+    return await this.serviceContextCreator.createIdentifiedServiceContext(
+      req,
+      startTime
+    );
   }
 }

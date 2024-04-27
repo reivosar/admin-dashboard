@@ -1,11 +1,18 @@
-import prisma from "../prisma";
+import { PermissionQueryService } from "@/app/services/query/permission";
+import { TYPES } from "@/container/types";
 import { UserRolesWithPermissions } from "@/types/shared/user-permission";
+import { PrismaClient } from "@prisma/client";
+import { injectable, inject } from "inversify";
 
-export const PermissionRepository = {
-  async findUserPermissions(
+@injectable()
+export class PrismaPermissionQueryService implements PermissionQueryService {
+  constructor(
+    @inject(TYPES.PrismaClient) private readonly prisma: PrismaClient
+  ) {}
+  async getUserPermissions(
     userId: number
   ): Promise<UserRolesWithPermissions[] | null> {
-    const userRolesData = await prisma.userRole.findMany({
+    const userRolesData = await this.prisma.userRole.findMany({
       where: {
         user_id: userId,
       },
@@ -64,5 +71,5 @@ export const PermissionRepository = {
     }));
 
     return userRolesWithPermissions;
-  },
-};
+  }
+}

@@ -17,7 +17,7 @@ import { LogoutUseCase } from "@/app/usecases/user/logoutUseCase";
 import { UpdateUserContractUseCase } from "@/app/usecases/user/updateUserContractUseCase";
 import { UpdateUserProfileUseCase } from "@/app/usecases/user/updateUserProfileUseCase";
 import { PrismaUserFactory } from "@/infrastructures/factory/user";
-import { PrismaUserQueryService } from "@/infrastructures/query/user";
+import { PrismaUserQueryService } from "@/infrastructures/service/query/user";
 import { PrismaUserRepository } from "@/infrastructures/repositories/user";
 import { PrismaUserActivationRepository } from "@/infrastructures/repositories/user/activation";
 import { PrismaUserActivationCodeRepository } from "@/infrastructures/repositories/user/activationCode";

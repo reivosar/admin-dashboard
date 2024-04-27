@@ -3,8 +3,8 @@ import { DatabaseTableQueryService } from "@/app/services/query/debug/db/tables"
 import { ExecuteSqlUseCase } from "@/app/usecases/debug/executeSqlUseCase";
 import { GetAllTablesUseCase } from "@/app/usecases/debug/getAllTablesUseCase";
 import { GetTableInfoUseCase } from "@/app/usecases/debug/getTableInfoUseCase";
-import { PrismaExecuteSqlQueryService } from "@/infrastructures/query/debug/db/sql";
-import { PrismaDatabaseTableQueryService } from "@/infrastructures/query/debug/db/tables";
+import { PrismaExecuteSqlQueryService } from "@/infrastructures/service/query/debug/db/sql";
+import { PrismaDatabaseTableQueryService } from "@/infrastructures/service/query/debug/db/tables";
 import { Container } from "inversify";
 
 export const DebugContainer = {

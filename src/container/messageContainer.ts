@@ -13,8 +13,8 @@ import { UpdateChannelProfileUseCase } from "@/app/usecases/message/updateChanne
 import { UpdateChannelVisibilityUseCase } from "@/app/usecases/message/updateChannelVisibilityUseCase";
 import { PrismaChannelFactory } from "@/infrastructures/factory/message/channel";
 import { PrismaMessageContentFactory } from "@/infrastructures/factory/message/content";
-import { PrismaChannelQueryService } from "@/infrastructures/query/message/channel";
-import { PrismaMessageResponseQueryService } from "@/infrastructures/query/message/response";
+import { PrismaChannelQueryService } from "@/infrastructures/service/query/message/channel";
+import { PrismaMessageResponseQueryService } from "@/infrastructures/service/query/message/response";
 import { PrismaChannelMemberRepository } from "@/infrastructures/repositories/message/channel/member";
 import { PrismaChannelProfileRepository } from "@/infrastructures/repositories/message/channel/profile";
 import { PrismaChannelVisibilityRepository } from "@/infrastructures/repositories/message/channel/visibility";

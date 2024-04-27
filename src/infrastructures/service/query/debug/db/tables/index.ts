@@ -199,7 +199,7 @@ export class PrismaDatabaseTableQueryService
         query += ` ORDER BY "${sortConfig.key}" ${sortConfig.direction}`;
       }
 
-      const results = await prisma.$queryRaw<Record<string, any>[]>`
+      const results = await this.prisma.$queryRaw<Record<string, any>[]>`
         ${Prisma.raw(query)}
       `;
 
