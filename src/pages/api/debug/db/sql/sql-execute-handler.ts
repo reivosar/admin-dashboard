@@ -1,14 +1,26 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { SqlService } from "@/services/debug/sql-service";
 import { AuthenticatedApiHandler } from "@/pages/api/api-handler";
+import { container } from "@/container";
+import { ExecuteSqlUseCase } from "@/app/usecases/debug/executeSqlUseCase";
+import { ServiceContext } from "@/types/shared/service-context";
 
 class SQLExecuteHandler extends AuthenticatedApiHandler {
-  protected async handlePost(req: NextApiRequest, res: NextApiResponse) {
+  constructor(private executeSqlUseCase = container.get(ExecuteSqlUseCase)) {
+    super();
+  }
+
+  protected async handlePost(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    context: ServiceContext
+  ) {
     const { query } = req.body;
     if (!query) {
       return res.status(400).json({ error: "SQL query is required" });
     }
-    return (await SqlService.exectueSql(query)).toResponse(res);
+    return (
+      await this.executeSqlUseCase.execute(context, { sql: query })
+    ).toResponse(res);
   }
 }
 

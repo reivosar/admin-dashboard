@@ -16,11 +16,11 @@ export interface UserNameModel {
 
 export interface UserModelWithDetails {
   id: number;
-  first_name: string | null;
-  last_name: string | null;
-  birth_date: Date | null;
-  gender: string | null;
-  email: string | null;
+  first_name: string;
+  last_name: string;
+  birth_date: Date;
+  gender: string;
+  email: string;
   auth_id: string;
   password_hash: string;
   activated_at: Date | null;

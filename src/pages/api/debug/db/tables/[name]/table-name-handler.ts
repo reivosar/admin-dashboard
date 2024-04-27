@@ -1,9 +1,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { TablenService } from "@/services/debug/table-service";
 import { AuthenticatedApiHandler } from "@/pages/api/api-handler";
+import { container } from "@/container";
+import { GetTableInfoUseCase } from "@/app/usecases/debug/getTableInfoUseCase";
+import { ServiceContext } from "@/types/shared/service-context";
 
 class TablesNameHandler extends AuthenticatedApiHandler {
-  protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
+  constructor(
+    private getTableInfoUseCase = container.get(GetTableInfoUseCase)
+  ) {
+    super();
+  }
+
+  protected async handleGet(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    context: ServiceContext
+  ) {
     const {
       query: { name },
       method,
@@ -34,7 +46,12 @@ class TablesNameHandler extends AuthenticatedApiHandler {
       : req.query.direction;
 
     return (
-      await TablenService.getTableInfo(name, conditions, sort, direction)
+      await this.getTableInfoUseCase.execute(context, {
+        tableName: name,
+        conditions: conditions,
+        sort: sort,
+        direction: direction,
+      })
     ).toResponse(res);
   }
 }

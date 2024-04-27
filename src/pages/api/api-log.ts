@@ -1,4 +1,5 @@
-import { AuditLogService } from "@/services/log/audit-log-service";
+import { AuditLogService } from "@/app/services/log/audit-log-service";
+import { log } from "console";
 import { NextApiRequest } from "next";
 
 export async function logRequest(

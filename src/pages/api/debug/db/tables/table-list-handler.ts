@@ -1,10 +1,22 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { TablenService } from "@/services/debug/table-service";
 import { AuthenticatedApiHandler } from "@/pages/api/api-handler";
+import { container } from "@/container";
+import { GetAllTablesUseCase } from "@/app/usecases/debug/getAllTablesUseCase";
+import { ServiceContext } from "@/types/shared/service-context";
 
 class TablesListHandler extends AuthenticatedApiHandler {
-  protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
-    return (await TablenService.getAllTables()).toResponse(res);
+  constructor(
+    private getAllTablesUseCase = container.get(GetAllTablesUseCase)
+  ) {
+    super();
+  }
+
+  protected async handleGet(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    context: ServiceContext
+  ) {
+    return (await this.getAllTablesUseCase.execute(context)).toResponse(res);
   }
 }
 

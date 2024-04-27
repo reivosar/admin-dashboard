@@ -168,7 +168,7 @@ model MessageChannelMember {
 model Message {
   id               Int             @id @default(autoincrement())
   channel_id       Int
-  sended_by        Int?          
+  sended_by        Int          
   sended_at        DateTime        @default(now())
   message_channels MessageChannel  @relation(fields: [channel_id], references: [id]) 
   message_contents MessageContent?     

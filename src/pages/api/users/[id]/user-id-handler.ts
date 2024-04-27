@@ -1,12 +1,26 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { UserService } from "@/services/users/user-service";
+import { UserService } from "@/app/services/users/user-service";
 import { AuthenticatedApiHandler } from "../../api-handler";
+import { container } from "@/container";
+import { GetUserUseCase } from "@/app/usecases/user/getUserUseCase";
+import { ServiceContext } from "@/types/shared/service-context";
+import { UpdateUserProfileUseCase } from "@/app/usecases/user/updateUserProfileUseCase";
 
 class UserIdHandler extends AuthenticatedApiHandler {
-  protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
+  constructor(private getUserUseCase = container.get(GetUserUseCase)) {
+    super();
+  }
+
+  protected async handleGet(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    context: ServiceContext
+  ) {
     const { id } = req.query;
     const parsedId = parseInt(id as string);
-    return (await UserService.getUser(parsedId)).toResponse(res);
+    return (
+      await this.getUserUseCase.execute(context, { userId: parsedId })
+    ).toResponse(res);
   }
 
   protected async handlePut(req: NextApiRequest, res: NextApiResponse) {

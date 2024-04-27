@@ -1,8 +1,8 @@
-import { PermissionService } from "@/services/permissions/permission-service";
+import { PermissionService } from "@/app/services/query/permissions";
 import { ServiceContext } from "@/types/shared/service-context";
 import { UserRolesWithPermissions } from "@/types/shared/user-permission";
 import { NextApiRequest } from "next";
-import { getUseIdFromCookie } from "./utils/cookie";
+import { getUseIdFromCookie } from "../../utils/cookie";
 
 function evaluatePolicy(
   permissions: UserRolesWithPermissions[],

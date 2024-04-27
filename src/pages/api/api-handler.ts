@@ -6,6 +6,7 @@ import {
   createIdentifiedServiceContext,
 } from "./service-context-creator";
 import { handleError } from "./api-error-handler";
+import { log } from "console";
 
 abstract class ApiHandler {
   protected handleGet(

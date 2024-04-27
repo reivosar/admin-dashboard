@@ -1,4 +1,4 @@
-import { APIError } from "@/errors";
+import { APIError } from "@/utils/errors";
 import { ServiceContext } from "@/types/shared/service-context";
 import { NextApiRequest, NextApiResponse } from "next";
 import { logRequest } from "./api-log";

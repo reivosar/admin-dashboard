@@ -1,10 +1,24 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { ActivationService } from "@/services/activation/activation-service";
-import { BadRequestError } from "@/errors";
+import { BadRequestError } from "@/utils/errors";
 import { AnonymousApiHandler } from "../api-handler";
+import { GetActivationUseCase } from "@/app/usecases/user/getActivationUseCase";
+import { container } from "@/container";
+import { ServiceContext } from "@/types/shared/service-context";
+import { ActivateUserUseCase } from "@/app/usecases/user/activateUserUseCase";
 
 class ActivationHandler extends AnonymousApiHandler {
-  protected async handleGet(req: NextApiRequest, res: NextApiResponse) {
+  constructor(
+    private getActivationUseCase = container.get(GetActivationUseCase),
+    private activateUserUseCase = container.get(ActivateUserUseCase)
+  ) {
+    super();
+  }
+
+  protected async handleGet(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    context: ServiceContext
+  ) {
     const {
       query: { code },
       method,
@@ -13,10 +27,16 @@ class ActivationHandler extends AnonymousApiHandler {
     if (typeof code !== "string" || !code) {
       throw new BadRequestError("Activaton code is required");
     }
-    return (await ActivationService.getActivation(code)).toResponse(res);
+    return (
+      await this.getActivationUseCase.execute(context, { activationCode: code })
+    ).toResponse(res);
   }
 
-  protected async handlePost(req: NextApiRequest, res: NextApiResponse) {
+  protected async handlePost(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    context: ServiceContext
+  ) {
     const { activationCode, email, password } = req.body;
 
     if (!activationCode) {
@@ -24,7 +44,11 @@ class ActivationHandler extends AnonymousApiHandler {
     }
 
     return (
-      await ActivationService.activate(activationCode, email, password)
+      await this.activateUserUseCase.execute(context, {
+        activationCode,
+        email,
+        password,
+      })
     ).toResponse(res);
   }
 }

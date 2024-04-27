@@ -1,11 +1,18 @@
 import { ServiceContext } from "@/types/shared/service-context";
 import { NextApiRequest, NextApiResponse } from "next";
-import { MessageResponseService } from "@/services/messages/response";
 import { MessageResponse } from "@/types/messages";
 import { sseManager } from "../../utils/sme";
 import { AuthenticatedApiHandler } from "../../api-handler";
+import { container } from "@/container";
+import { GetChannelMessagesUseCase } from "@/app/usecases/message/getChannelMessagesUseCase";
 
 class ResponseHandler extends AuthenticatedApiHandler {
+  constructor(
+    private getChannelMessagesUseCase = container.get(GetChannelMessagesUseCase)
+  ) {
+    super();
+  }
+
   protected async handleGet(
     req: NextApiRequest,
     res: NextApiResponse,
@@ -31,10 +38,12 @@ class ResponseHandler extends AuthenticatedApiHandler {
     let searchLastMessageId = lastMessageId;
     const onData = async () => {
       try {
-        const newMessages = await MessageResponseService.getMessages(
+        const newMessages = await this.getChannelMessagesUseCase.execute(
           context,
-          channelId,
-          searchLastMessageId
+          {
+            channelId: channelId,
+            lastMessageId: searchLastMessageId,
+          }
         );
         if (!newMessages || !newMessages.data || newMessages.data.length == 0) {
           return [];
