@@ -11,13 +11,12 @@ import { ActivateUserUseCase } from "@/app/usecases/user/activateUserUseCase";
 import { CreateUserUseCase } from "@/app/usecases/user/createUserUseCase";
 import { DeleteUserUseCase } from "@/app/usecases/user/deleteUserUseCase";
 import { GetActivationUseCase } from "@/app/usecases/user/getActivationUseCase";
+import { GetUserUseCase } from "@/app/usecases/user/getUserUseCase";
 import { GetUsersBySearchTermUseCase } from "@/app/usecases/user/getUsersBySearchTermUseCase";
 import { LoginUseCase } from "@/app/usecases/user/loginUseCase";
 import { LogoutUseCase } from "@/app/usecases/user/logoutUseCase";
-import { UpdateUserContractUseCase } from "@/app/usecases/user/updateUserContractUseCase";
-import { UpdateUserProfileUseCase } from "@/app/usecases/user/updateUserProfileUseCase";
+import { UpdateUserUseCase } from "@/app/usecases/user/updateUserUseCase";
 import { PrismaUserFactory } from "@/infrastructures/factory/user";
-import { PrismaUserQueryService } from "@/infrastructures/service/query/user";
 import { PrismaUserRepository } from "@/infrastructures/repositories/user";
 import { PrismaUserActivationRepository } from "@/infrastructures/repositories/user/activation";
 import { PrismaUserActivationCodeRepository } from "@/infrastructures/repositories/user/activationCode";
@@ -25,6 +24,7 @@ import { PrismaUserAuthorizationRepository } from "@/infrastructures/repositorie
 import { PrismaUserContractRepository } from "@/infrastructures/repositories/user/contract";
 import { PrismaUserProfileRepository } from "@/infrastructures/repositories/user/profile";
 import { PrismaUserTokenRepository } from "@/infrastructures/repositories/user/token";
+import { PrismaUserQueryService } from "@/infrastructures/service/query/user";
 import { Container } from "inversify";
 
 export const UserContainer = {
@@ -35,11 +35,10 @@ export const UserContainer = {
     container.bind(DeleteUserUseCase).toSelf();
     container.bind(GetActivationUseCase).toSelf();
     container.bind(GetUsersBySearchTermUseCase).toSelf();
-    container.bind(UpdateUserProfileUseCase).toSelf();
+    container.bind(GetUserUseCase).toSelf();
     container.bind(LoginUseCase).toSelf();
     container.bind(LogoutUseCase).toSelf();
-    container.bind(UpdateUserContractUseCase).toSelf();
-    container.bind(UpdateUserProfileUseCase).toSelf();
+    container.bind(UpdateUserUseCase).toSelf();
 
     // Factory
     container.bind<UserFactory>("UserFactory").to(PrismaUserFactory);

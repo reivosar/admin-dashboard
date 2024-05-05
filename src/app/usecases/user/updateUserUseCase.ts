@@ -1,35 +1,39 @@
-import { AuthId } from "@/app/domain/models/user/authorization/authid";
-import { Email } from "@/app/domain/models/user/contact/email";
-import { UserId } from "@/app/domain/models/user/userId";
+import type { UserProfileRepository } from "@/app/domain/repositories/user/profile";
 import type { UserAuthorizationRepository } from "@/app/domain/repositories/user/authorization";
 import type { UserContractRepository } from "@/app/domain/repositories/user/contract";
 import type { UserQueryService } from "@/app/services/query/user";
+import { UserId } from "@/app/domain/models/user/userId";
 import { ServiceContext } from "@/types/shared/service-context";
-import { ConflictError, NotFoundError } from "@/utils/errors";
 import { injectable, inject } from "inversify";
 import { commandUseCaseOperation } from "../usecaseHelper";
+import { ConflictError, NotFoundError } from "@/utils/errors";
 import "reflect-metadata";
+import { AuthId } from "@/app/domain/models/user/authorization/authid";
+import { Email } from "@/app/domain/models/user/contact/email";
 
-export interface UpdateUserContractUseCaseCommand {
+export interface UpdateUserUseCaseCommand {
   id: number;
+  firstName?: string;
+  lastName?: string;
+  gender?: string;
+  birthDay?: Date;
   email?: string;
 }
 
 @injectable()
-export class UpdateUserContractUseCase {
+export class UpdateUserUseCase {
   constructor(
     @inject("UserQueryService")
     private userQueryService: UserQueryService,
+    @inject("UserProfileRepository")
+    private userProfileRepository: UserProfileRepository,
     @inject("UserContractRepository")
     private userContractRepository: UserContractRepository,
     @inject("UserAuthorizationRepository")
     private userAuthorizationRepository: UserAuthorizationRepository
   ) {}
 
-  async execute(
-    context: ServiceContext,
-    request: UpdateUserContractUseCaseCommand
-  ) {
+  execute(context: ServiceContext, request: UpdateUserUseCaseCommand) {
     return commandUseCaseOperation(async () => {
       const existingUser = await this.userQueryService.getUserById(
         context,
@@ -37,6 +41,28 @@ export class UpdateUserContractUseCase {
       );
       if (!existingUser) {
         throw new NotFoundError("User not found");
+      }
+
+      if (
+        request.firstName !== undefined ||
+        request.lastName !== undefined ||
+        request.birthDay !== undefined ||
+        request.gender !== undefined
+      ) {
+        const userProfile = await this.userProfileRepository.findById(
+          new UserId(request.id)
+        );
+        if (!userProfile) {
+          throw new NotFoundError("User profile not found");
+        }
+
+        await this.userProfileRepository.save(
+          context,
+          userProfile
+            .changeUserName(request.firstName, request.lastName)
+            .changeBirthDay(request.birthDay)
+            .changeGender(request.gender)
+        );
       }
 
       if (request.email) {
