@@ -68,6 +68,13 @@ export function ensureFutureDate(
   return date;
 }
 
+export function ensurePastDate(date: Date, paramName: string): Date {
+  if (date > new Date()) {
+    throw new Error(`${paramName} must be a past date.`);
+  }
+  return date;
+}
+
 export function ensureEmail(email: string): string {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!regex.test(email)) {

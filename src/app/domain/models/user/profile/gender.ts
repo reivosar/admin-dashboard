@@ -9,7 +9,7 @@ export class Gender {
 
   constructor(value: string) {
     const normalizedInput = value.trim().toLowerCase();
-    if (!Object.values(Gender).includes(normalizedInput as GenderType)) {
+    if (!Object.values(GenderType).includes(normalizedInput as GenderType)) {
       throw new Error(
         "Invalid gender value. Accepted values are 'male', 'female', or 'other'."
       );

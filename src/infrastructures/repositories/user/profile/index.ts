@@ -49,14 +49,14 @@ export class PrismaUserProfileRepository implements UserProfileRepository {
         user_id: entity.getUserId().asNumber(),
         first_name: entity.getUserName().first(),
         last_name: entity.getUserName().last(),
-        birth_date: entity.geBirthDay().asDate(),
+        birth_date: new Date(entity.geBirthDay().asDate()),
         gender: entity.getGender().asString() as $Enums.GenderType,
         created_by: context.userId.toString(),
       },
       update: {
         first_name: entity.getUserName().first(),
         last_name: entity.getUserName().last(),
-        birth_date: entity.geBirthDay().asDate(),
+        birth_date: new Date(entity.geBirthDay().asDate()),
         gender: entity.getGender().asString() as $Enums.GenderType,
       },
     });

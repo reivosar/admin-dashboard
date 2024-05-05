@@ -1,10 +1,10 @@
-import { ensureFutureDate } from "@/utils/validation";
+import { ensurePastDate } from "@/utils/validation";
 
 export class Birthday {
   private readonly date: Date;
 
   constructor(date: Date) {
-    this.date = ensureFutureDate(date, "Birthday");
+    this.date = ensurePastDate(date, "Birthday");
   }
 
   equals(other: Birthday): boolean {
@@ -13,9 +13,5 @@ export class Birthday {
 
   asDate(): Date {
     return this.date;
-  }
-
-  toString(): string {
-    return this.date.toISOString().substring(0, 10);
   }
 }
