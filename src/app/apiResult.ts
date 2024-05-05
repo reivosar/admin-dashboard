@@ -38,13 +38,13 @@ export class ApiResult<T> {
       }
       return message ? message : "An unexpected error occurred";
     }
-    return message ? message : "";
+    return message ? message : "Success";
   }
 
   public toResponse(res: NextApiResponse) {
     if (this.success) {
       if (!this.data) {
-        return res.status(this.statusCode);
+        return res.status(this.statusCode).json({ message: this.message });
       }
       return res.status(this.statusCode).json(this.data);
     }

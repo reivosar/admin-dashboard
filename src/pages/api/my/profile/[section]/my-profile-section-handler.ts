@@ -29,15 +29,17 @@ class MyProfileSectionHandler extends AuthenticatedApiHandler {
           email: email,
         })
       ).toResponse(res);
+    } else if (section) {
+      return (
+        await this.updateMyProfileUseCase.execute(context, {
+          firstName: firstName,
+          lastName: lastName,
+          gender: gender,
+          birthDay: birthdate,
+        })
+      ).toResponse(res);
     }
-    return (
-      await this.updateMyProfileUseCase.execute(context, {
-        firstName: firstName,
-        lastName: lastName,
-        gender: gender,
-        birthDay: birthdate,
-      })
-    ).toResponse(res);
+    return res.status(400).json({ message: "Invalid section provided." });
   }
 }
 

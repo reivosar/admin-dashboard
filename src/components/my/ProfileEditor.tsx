@@ -12,6 +12,7 @@ import {
   CalendarIcon,
   IdentificationIcon,
 } from "@heroicons/react/solid";
+import error from "next/error";
 
 type FormData = {
   firstName: string;
@@ -75,11 +76,11 @@ const ProfileEditor: React.FC = () => {
     showConfirmDialog({
       message: "Are you sure you want to update the your information?",
       onConfirm: async () => {
-        const { error } = await put(`/api/my/profile/${section}`, {
+        const response = await put(`/api/my/profile/${section}`, {
           formData,
         });
-        if (error) {
-          toastError(error.message);
+        if (response.error) {
+          toastError(response.error.message);
         } else {
           toastSuccess(`${section} updated successfully!`);
           router.push("/my/profile");
