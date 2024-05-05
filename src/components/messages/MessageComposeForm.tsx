@@ -9,7 +9,7 @@ import {
   RichUtils,
 } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { toastError } from "../utils/ToastNotifications";
 
 interface MessageComposeFormProps {
@@ -19,7 +19,12 @@ interface MessageComposeFormProps {
 const MessageComposeForm: React.FC<MessageComposeFormProps> = ({
   channelId,
 }) => {
+  const [editorEnable, setEditorEnable] = useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  useEffect(() => {
+    setEditorEnable(true);
+  }, []);
 
   const options = useMemo(
     () => ({

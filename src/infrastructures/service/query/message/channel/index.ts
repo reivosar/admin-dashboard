@@ -15,7 +15,7 @@ export class PrismaChannelQueryService implements ChannelQueryService {
     context: ServiceContext,
     searchTerm?: string | undefined
   ): Promise<ChannelModel[]> {
-    const results = await prisma.messageChannel.findMany({
+    const results = await this.prisma.messageChannel.findMany({
       include: {
         message_channel_profiles: true,
         message_channel_visibility: true,

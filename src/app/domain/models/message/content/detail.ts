@@ -1,10 +1,10 @@
 import { ensureNotNullOrEmpty } from "@/utils/validation";
 
 export class ContentDetails {
-  private readonly data: any;
+  private readonly data: string;
 
   constructor(jsonData: string) {
-    this.data = JSON.parse(ensureNotNullOrEmpty(jsonData, "JsonData"));
+    this.data = ensureNotNullOrEmpty(jsonData, "JsonData");
   }
 
   equals(other: ContentDetails): boolean {

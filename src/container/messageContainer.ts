@@ -7,6 +7,7 @@ import { MessageContentRepository } from "@/app/domain/repositories/message/cont
 import { ChannelQueryService } from "@/app/services/query/message/channel";
 import { MessageResponseQueryService } from "@/app/services/query/message/response";
 import { CreateChannelUseCase } from "@/app/usecases/message/createChannelUseCase";
+import { GetChannelMessagesUseCase } from "@/app/usecases/message/getChannelMessagesUseCase";
 import { GetChannelsUseCase } from "@/app/usecases/message/getChannelsUseCase";
 import { SendMessageUseCase } from "@/app/usecases/message/sendMessageUseCase";
 import { UpdateChannelProfileUseCase } from "@/app/usecases/message/updateChannelProfileUseCase";
@@ -26,6 +27,7 @@ export const MessageContainer = {
     // UseCase
     container.bind(CreateChannelUseCase).toSelf();
     container.bind(GetChannelsUseCase).toSelf();
+    container.bind(GetChannelMessagesUseCase).toSelf();
     container.bind(SendMessageUseCase).toSelf();
     container.bind(UpdateChannelProfileUseCase).toSelf();
     container.bind(UpdateChannelVisibilityUseCase).toSelf();
@@ -38,9 +40,7 @@ export const MessageContainer = {
 
     // Query
     container
-      .bind<ChannelQueryService>(
-        "MessageRespChannelQueryServiceonseQueryService"
-      )
+      .bind<ChannelQueryService>("ChannelQueryService")
       .to(PrismaChannelQueryService);
     container
       .bind<MessageResponseQueryService>("MessageResponseQueryService")
