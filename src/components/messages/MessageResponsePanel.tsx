@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import { MessageResponse } from "@/types/messages";
 import { UserCircleIcon } from "@heroicons/react/solid";
@@ -14,7 +14,6 @@ const MessageResponsePanel: React.FC<MessageResponsePanelProps> = ({
 
   useEffect(() => {
     if (!channelId) {
-      console.log("Channel ID is undefined");
       return;
     }
     setMessages([]);
@@ -25,7 +24,6 @@ const MessageResponsePanel: React.FC<MessageResponsePanelProps> = ({
 
     eventSource.onmessage = (event) => {
       try {
-        console.log("Received data:", event.data);
         const newMessage = JSON.parse(event.data);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       } catch (error) {
@@ -44,7 +42,6 @@ const MessageResponsePanel: React.FC<MessageResponsePanelProps> = ({
     };
 
     return () => {
-      console.log("Closing EventSource.");
       eventSource.close();
     };
   }, [channelId]);

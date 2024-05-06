@@ -3,14 +3,15 @@ import { PaperAirplaneIcon } from "@heroicons/react/solid";
 import DOMPurify from "dompurify";
 import {
   ContentBlock,
-  DraftBlockType,
-  Editor,
+  DraftEditorCommand,
   EditorState,
   RichUtils,
 } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
 import { stateToHTML } from "draft-js-export-html";
 import { useState, useMemo, useEffect } from "react";
 import { toastError } from "../utils/ToastNotifications";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 interface MessageComposeFormProps {
   channelId: number | undefined;
@@ -38,6 +39,20 @@ const MessageComposeForm: React.FC<MessageComposeFormProps> = ({
     []
   );
 
+  const handleKeyCommand = (
+    command: DraftEditorCommand,
+    editorState: EditorState
+  ) => {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+
+    if (newState) {
+      setEditorState(newState);
+      return "handled";
+    }
+
+    return "not-handled";
+  };
+
   const handleSubmit = async () => {
     const contentState = editorState.getCurrentContent();
     const dirtyHtml = stateToHTML(contentState, options);
@@ -56,18 +71,6 @@ const MessageComposeForm: React.FC<MessageComposeFormProps> = ({
     }
   };
 
-  const onToggleStyle = (style: string) => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, style));
-  };
-
-  const onToggleBlockType = (type: DraftBlockType) => {
-    setEditorState(RichUtils.toggleBlockType(editorState, type));
-  };
-
-  const onToggleInlineCode = () => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, "CODE"));
-  };
-
   return (
     <div className="editor bg-white p-4 border rounded flex flex-col justify-between">
       <div
@@ -77,57 +80,22 @@ const MessageComposeForm: React.FC<MessageComposeFormProps> = ({
           borderRadius: "4px",
         }}
       >
-        <Editor
-          editorKey="message-sender"
-          editorState={editorState}
-          onChange={setEditorState}
-        />
+        {editorEnable && (
+          <Editor
+            editorState={editorState}
+            toolbarClassName="toolbarClassName"
+            wrapperClassName="wrapperClassName"
+            editorClassName="editorClassName"
+            onEditorStateChange={setEditorState}
+            handleKeyCommand={handleKeyCommand}
+            toolbar={{
+              options: ["inline", "blockType"],
+            }}
+          />
+        )}
       </div>
       <div className="flex justify-between items-center w-full mt- pt-2 border-t-2 border-gray-200">
-        <div className="toolbar flex items-center">
-          <button
-            onClick={() => onToggleStyle("BOLD")}
-            className="font-bold mr-2"
-          >
-            B
-          </button>
-          <button
-            onClick={() => onToggleStyle("ITALIC")}
-            className="italic mr-2"
-          >
-            I
-          </button>
-          <button
-            onClick={() => onToggleStyle("UNDERLINE")}
-            className="underline mr-2"
-          >
-            U
-          </button>
-          <button
-            onClick={() => onToggleBlockType("unordered-list-item")}
-            className="mr-2"
-            title="Bulleted List"
-          >
-            •••
-          </button>
-          <button
-            onClick={() => onToggleBlockType("ordered-list-item")}
-            className="mr-2"
-            title="Numbered List"
-          >
-            123
-          </button>
-          <button
-            onClick={() => onToggleBlockType("code-block")}
-            className="mr-2"
-          >
-            {"{ }"}
-          </button>
-          <button onClick={onToggleInlineCode} className="tool-btn">
-            ` `
-          </button>
-        </div>
-        <div className="flex items-center">
+        <div className="flex justify-end w-full">
           <button onClick={handleSubmit} className="icon-button">
             <PaperAirplaneIcon className="h-8 w-8" />{" "}
           </button>
