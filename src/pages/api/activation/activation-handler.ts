@@ -3,7 +3,7 @@ import { BadRequestError } from "@/utils/errors";
 import { AnonymousApiHandler } from "../api-handler";
 import { GetActivationUseCase } from "@/app/usecases/user/getActivationUseCase";
 import { container } from "@/container";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { ActivateUserUseCase } from "@/app/usecases/user/activateUserUseCase";
 
 class ActivationHandler extends AnonymousApiHandler {

@@ -1,4 +1,4 @@
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { injectable, inject } from "inversify";
 import { commandUseCaseOperation } from "../usecaseHelper";
 import { Email } from "@/app/domain/models/user/contact/email";

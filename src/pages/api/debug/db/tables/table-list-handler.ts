@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { AuthenticatedApiHandler } from "@/pages/api/api-handler";
 import { container } from "@/container";
 import { GetAllTablesUseCase } from "@/app/usecases/debug/getAllTablesUseCase";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 
 class TablesListHandler extends AuthenticatedApiHandler {
   constructor(

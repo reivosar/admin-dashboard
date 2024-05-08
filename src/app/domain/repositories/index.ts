@@ -1,4 +1,4 @@
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 
 export interface PersistentRepository<ENTITY, ID> {
   existsById(id: ID): Promise<boolean>;

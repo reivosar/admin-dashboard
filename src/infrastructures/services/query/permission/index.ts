@@ -1,6 +1,6 @@
 import { PermissionQueryService } from "@/app/services/query/permission";
 import { TYPES } from "@/container/types";
-import { UserRolesWithPermissions } from "@/types/shared/user-permission";
+import { UserRolesWithPermissions } from "@/types/shared/userPermission";
 import { PrismaClient } from "@prisma/client";
 import { injectable, inject } from "inversify";
 

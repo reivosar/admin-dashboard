@@ -1,5 +1,5 @@
 import { SearchTableDetailsModel, TableDetailsModel } from "@/types/debug";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 
 export interface DatabaseTableQueryService {
   getAllTables(context: ServiceContext): Promise<TableDetailsModel[]>;

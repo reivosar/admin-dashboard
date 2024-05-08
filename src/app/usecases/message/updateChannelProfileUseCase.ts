@@ -1,5 +1,5 @@
 import type { ChannelProfileRepository } from "@/app/domain/repositories/message/channel/profile";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { injectable, inject } from "inversify";
 import { commandUseCaseOperation } from "../usecaseHelper";
 import "reflect-metadata";

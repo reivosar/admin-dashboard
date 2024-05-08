@@ -5,7 +5,7 @@ import { UserName } from "@/app/domain/models/user/profile/name";
 import { UserId } from "@/app/domain/models/user/userId";
 import { UserProfileRepository } from "@/app/domain/repositories/user/profile";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { $Enums, PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

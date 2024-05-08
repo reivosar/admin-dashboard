@@ -1,6 +1,6 @@
 import type { UserProfileRepository } from "@/app/domain/repositories/user/profile";
 import { UserId } from "@/app/domain/models/user/userId";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { injectable, inject } from "inversify";
 import { commandUseCaseOperation } from "../usecaseHelper";
 import { NotFoundError } from "@/utils/errors";

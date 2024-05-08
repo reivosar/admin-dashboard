@@ -3,7 +3,7 @@ import { UserService } from "@/app/services/users/user-service";
 import { AuthenticatedApiHandler } from "../api-handler";
 import { container } from "@/container";
 import { CreateUserUseCase } from "@/app/usecases/user/createUserUseCase";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { DeleteUserUseCase } from "@/app/usecases/user/deleteUserUseCase";
 import { GetUserUseCase } from "@/app/usecases/user/getUserUseCase";
 import { GetUsersBySearchTermUseCase } from "@/app/usecases/user/getUsersBySearchTermUseCase";

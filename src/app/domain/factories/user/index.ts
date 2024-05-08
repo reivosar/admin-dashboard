@@ -1,4 +1,4 @@
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { UserName } from "../../models/user/profile/name";
 import { Email } from "../../models/user/contact/email";
 import { PasswordHash } from "../../models/user/authorization/passwordHash";

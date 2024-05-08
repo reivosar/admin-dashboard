@@ -2,7 +2,7 @@ import { UserActivation } from "@/app/domain/models/user/activation";
 import { UserId } from "@/app/domain/models/user/userId";
 import { UserActivationRepository } from "@/app/domain/repositories/user/activation";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

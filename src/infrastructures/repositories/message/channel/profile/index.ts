@@ -4,7 +4,7 @@ import { Description } from "@/app/domain/models/shared/description";
 import { Name } from "@/app/domain/models/shared/name";
 import { ChannelProfileRepository } from "@/app/domain/repositories/message/channel/profile";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

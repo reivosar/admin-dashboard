@@ -1,5 +1,5 @@
-import { ServiceContext } from "@/types/shared/service-context";
-import { UserRolesWithPermissions } from "@/types/shared/user-permission";
+import { ServiceContext } from "@/types/shared/serviceContext";
+import { UserRolesWithPermissions } from "@/types/shared/userPermission";
 import { NextApiRequest } from "next";
 import { getUseIdFromCookie } from "../../utils/cookie";
 import { inject, injectable } from "inversify";

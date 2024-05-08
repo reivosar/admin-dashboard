@@ -1,7 +1,7 @@
 import { UserQueryService } from "@/app/services/query/user";
 import { TYPES } from "@/container/types";
 import { ActivationUser } from "@/types/activation";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { UserModelWithDetails, UserNameModel } from "@/types/users";
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";

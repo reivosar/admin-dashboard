@@ -2,7 +2,7 @@ import { ChannelFactory } from "@/app/domain/factories/message/channel";
 import { Description } from "@/app/domain/models/shared/description";
 import { Name } from "@/app/domain/models/shared/name";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

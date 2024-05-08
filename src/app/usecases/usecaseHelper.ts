@@ -1,5 +1,5 @@
 import { NotFoundError } from "@/utils/errors";
-import { ApiResult } from "../apiResult";
+import { ApiResult } from "../appResult";
 
 export async function queryUseCaseOperation<T>(
   operation: Promise<T>,

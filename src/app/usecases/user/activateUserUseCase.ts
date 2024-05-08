@@ -5,7 +5,7 @@ import { UserActivation } from "@/app/domain/models/user/activation";
 import type { UserActivationCodeRepository } from "@/app/domain/repositories/user/activationCode";
 import type { UserAuthorizationRepository } from "@/app/domain/repositories/user/authorization";
 import type { UserActivationRepository } from "@/app/domain/repositories/user/activation";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { BadRequestError, NotFoundError } from "@/utils/errors";
 import { commandUseCaseOperation } from "../usecaseHelper";
 import "reflect-metadata";

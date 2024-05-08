@@ -3,7 +3,7 @@ import { ContentType } from "@/app/domain/models/message/content/type";
 import { MessageContent } from "@/app/domain/models/message/content";
 import { MessageId } from "@/app/domain/models/message/messageld";
 import { MessageContentRepository } from "@/app/domain/repositories/message/content";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { $Enums, PrismaClient } from "@prisma/client";
 import { ContentDetails } from "@/app/domain/models/message/content/detail";
 import { MemberId } from "@/app/domain/models/message/memberId";

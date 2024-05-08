@@ -3,7 +3,7 @@ import { serialize } from "cookie";
 import { AnonymousApiHandler } from "../api-handler";
 import { LoginUseCase } from "@/app/usecases/user/loginUseCase";
 import { container } from "@/container";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 
 class LoginHandler extends AnonymousApiHandler {
   constructor(private loginUseCase = container.get(LoginUseCase)) {

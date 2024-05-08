@@ -16,7 +16,7 @@ import { GetUsersBySearchTermUseCase } from "@/app/usecases/user/getUsersBySearc
 import { LoginUseCase } from "@/app/usecases/user/loginUseCase";
 import { LogoutUseCase } from "@/app/usecases/user/logoutUseCase";
 import { UpdateUserUseCase } from "@/app/usecases/user/updateUserUseCase";
-import { PrismaUserFactory } from "@/infrastructures/factory/user";
+import { PrismaUserFactory } from "@/infrastructures/factories/user";
 import { PrismaUserRepository } from "@/infrastructures/repositories/user";
 import { PrismaUserActivationRepository } from "@/infrastructures/repositories/user/activation";
 import { PrismaUserActivationCodeRepository } from "@/infrastructures/repositories/user/activationCode";
@@ -24,7 +24,7 @@ import { PrismaUserAuthorizationRepository } from "@/infrastructures/repositorie
 import { PrismaUserContractRepository } from "@/infrastructures/repositories/user/contract";
 import { PrismaUserProfileRepository } from "@/infrastructures/repositories/user/profile";
 import { PrismaUserTokenRepository } from "@/infrastructures/repositories/user/token";
-import { PrismaUserQueryService } from "@/infrastructures/service/query/user";
+import { PrismaUserQueryService } from "@/infrastructures/services/query/user";
 import { Container } from "inversify";
 
 export const UserContainer = {

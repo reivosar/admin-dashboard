@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import type { UserRepository } from "@/app/domain/repositories/user";
 import { UserId } from "@/app/domain/models/user/userId";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { commandUseCaseOperation } from "../usecaseHelper";
 import "reflect-metadata";
 

@@ -8,7 +8,7 @@ import { Gender } from "@/app/domain/models/user/profile/gender";
 import { UserName } from "@/app/domain/models/user/profile/name";
 import type { UserContractRepository } from "@/app/domain/repositories/user/contract";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { ConflictError } from "@/utils/errors";
 import { $Enums, PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";

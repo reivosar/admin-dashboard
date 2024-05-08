@@ -1,5 +1,5 @@
 import type { MessageResponseQueryService } from "@/app/services/query/message/response";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { injectable, inject } from "inversify";
 import "reflect-metadata";
 import { queryUseCaseOperation } from "../usecaseHelper";

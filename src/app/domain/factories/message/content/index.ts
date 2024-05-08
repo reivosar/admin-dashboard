@@ -1,7 +1,7 @@
 import { ChannelId } from "@/app/domain/models/message/channeld";
 import { ContentDetails } from "@/app/domain/models/message/content/detail";
 import { ContentType } from "@/app/domain/models/message/content/type";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 
 export interface MessageContentFactory {
   create(

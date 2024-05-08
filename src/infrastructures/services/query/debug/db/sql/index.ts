@@ -1,7 +1,7 @@
 import { ExecuteSqlQueryService } from "@/app/services/query/debug/db/sql";
 import { TYPES } from "@/container/types";
 import { ExecuteSQLResultType, TableDetailsModel } from "@/types/debug";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

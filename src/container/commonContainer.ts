@@ -1,10 +1,10 @@
 import { Container } from "inversify";
 import { TYPES } from "./types";
 import { PermissionQueryService } from "@/app/services/query/permission";
-import { PrismaPermissionQueryService } from "@/infrastructures/service/query/permission";
+import { PrismaPermissionQueryService } from "@/infrastructures/services/query/permission";
 import { PrismaClient } from "@prisma/client";
 import { LogService } from "@/app/services/log";
-import { PrismaLogService } from "@/infrastructures/service/log";
+import { PrismaLogService } from "@/infrastructures/services/log";
 import { ContextCreator } from "@/pages/api/context-creator";
 import { LogRegister } from "@/pages/api/log-register";
 import { ErrorHandler } from "@/pages/api/error-handler";

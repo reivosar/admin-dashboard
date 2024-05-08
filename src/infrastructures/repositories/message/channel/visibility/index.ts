@@ -2,7 +2,7 @@ import { ChannelVisibility } from "@/app/domain/models/message/channel/visibilit
 import { ChannelId } from "@/app/domain/models/message/channeld";
 import { ChannelVisibilityRepository } from "@/app/domain/repositories/message/channel/visibility";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

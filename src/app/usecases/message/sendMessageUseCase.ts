@@ -1,5 +1,5 @@
 import type { MessageContentFactory } from "@/app/domain/factories/message/content";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { injectable, inject } from "inversify";
 import { commandUseCaseOperation } from "../usecaseHelper";
 import { ChannelId } from "@/app/domain/models/message/channeld";

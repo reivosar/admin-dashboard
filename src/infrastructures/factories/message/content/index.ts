@@ -3,7 +3,7 @@ import { ChannelId } from "@/app/domain/models/message/channeld";
 import { ContentDetails } from "@/app/domain/models/message/content/detail";
 import { ContentType } from "@/app/domain/models/message/content/type";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { $Enums, PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

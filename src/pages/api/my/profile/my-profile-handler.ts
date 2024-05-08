@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { AuthenticatedApiHandler } from "../../api-handler";
 import { container } from "@/container";
 import { GetMyProfileUseCase } from "@/app/usecases/my/getMyProfileUseCase";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 
 class MyProfileHandler extends AuthenticatedApiHandler {
   constructor(

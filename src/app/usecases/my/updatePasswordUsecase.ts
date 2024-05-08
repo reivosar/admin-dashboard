@@ -1,6 +1,6 @@
 import { UserId } from "@/app/domain/models/user/userId";
 import type { UserAuthorizationRepository } from "@/app/domain/repositories/user/authorization";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { BadRequestError, NotFoundError } from "@/utils/errors";
 import { injectable, inject } from "inversify";
 import { commandUseCaseOperation } from "../usecaseHelper";

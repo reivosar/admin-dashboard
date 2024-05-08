@@ -1,7 +1,7 @@
 import { MessageResponseQueryService } from "@/app/services/query/message/response";
 import { TYPES } from "@/container/types";
 import { MessageResponse } from "@/types/messages";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

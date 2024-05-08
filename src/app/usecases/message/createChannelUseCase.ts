@@ -1,7 +1,7 @@
 import type { ChannelFactory } from "@/app/domain/factories/message/channel";
 import { Description } from "@/app/domain/models/shared/description";
 import { Name } from "@/app/domain/models/shared/name";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { injectable, inject } from "inversify";
 import { commandUseCaseOperation } from "../usecaseHelper";
 import "reflect-metadata";

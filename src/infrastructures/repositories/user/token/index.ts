@@ -4,7 +4,7 @@ import { TokenHash } from "@/app/domain/models/user/token/tokenHash";
 import { UserId } from "@/app/domain/models/user/userId";
 import { UserTokenRepository } from "@/app/domain/repositories/user/token";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

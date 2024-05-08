@@ -1,4 +1,4 @@
-import { UserRolesWithPermissions } from "./user-permission";
+import { UserRolesWithPermissions } from "./userPermission";
 
 export interface ServiceContext {
   userId: number;

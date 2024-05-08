@@ -4,7 +4,7 @@ import { UserId } from "@/app/domain/models/user/userId";
 import type { UserAuthorizationRepository } from "@/app/domain/repositories/user/authorization";
 import type { UserContractRepository } from "@/app/domain/repositories/user/contract";
 import type { UserQueryService } from "@/app/services/query/user";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { ConflictError, NotFoundError } from "@/utils/errors";
 import { injectable, inject } from "inversify";
 import { commandUseCaseOperation } from "../usecaseHelper";

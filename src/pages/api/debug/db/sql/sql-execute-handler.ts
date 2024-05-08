@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { AuthenticatedApiHandler } from "@/pages/api/api-handler";
 import { container } from "@/container";
 import { ExecuteSqlUseCase } from "@/app/usecases/debug/executeSqlUseCase";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 
 class SQLExecuteHandler extends AuthenticatedApiHandler {
   constructor(private executeSqlUseCase = container.get(ExecuteSqlUseCase)) {

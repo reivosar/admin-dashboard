@@ -3,7 +3,7 @@ import { Email } from "@/app/domain/models/user/contact/email";
 import { UserId } from "@/app/domain/models/user/userId";
 import { UserContractRepository } from "@/app/domain/repositories/user/contract";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

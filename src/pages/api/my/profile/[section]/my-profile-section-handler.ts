@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getTokenFromCookie } from "../../../../../utils/cookie";
 import { AuthenticatedApiHandler } from "@/pages/api/api-handler";
 import { container } from "@/container";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { UpdateMyProfileUseCase } from "@/app/usecases/my/updateMyProfileUsecase";
 import { UpdateMyContractUseCase } from "@/app/usecases/my/updateMyContractUsecase";
 

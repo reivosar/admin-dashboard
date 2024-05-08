@@ -1,7 +1,7 @@
 import { ChannelQueryService } from "@/app/services/query/message/channel";
 import { TYPES } from "@/container/types";
 import { ChannelModel } from "@/types/messages/channels";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient } from "@prisma/client";
 import { injectable, inject } from "inversify";
 

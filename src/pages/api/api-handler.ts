@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { LogRegister } from "./log-register";
 import { ContextCreator } from "./context-creator";
-import { injectable } from "inversify";
 import { container } from "@/container";
 import { ErrorHandler } from "./error-handler";
 

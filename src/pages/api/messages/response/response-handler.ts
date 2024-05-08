@@ -1,4 +1,4 @@
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MessageResponse } from "@/types/messages";
 import { sseManager } from "../../utils/sme";

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { AuthenticatedApiHandler } from "../../api-handler";
 import { container } from "@/container";
 import { SendMessageUseCase } from "@/app/usecases/message/sendMessageUseCase";

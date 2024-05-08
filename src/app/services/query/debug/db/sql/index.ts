@@ -1,5 +1,5 @@
 import { ExecuteSQLResultType, TableDetailsModel } from "@/types/debug";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 
 export interface ExecuteSqlQueryService {
   executeSql(

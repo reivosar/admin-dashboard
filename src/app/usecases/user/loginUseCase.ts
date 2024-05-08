@@ -3,7 +3,7 @@ import { UserToken } from "@/app/domain/models/user/token";
 import type { UserAuthorizationRepository } from "@/app/domain/repositories/user/authorization";
 import type { UserActivationRepository } from "@/app/domain/repositories/user/activation";
 import type { UserTokenRepository } from "@/app/domain/repositories/user/token";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { NotFoundError, UnauthorizedError } from "@/utils/errors";
 import { injectable, inject } from "inversify";
 import { sign } from "@/utils/jwt";

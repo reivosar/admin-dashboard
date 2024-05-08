@@ -1,4 +1,4 @@
-import { UserRolesWithPermissions } from "@/types/shared/user-permission";
+import { UserRolesWithPermissions } from "@/types/shared/userPermission";
 
 export interface PermissionQueryService {
   getUserPermissions(

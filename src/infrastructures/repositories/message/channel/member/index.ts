@@ -4,7 +4,7 @@ import { ChannelId } from "@/app/domain/models/message/channeld";
 import { MemberId } from "@/app/domain/models/message/memberId";
 import { ChannelMemberRepository } from "@/app/domain/repositories/message/channel/member";
 import { TYPES } from "@/container/types";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { PrismaClient } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

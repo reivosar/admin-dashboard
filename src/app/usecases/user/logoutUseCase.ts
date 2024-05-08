@@ -1,5 +1,5 @@
 import type { UserTokenRepository } from "@/app/domain/repositories/user/token";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { injectable, inject } from "inversify";
 import { commandUseCaseOperation } from "../usecaseHelper";
 import { UserId } from "@/app/domain/models/user/userId";

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ChannelsService } from "@/app/services/messages/channels";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { AuthenticatedApiHandler } from "../../api-handler";
 import { container } from "@/container";
 import { CreateChannelUseCase } from "@/app/usecases/message/createChannelUseCase";

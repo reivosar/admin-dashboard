@@ -4,7 +4,7 @@ import {
   SearchTableDetailsModel,
   TableDetailsModel,
 } from "@/types/debug";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { NotFoundError } from "@/utils/errors";
 import "reflect-metadata";

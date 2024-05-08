@@ -1,7 +1,7 @@
 import { User } from "@/app/domain/models/user";
 import { UserId } from "@/app/domain/models/user/userId";
 import { UserRepository } from "@/app/domain/repositories/user";
-import { ServiceContext } from "@/types/shared/service-context";
+import { ServiceContext } from "@/types/shared/serviceContext";
 import { injectable } from "inversify";
 import "reflect-metadata";
 
