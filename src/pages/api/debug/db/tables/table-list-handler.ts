@@ -20,4 +20,4 @@ class TablesListHandler extends AuthenticatedApiHandler {
   }
 }
 
-export const apiHander = new TablesListHandler();
+export const apiHandler = new TablesListHandler();

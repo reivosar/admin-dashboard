@@ -56,4 +56,4 @@ class TablesNameHandler extends AuthenticatedApiHandler {
   }
 }
 
-export const apiHander = new TablesNameHandler();
+export const apiHandler = new TablesNameHandler();

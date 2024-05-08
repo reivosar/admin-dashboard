@@ -12,7 +12,6 @@ import {
   CalendarIcon,
   IdentificationIcon,
 } from "@heroicons/react/solid";
-import error from "next/error";
 
 type FormData = {
   firstName: string;

@@ -10,7 +10,6 @@ import { sign } from "@/utils/jwt";
 import { commandUseCaseOperation } from "../usecaseHelper";
 import { Expire } from "@/app/domain/models/shared/expire";
 import { TokenHash } from "@/app/domain/models/user/token/tokenHash";
-import { log } from "console";
 import "reflect-metadata";
 
 export interface LoginUseCaseCommnd {
@@ -51,15 +50,17 @@ export class LoginUseCase {
         );
       }
 
+      const expire = Expire.fromHours(24);
+
       const token = sign({
         user_id: loginInfo.getUserId().asNumber(),
-        loginDate: new Date().toISOString(),
+        expire: expire.asDate(),
       });
 
       const userToken = new UserToken(
         loginInfo.getUserId(),
         TokenHash.fromHashString(token),
-        Expire.fromHours(24)
+        expire
       );
       await this.userTokenRepository.save(context, userToken);
 

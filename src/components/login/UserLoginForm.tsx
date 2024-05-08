@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { clearToken, saveToken } from "@/utils/auth";
 import { post } from "@/utils/api";
 
 const UserLoginForm = () => {
@@ -21,7 +20,6 @@ const UserLoginForm = () => {
     if (error) {
       setError(error.message);
     } else if (data) {
-      saveToken(new Date().toISOString());
       router.push("/");
     }
     setLoading(false);

@@ -10,8 +10,8 @@ import {
   LogoutIcon,
   UserIcon,
 } from "@heroicons/react/solid";
-import { clearToken } from "@/utils/auth";
 import { showConfirmDialog } from "./utils/ConfirmationDialog";
+import { post } from "@/utils/api";
 
 const DashboardNavigation: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -40,7 +40,7 @@ const DashboardNavigation: React.FC = () => {
     showConfirmDialog({
       message: "Are you sure you want to update the user information?",
       onConfirm: async () => {
-        clearToken();
+        await post("/api/logout", {});
         router.push("/login");
       },
     });

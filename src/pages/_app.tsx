@@ -5,11 +5,10 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
-  clearToken,
-  getTokenData,
-  refreshTokenExpiry,
   shouldRedirectToLogin,
-} from "../utils/auth";
+  checkAuthStatus,
+  forceLogout,
+} from "./appSupport";
 import DashboardHeader from "../components/DashboardHeader";
 import DashboardNavigation from "../components/DashboardNavigation";
 import DashboardSidebar from "../components/DashboardSidebar";
@@ -23,8 +22,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     const handleRouteChange = () => {
       if (shouldRedirectToLogin(router.pathname)) {
         router.push("/login");
-      } else {
-        refreshTokenExpiry();
       }
     };
     handleRouteChange();
@@ -37,8 +34,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const onLoginSuccess = () => {
       setInterval(() => {
-        if (!getTokenData()) {
-          clearToken();
+        if (!checkAuthStatus()) {
+          forceLogout();
           router.push("/login");
         }
       }, 1 * 60 * 1000);

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { apiHander } from "./table-name-handler";
+import { apiHandler } from "./table-name-handler";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  return apiHander.handleRequest(req, res);
+  return apiHandler.handleRequest(req, res);
 }

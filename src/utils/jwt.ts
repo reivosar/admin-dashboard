@@ -11,7 +11,6 @@ interface VerifyResult {
 
 interface CustomJwtPayload extends JwtPayload {
   user_id: number;
-  loginDate: string;
 }
 
 export const sign = (

@@ -1,7 +1,7 @@
 import { ServiceContext } from "@/types/shared/serviceContext";
 import { UserRolesWithPermissions } from "@/types/shared/userPermission";
 import { NextApiRequest } from "next";
-import { getUseIdFromCookie } from "../../utils/cookie";
+import { getUserIdFromCookie } from "../../utils/cookie";
 import { inject, injectable } from "inversify";
 import type { PermissionQueryService } from "@/app/services/query/permission";
 import "reflect-metadata";
@@ -41,7 +41,7 @@ export class ContextCreator {
     req: NextApiRequest,
     startTime: Date
   ): Promise<ServiceContext> {
-    const userId = getUseIdFromCookie(req);
+    const userId = getUserIdFromCookie(req);
     const permissions = await this.permissionQueryService.getUserPermissions(
       userId
     );

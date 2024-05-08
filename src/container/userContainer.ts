@@ -8,6 +8,7 @@ import { UserProfileRepository } from "@/app/domain/repositories/user/profile";
 import { UserTokenRepository } from "@/app/domain/repositories/user/token";
 import { UserQueryService } from "@/app/services/query/user";
 import { ActivateUserUseCase } from "@/app/usecases/user/activateUserUseCase";
+import { AuthCheckUseCase } from "@/app/usecases/user/authCheckUseCase";
 import { CreateUserUseCase } from "@/app/usecases/user/createUserUseCase";
 import { DeleteUserUseCase } from "@/app/usecases/user/deleteUserUseCase";
 import { GetActivationUseCase } from "@/app/usecases/user/getActivationUseCase";
@@ -31,6 +32,7 @@ export const UserContainer = {
   dependencyInjecton(container: Container) {
     // UseCase
     container.bind(ActivateUserUseCase).toSelf();
+    container.bind(AuthCheckUseCase).toSelf();
     container.bind(CreateUserUseCase).toSelf();
     container.bind(DeleteUserUseCase).toSelf();
     container.bind(GetActivationUseCase).toSelf();

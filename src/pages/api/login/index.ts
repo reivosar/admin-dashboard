@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { apiHander } from "./login-handler";
+import { apiHandler } from "./login-handler";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  return apiHander.handleRequest(req, res);
+  return apiHandler.handleRequest(req, res);
 }

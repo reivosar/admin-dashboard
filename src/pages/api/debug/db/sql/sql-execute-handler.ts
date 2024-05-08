@@ -24,4 +24,4 @@ class SQLExecuteHandler extends AuthenticatedApiHandler {
   }
 }
 
-export const apiHander = new SQLExecuteHandler();
+export const apiHandler = new SQLExecuteHandler();
