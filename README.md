@@ -68,6 +68,8 @@ Follow the instructions on the screen to explore the features of the dashboard.
 
 ![スクリーンショット 2024-03-24 1 22 51](https://github.com/reivosar/admin-dashboard/assets/2153822/82c6f55e-6dc9-470d-be64-05a2b5159d0b)
 
+![スクリーンショット 2024-05-08 23 40 06](https://github.com/reivosar/admin-dashboard/assets/2153822/60659ac0-59cd-40e0-9818-c5c6a307608c)
+
 ## Contributing
 
 Contributions to this project are welcome! If you find a bug or have a feature request, please open an issue. If you want to contribute to the code, feel free to create a pull request.
