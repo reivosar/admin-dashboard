@@ -13,6 +13,9 @@ export class AuthCheckUseCase {
 
   async execute(context: ServiceContext, userId: number) {
     const token = await this.userTokenRepository.findById(new UserId(userId));
-    return token !== null;
+    if (!token) {
+      return false;
+    }
+    return token.hasExpired();
   }
 }

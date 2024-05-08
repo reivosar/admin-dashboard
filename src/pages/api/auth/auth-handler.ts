@@ -11,6 +11,10 @@ class AuthHandler extends AnonymousApiHandler {
   constructor(private authCheckUseCase = container.get(AuthCheckUseCase)) {
     super();
   }
+  protected shouldAuditoLogActivity(): boolean {
+    // This process is a check for authentication. No need to write logs
+    return false;
+  }
 
   protected async handleGet(
     req: NextApiRequest,

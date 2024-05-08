@@ -27,6 +27,10 @@ export class UserToken {
     return this.expire;
   }
 
+  hasExpired(): boolean {
+    return this.expire.hasExpired();
+  }
+
   equals(other: UserToken): boolean {
     return this.userId.equals(other.userId);
   }

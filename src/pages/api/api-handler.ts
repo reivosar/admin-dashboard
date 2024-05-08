@@ -55,31 +55,39 @@ abstract class ApiHandler {
 
   public async handleRequest(req: NextApiRequest, res: NextApiResponse) {
     const startTime = new Date();
-    const handler = this.getHandlerForMethod(req.method);
-    if (!handler) {
-      return this.methodNotAllowed(req, res);
-    }
     let context;
     try {
+      const handler = this.getHandlerForMethod(req.method);
+      if (!handler) {
+        return this.methodNotAllowed(req, res);
+      }
       context = await this.createServiceContext(req, startTime);
       await handler(req, res, context);
-      this.logRegister.execute(
-        req,
-        startTime,
-        context.userId !== 0 ? context.userId : undefined,
-        undefined,
-        res.statusCode,
-        undefined
-      );
+      if (this.shouldAuditoLogActivity()) {
+        this.logRegister.execute(
+          req,
+          startTime,
+          context.userId !== 0 ? context.userId : undefined,
+          undefined,
+          res.statusCode,
+          undefined
+        );
+      }
     } catch (error) {
-      this.errorHandler.handleError(
-        req,
-        res,
-        startTime,
-        context?.userId !== 0 ? context?.userId : undefined,
-        error
-      );
+      if (this.shouldAuditoLogActivity()) {
+        this.errorHandler.handleError(
+          req,
+          res,
+          startTime,
+          context?.userId !== 0 ? context?.userId : undefined,
+          error
+        );
+      }
     }
+  }
+
+  protected shouldAuditoLogActivity(): boolean {
+    return true;
   }
 
   protected abstract createServiceContext(
