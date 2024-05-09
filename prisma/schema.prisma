@@ -152,7 +152,7 @@ model MessageChannelProfile {
 
 model MessageChannelMember {
   channel_id       Int      
-  user_id          Int             
+  member_id        Int             
   can_post         Boolean         @default(false) 
   can_view         Boolean         @default(true)  
   can_edit         Boolean         @default(false) 
@@ -160,8 +160,8 @@ model MessageChannelMember {
   joined_by        String?           
   joined_at        DateTime        @default(now()) 
   message_channels MessageChannel  @relation(fields: [channel_id], references: [id])
-  user             User            @relation(fields: [user_id], references: [id])
-  @@unique([channel_id, user_id]) 
+  user             User            @relation(fields: [member_id], references: [id])
+  @@unique([channel_id, member_id]) 
   @@map("message_channel_members")
 }
 
