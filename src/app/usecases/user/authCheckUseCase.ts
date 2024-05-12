@@ -16,6 +16,6 @@ export class AuthCheckUseCase {
     if (!token) {
       return false;
     }
-    return token.hasExpired();
+    return !token.hasExpired();
   }
 }

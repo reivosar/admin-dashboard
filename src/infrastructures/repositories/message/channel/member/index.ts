@@ -19,7 +19,7 @@ export class PrismaChannelMemberRepository implements ChannelMemberRepository {
     const channelMember = await this.prisma.messageChannelMember.findFirst({
       where: {
         channel_id: id.getChannelId().asNumber(),
-        user_id: id.getMemberId().asNumber(),
+        member_id: id.getMemberId().asNumber(),
       },
     });
     return channelMember !== null;
@@ -28,9 +28,9 @@ export class PrismaChannelMemberRepository implements ChannelMemberRepository {
   async findById(id: ChannelMemberId): Promise<ChannelMember | null> {
     const channelMember = await this.prisma.messageChannelMember.findUnique({
       where: {
-        channel_id_user_id: {
+        channel_id_member_id: {
           channel_id: id.getChannelId().asNumber(),
-          user_id: id.getMemberId().asNumber(),
+          member_id: id.getMemberId().asNumber(),
         },
       },
     });
@@ -38,7 +38,7 @@ export class PrismaChannelMemberRepository implements ChannelMemberRepository {
     return new ChannelMember(
       new ChannelMemberId(
         new ChannelId(channelMember.channel_id),
-        new MemberId(channelMember.user_id)
+        new MemberId(channelMember.member_id)
       ),
       channelMember.can_post,
       channelMember.can_view,
@@ -50,14 +50,14 @@ export class PrismaChannelMemberRepository implements ChannelMemberRepository {
   async save(context: ServiceContext, entity: ChannelMember): Promise<void> {
     await this.prisma.messageChannelMember.upsert({
       where: {
-        channel_id_user_id: {
+        channel_id_member_id: {
           channel_id: entity.getChannelId().asNumber(),
-          user_id: entity.getMemberId().asNumber(),
+          member_id: entity.getMemberId().asNumber(),
         },
       },
       create: {
         channel_id: entity.getChannelId().asNumber(),
-        user_id: entity.getMemberId().asNumber(),
+        member_id: entity.getMemberId().asNumber(),
         can_post: entity.canMemberPost(),
         can_view: entity.canMemberView(),
         can_edit: entity.canMemberEdit(),
@@ -76,9 +76,9 @@ export class PrismaChannelMemberRepository implements ChannelMemberRepository {
   async delete(id: ChannelMemberId): Promise<void> {
     await this.prisma.messageChannelMember.delete({
       where: {
-        channel_id_user_id: {
+        channel_id_member_id: {
           channel_id: id.getChannelId().asNumber(),
-          user_id: id.getMemberId().asNumber(),
+          member_id: id.getMemberId().asNumber(),
         },
       },
     });

@@ -33,8 +33,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const onLoginSuccess = () => {
-      setInterval(() => {
-        if (!checkAuthStatus()) {
+      setInterval(async () => {
+        if (!(await checkAuthStatus())) {
           forceLogout();
           router.push("/login");
         }

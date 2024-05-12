@@ -27,9 +27,12 @@ class AuthHandler extends AnonymousApiHandler {
       if (!result) {
         throw new UnauthorizedError("Auth check error has ocurred.");
       }
+      console.log("Auth Success");
       return new ApiResult<boolean>(true, undefined).toResponse(res);
     } catch (error) {
-      return new ApiResult<boolean>(false, error).toResponse(res);
+      const errorResult = new ApiResult<boolean>(false, error);
+      console.log(errorResult);
+      return errorResult.toResponse(res);
     }
   }
 }
